@@ -8,14 +8,12 @@ interface InputWrapperProps extends React.ComponentProps<"input"> {
 
 export function InputWrapper({ className, ...props }: InputWrapperProps) {
   return (
-    <Input 
+    <Input
       className={cn(
-        "bg-transparent border-none shadow-none h-auto px-2 py-1", 
-        "focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:border-none focus-visible:ring-0 focus-visible:shadow-none",
-        "placeholder:text-foreground font-mono",
+        "border-none shadow-none focus-visible:bg-background",
         className
-      )} 
-      {...props} 
+      )}
+      {...props}
     />
   )
 }

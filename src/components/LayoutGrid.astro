@@ -1,31 +1,4 @@
----
----
-<div class="layout-grid">
+<div class="relative grid gap-8 grid-cols-1 grid-rows-[auto] items-start content-stretch xl:grid-cols-[2fr_5fr] max-sm:mx-4 max-sm:gap-4">
   <slot name="left" />
   <slot name="right" />
 </div>
-
-<style>
-  .layout-grid {
-    position: relative;
-    align-items: start;
-    align-content: stretch;
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 2fr 5fr;
-    grid-template-rows: auto;
-  }
-
-  @media screen and (max-width: 1380px) {
-    .layout-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media screen and (max-width: 640px) {
-    .layout-grid {
-      margin: 0 1rem;
-      gap: 1rem;
-    }
-  }
-</style>

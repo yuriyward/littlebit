@@ -1,25 +1,11 @@
----
-import '../styles/background.css';
----
+<canvas
+  id="bg-canvas"
+  class="fixed top-0 left-0 w-full min-h-screen -z-[2] opacity-0 font-mono select-none pointer-events-none transition-all duration-150"
+></canvas>
 
-<canvas id="bg-canvas"></canvas>
-<canvas id="overlay-canvas"></canvas>
+<canvas
+  id="overlay-canvas"
+  class="fixed top-0 left-0 w-full min-h-screen -z-[1] opacity-100 font-mono select-none pointer-events-none transition-all duration-150"
+></canvas>
 
 <script src="../scripts/page-background.ts"></script>
-<style>
-    #bg-canvas, #overlay-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-    }
-
-    #bg-canvas {
-        z-index: -1;
-    }
-
-    #overlay-canvas {
-        z-index: -1;
-    }
-</style>
