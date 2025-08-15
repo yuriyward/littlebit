@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import expressiveCode from 'astro-expressive-code';
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import spectre from './package/src';
 
@@ -33,6 +34,7 @@ const config = defineConfig({
       themes: [spectreDark],
     }),
     mdx(),
+    react(),
     sitemap(),
     spectre({
       name: 'Spectre',
