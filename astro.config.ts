@@ -27,7 +27,7 @@ const {
 
 // https://astro.build/config
 const config = defineConfig({
-  site: 'https://spectre.louisescher.dev',
+  site: 'https://littlebit.dev',
   output: 'static',
   integrations: [
     expressiveCode({
@@ -37,18 +37,19 @@ const config = defineConfig({
     react(),
     sitemap(),
     spectre({
-      name: 'Spectre',
+      name: 'littlebit.dev',
       openGraph: {
         home: {
-          title: 'Spectre',
-          description: 'A minimalistic theme for Astro.'
+          title: 'littlebit.dev',
+          description: 'A personal website of Yuriy Babyak AI Engineer.'
         },
         blog: {
           title: 'Blog',
-          description: 'News and guides for Spectre.'
+          description: 'Blog written by Yuriy Babyak.'
         },
         projects: {
-          title: 'Projects'
+          title: 'Projects',
+          description: 'Projects done by Yuriy Babyak.'
         }
       },
       giscus: {

@@ -76,19 +76,20 @@ export default defineConfig({
     // ...
     spectre({
 
-      name: 'Spectre',
+      name: 'littlebit.dev',
 
       openGraph: {
         home: {
-          title: 'Spectre',
-          description: 'A minimalistic theme for Astro.'
+          title: 'littlebit.dev',
+          description: 'A personal website of Yuriy Babyak AI Engineer.'
         },
         blog: {
           title: 'Blog',
-          description: 'News and guides for Spectre.'
+          description: 'Blog written by Yuriy Babyak.'
         },
         projects: {
-          title: 'Projects'
+          title: 'Projects',
+          description: 'Projects done by Yuriy Babyak.'
         }
       }
     })
@@ -127,7 +128,7 @@ export default defineConfig({
 });
 ```
 
-If you want to modify the giscus colors, you can do so in the `styles/giscus.css` file. If you do so, make sure to provide the theme as `https://your-site.tld/styles/giscus`. 
+If you want to modify the giscus colors, you can do so in the `styles/giscus.css` file. If you do so, make sure to provide the theme as `https://your-site.tld/styles/giscus`.
 
 Alternatively, you can change the `giscus.theme` option to one of the provided options by giscus.
 
@@ -288,7 +289,7 @@ As with all themes, you might wish to modify it. In terms of content, you should
 
 ### Changing the code block colors
 
-Code snippets declared in `.md` and `.mdx` files are powered by [Expressive Code](https://expressive-code.com). By default, Spectre uses a variation of GitHub's dark theme with custom background colors. 
+Code snippets declared in `.md` and `.mdx` files are powered by [Expressive Code](https://expressive-code.com). By default, Spectre uses a variation of GitHub's dark theme with custom background colors.
 
 If you want to change the colors of the code snippets (syntax highlighting, background color, etc.) you can provide your desired theme in the `astro.config.ts` file as such:
 
@@ -302,7 +303,7 @@ export default defineConfig({
       themes: [spectreDark],
       themes: ['catppuccin-mocha'],
     }),
-    // ... 
+    // ...
   ],
   // ...
 });

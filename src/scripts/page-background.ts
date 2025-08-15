@@ -22,7 +22,7 @@ class PageBackground {
 
   private baseCtx: CanvasRenderingContext2D;
   private overlayCtx: CanvasRenderingContext2D;
-  
+
   private width: number = window.innerWidth;
   private height: number = window.innerHeight;
 
@@ -30,6 +30,7 @@ class PageBackground {
   private letterInstances: LetterInstance[] = [];
 
   private primaryRgb: string;
+  private foregroundRgb: string;
 
   /**
    * Initializes the background on the page.
@@ -57,35 +58,53 @@ class PageBackground {
     overlayCanvas.width = this.width;
     overlayCanvas.height = this.height;
 
-    // Set the primary color to match Tailwind's primary color (oklch(0.21 0.006 285.885))
-    this.primaryRgb = '140, 92, 245';
+    // Set colors based on theme
+    this.setThemeColors();
 
     this.initBackground();
-  
+
     requestAnimationFrame(this.redrawBackground);
+  }
+
+  /**
+   * Sets the colors based on current theme (light/dark mode)
+   */
+  private setThemeColors = () => {
+    const isDark = document.documentElement.classList.contains('dark');
+
+    if (isDark) {
+      // Dark mode: white letters on dark background
+      this.primaryRgb = '255, 255, 255'; // White for animated letters
+      this.foregroundRgb = '255, 255, 255'; // White for base layer
+    } else {
+      // Light mode: black letters on light background
+      this.primaryRgb = '0, 0, 0'; // Black for animated letters
+      this.foregroundRgb = '0, 0, 0'; // Black for base layer
+    }
   }
 
   /**
    * Sets up the background canvases. The text is decided based on the title of the page.
    */
   private initBackground = () => {
-    let text: string = document.title.toLowerCase().split(' | ')[0].replace(/\s/g, '_') || 'spectre';
+    let text: string = document.title.toLowerCase().split(' | ')[0].replace(/\s/g, '_') || 'littlebit.dev';
+    // let text: string = '01';
 
     // Add additional underscore to separate words
     if (text.includes("_")) {
       text += "_";
     }
-  
+
     // Letters are 17px wide and 35px tall
     const letters = Math.ceil(this.width / 17);
     const lines = Math.ceil(this.height / 35);
-  
+
     // Loop through the canvas and draw the text
     this.baseCtx.font = '28px Geist Mono';
     this.baseCtx.textAlign = 'start';
     this.baseCtx.textBaseline = 'top';
-    this.baseCtx.fillStyle = 'rgba(255, 255, 255, 0.01)';
-      
+    this.baseCtx.fillStyle = `rgba(${this.foregroundRgb}, 0.01)`;
+
     for(let i = 0; i < lines; i++) {
       for(let j = 0; j < letters; j++) {
         this.baseCtx.fillText(text[j % text.length], j * 17, i * 35);
@@ -96,13 +115,13 @@ class PageBackground {
         });
       }
     }
-  
+
     // Randomly select 75% of the letters to animate
     const randomLetters = this.getRandomAmountFromArray<LetterPosition>(
       this.letterPositions,
       Number.parseInt((lines * 0.75).toFixed())
     );
-  
+
     this.overlayCtx.font = 'bold 28px Geist Mono';
     this.overlayCtx.textAlign = 'start';
     this.overlayCtx.textBaseline = 'top';
@@ -113,10 +132,10 @@ class PageBackground {
     // Draw the letters on the overlay canvas
     for(const letter of randomLetters) {
       this.overlayCtx.fillText(letter.letter, letter.x, letter.y);
-  
+
       // Some number between LETTER_FADE_DURATION[0] and LETTER_FADE_DURATION[1] (in seconds)
       const animLength = this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0]);
-  
+
       this.letterInstances.push({
         x: letter.x,
         y: letter.y,
@@ -125,7 +144,7 @@ class PageBackground {
         fadeout: Date.now() + animLength * 1000
       });
     }
-  
+
     // Make the base canvas visible
     this.baseCanvas.style.opacity = '1';
   }
@@ -138,22 +157,22 @@ class PageBackground {
    */
   private easeInOutSine = (timestamp: number, start: number, end: number) => {
     const totalDuration = end - start;
-    
+
     // If the current timestamp is before the start, return 0
     if (timestamp < start) {
       return 0;
     }
-    
+
     // If the current timestamp is after the end, return 0
     if (timestamp > end) {
       const elapsedAfterEnd = timestamp - end;
       const progressAfterEnd = elapsedAfterEnd / (totalDuration / 2);
-      
+
       return Math.sin(progressAfterEnd * Math.PI);
     }
-    
+
     const progress = (timestamp - start) / totalDuration;
-    
+
     return Math.max(0, 0.5 - 0.5 * Math.cos(progress * Math.PI));
   }
 
@@ -169,7 +188,7 @@ class PageBackground {
     // Initialize arrays beforehand
     const result = new Array(n);
     const taken = new Array(len);
-    
+
     if(n > len) {
       throw new AstroError("getRandomAmountFromArray: more elements taken than available");
     }
@@ -189,7 +208,7 @@ class PageBackground {
   private redrawBackground = () => {
     // Clear the overlay canvas
     this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
-  
+
     this.overlayCtx.font = 'bold 28px Geist Mono';
     this.overlayCtx.textAlign = 'start';
     this.overlayCtx.textBaseline = 'top';
@@ -212,12 +231,12 @@ class PageBackground {
           fadeout: Date.now() + (this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0])) * 1000
         });
       }
-      
+
       this.overlayCtx.fillStyle = `rgba(${this.primaryRgb}, ${alpha})`;
       this.overlayCtx.shadowColor = `rgba(${this.primaryRgb}, ${alpha})`;
       this.overlayCtx.fillText(letter.letter, letter.x, letter.y);
     }
-    
+
     requestAnimationFrame(this.redrawBackground);
   }
 
@@ -233,12 +252,15 @@ class PageBackground {
 
     this.overlayCanvas.width = this.width;
     this.overlayCanvas.height = this.height;
-    
+
     this.baseCtx.clearRect(0, 0, this.baseCanvas.width, this.baseCanvas.height);
     this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
     this.letterInstances = [];
     this.letterPositions = [];
+
+    // Update theme colors in case theme changed
+    this.setThemeColors();
 
     this.initBackground();
   }
@@ -251,7 +273,7 @@ async function loadFont() {
   const font = new FontFace('Geist Mono', 'url(/fonts/GeistMono.woff2)');
 
   await font.load();
-  
+
   document.fonts.add(font);
 }
 
