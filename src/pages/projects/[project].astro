@@ -1,6 +1,4 @@
 ---
-import '../../styles/article.css';
-
 import Card from "../../components/Card.astro";
 import Layout from "../../layouts/Layout.astro";
 
@@ -35,15 +33,15 @@ const { Content } = await render(project);
     createdAt: project.data.date,
   }}
 >
-  <div class="left" slot="left">
-    <Card class="toc-card">
+  <div class="h-full relative" slot="left">
+    <Card class="min-w-0 sticky top-8">
       <h2 class="no-mt">Info</h2>
       <ul class="overview-list">
         {project.data.info.map((info) => {
           const Tag = info.link ? 'a' : 'div';
           return (
             <li>
-              <Tag href={info.link} class='project-info-item'>
+              <Tag href={info.link} class='flex items-center gap-4'>
                 <Icon type={info.icon.type} name={info.icon.name as any} width={24} height={24} class='glow-icon' />
                 <span>{info.text}</span>
               </Tag>
@@ -53,29 +51,22 @@ const { Content } = await render(project);
       </ul>
     </Card>
   </div>
-  <article slot="right" data-pagefind-body>
+  <article slot="right" data-pagefind-body class="flex flex-col gap-8 leading-relaxed min-w-0 sm:gap-4">
     <Card>
-      <div class="article-header" id="_top" data-pagefind-ignore>
-        {project.data.image && <ImageGlow quality={100} class="article-image" src={project.data.image} alt={project.data.title} />}
-        <div class="header">
+      <div class="relative w-full h-fit" style="scroll-margin-top: 2rem;" id="_top" data-pagefind-ignore>
+        {project.data.image && <ImageGlow quality={100} class="w-full h-auto z-10" src={project.data.image} alt={project.data.title} />}
+        <div class="flex flex-col gap-2 absolute bottom-6 left-4 max-w-[calc(100%-3rem)] z-20 sm:relative sm:bottom-0 sm:left-0 sm:w-fit sm:max-w-none sm:mt-4">
           <div>
-            <h1 class="no-mt article-h1">{project.data.title}</h1>
+            <h1 class="mt-0 text-2xl bg-white text-black inline relative leading-tight mb-0 px-3 py-1 sm:inline sm:bg-transparent sm:p-0 sm:text-foreground" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">{project.data.title}</h1>
           </div>
-          <div class="article-info">
+          <div class="flex flex-row gap-2 bg-accent-foreground text-accent w-fit px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground" style="font-family: 'Geist Mono', monospace; box-decoration-break: clone; -webkit-box-decoration-break: clone;">
             <span>{project.data.date.toLocaleDateString()}</span>
           </div>
         </div>
       </div>
       <Content />
-      <hr class="end-of-article" />
+      <hr class="mt-4 mb-6 w-full h-px bg-border border-none" />
       <a href="/projects" class="block-link" data-pagefind-ignore>← Back to projects</a>
     </Card>
   </article>
 </Layout>
-<style>
-  .project-info-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-</style>

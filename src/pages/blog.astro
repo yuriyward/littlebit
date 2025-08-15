@@ -1,6 +1,4 @@
 ---
-import '../styles/article-list.css';
-
 import { getCollection } from "astro:content";
 import Card from "../components/Card.astro";
 import Icon from "../components/Icon.astro";
@@ -18,11 +16,11 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   <div class="layout-grid-left" slot="left">
     <Card class="flex-col-card">
       <h2 class="no-mt">Filter</h2>
-      <ul class="tags-list">
+      <ul class="flex flex-row items-center flex-wrap list-none m-0 p-0 gap-4">
         {Array.from(new Set(tags)).map((tag) => (
           <li>
             <a
-              class="blog-tag"
+              class="py-1 px-2 bg-muted text-foreground no-underline hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground blog-tag"
               href="/blog"
               data-tag={tag}
             >
@@ -35,9 +33,9 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   </div>
   <div class="layout-grid-right" slot="right">
 		<Card>
-			<div class="header-container">
+			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type="lucide" name="rss" width={24} height={24} class='glow-icon' />
-				<h2>Latest Posts</h2>
+				<h2 class="m-0">Latest Posts</h2>
 			</div>
 			<div class="content-container">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).map((post) => (
@@ -84,13 +82,14 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   tags.forEach((tag) => {
     const tagValue = tag.dataset.tag!;
     if (selectedTags.has(tagValue)) {
-      tag.classList.add('active');
+      tag.classList.add('bg-accent', 'text-accent-foreground');
     }
 
     tag.addEventListener('click', (event) => {
       event.preventDefault();
 
-      tag.classList.toggle('active');
+      tag.classList.toggle('bg-accent');
+      tag.classList.toggle('text-accent-foreground');
 
       if (selectedTags.has(tagValue)) {
         selectedTags.delete(tagValue);

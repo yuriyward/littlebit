@@ -59,18 +59,18 @@ const { Content: About } = await render(about!);
 	</div>
 	<div class="layout-grid-right" slot="right">
 		<Card>
-			<div class="header-container">
+			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="user" width={24} height={24} class='glow-icon' />
-				<h2>About me</h2>
+				<h2 class="m-0">About me</h2>
 			</div>
 			<div class="prose">
 				<About />
 			</div>
 		</Card>
 		<Card>
-			<div class="header-container">
+			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="rss" width={24} height={24} class='glow-icon' />
-				<h2>Latest Posts</h2>
+				<h2 class="m-0">Latest Posts</h2>
 			</div>
 			<div class="content-container">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).slice(0, 2).map((post) => (
@@ -85,9 +85,9 @@ const { Content: About } = await render(about!);
 			</div>
 		</Card>
 		<Card>
-			<div class="header-container">
+			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="folder-git" width={24} height={24} class='glow-icon' />
-				<h2>Latest Projects</h2>
+				<h2 class="m-0">Latest Projects</h2>
 			</div>
 			<div class="content-container">
 				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2).map((project) => (
@@ -102,9 +102,9 @@ const { Content: About } = await render(about!);
 			</div>
 		</Card>
 		<Card>
-			<div class="header-container">
+			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="briefcase-business" width={24} height={24} class='glow-icon' />
-				<h2>Work Experience</h2>
+				<h2 class="m-0">Work Experience</h2>
 			</div>
 			<div class="work-experience-container">
 				{workExperience.reverse().map((entry) => (
