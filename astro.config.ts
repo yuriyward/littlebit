@@ -8,6 +8,9 @@ import spectre from './package/src';
 
 import node from '@astrojs/node';
 import { spectreDark } from './src/ec-theme';
+import tailwindcss from "@tailwindcss/vite";
+
+const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), "");
 
 const {
   GISCUS_REPO,
@@ -19,7 +22,7 @@ const {
   GISCUS_REACTIONS_ENABLED,
   GISCUS_EMIT_METADATA,
   GISCUS_LANG
-} = loadEnv(process.env.NODE_ENV!, process.cwd(), "");
+} = env;
 
 // https://astro.build/config
 const config = defineConfig({
@@ -61,7 +64,10 @@ const config = defineConfig({
   ],
   adapter: node({
     mode: 'standalone'
-  })
+  }),
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
 
 export default config;

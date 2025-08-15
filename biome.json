@@ -73,6 +73,16 @@
 					}
 				}
 			}
+		},
+		{
+			"include": ["astro.config.ts", "vite.config.ts", "*.config.ts"],
+			"linter": {
+				"rules": {
+					"nursery": {
+						"noProcessEnv": "off"
+					}
+				}
+			}
 		}
 	]
 }
