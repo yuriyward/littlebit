@@ -1,11 +1,4 @@
-:root {
-  --primary: #8c5cf5;
-  /* Needed for some hover effects. This is just the R, G and B values of the hex color above */
-  --primary-rgb: 140, 92, 245;
-  /* Used for links */
-  --primary-light: #a277ff;
-  --primary-lightest: #c2a8fd;
-}
+@import "./global.css";
 
 .overview-list {
   list-style-type: none;
@@ -26,14 +19,12 @@
 }
 
 a {
-  color: var(--primary-light);
+  @apply text-ring transition-colors duration-150;
   text-decoration: none;
-  transition: color .15s ease;
 }
 
 a:hover {
-  color: var(--primary-lightest);
-  text-decoration: underline;
+  @apply text-muted-foreground underline;
 }
 
 .no-mt {
@@ -51,8 +42,8 @@ main {
 }
 
 .glow-icon {
-  color: var(--primary);
-  filter: drop-shadow(0 0 4px var(--primary));
+  @apply text-primary;
+  filter: drop-shadow(0 0 4px oklch(0.21 0.006 285.885));
 }
 
 .expressive-code {
@@ -81,7 +72,7 @@ main {
 }
 
 .expressive-code span.title::after {
-  border-top: 1px solid var(--primary) !important;
+  border-top: 1px solid oklch(0.21 0.006 285.885) !important;
   border-bottom: 0 !important;
 }
 
@@ -90,21 +81,11 @@ main {
 }
 
 .post-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #353535;
-  color: #ffffff;
-  text-decoration: none;
-  transition: background-color .15s ease, border .15s ease;
+  @apply flex flex-col gap-4 p-4 border border-border text-foreground no-underline transition-all duration-150;
 }
 
 .post-container:hover, .post-container:focus-visible {
-  background-color: rgba(var(--primary-rgb), .125);
-  border: 1px solid var(--primary);
-  color: white;
-  text-decoration: none;
+  @apply bg-primary/20 border-primary text-foreground no-underline;
 }
 
 .post-container:focus-visible {
@@ -122,24 +103,20 @@ main {
 }
 
 .post-date {
-  color: #c7c7c7;
+  @apply text-muted-foreground;
 }
 
 .text-glow {
-  color: var(--primary);
-  filter: drop-shadow(0 0 12px var(--primary));
+  @apply text-primary;
+  filter: drop-shadow(0 0 12px oklch(0.21 0.006 285.885));
 }
 
 .block-link {
-  color: white;
-  padding: .25rem .5rem;
+  @apply text-foreground py-1 px-2;
 }
 
 .block-link:hover, .block-link:focus-visible {
-  color: white;
-  background-color: var(--primary);
-  text-decoration: none;
-  outline: none;
+  @apply text-foreground bg-primary no-underline outline-none;
 }
 
 @media screen and (max-width: 1380px) {

@@ -75,7 +75,7 @@ const path = Astro.url.pathname;
   searchElement?.addEventListener('focus', async () => {
     searchElement.placeholder = '';
     results.classList.add('active');
-    
+
     // initialize pagefind on first focus
     if (!pagefindInitialized) {
       try {
@@ -87,7 +87,7 @@ const path = Astro.url.pathname;
       }
     }
   });
-  
+
   searchElement?.addEventListener('blur', () => {
     handleTabletChange();
     setTimeout(() => {
@@ -121,7 +121,7 @@ const path = Astro.url.pathname;
       i++;
 
       const data = await result.data();
-      
+
       searchResultHtml += `
         <a href="${data.url}">
           <h3 class="no-mt">${data.meta.title}</h3>
@@ -157,6 +157,7 @@ const path = Astro.url.pathname;
   document.addEventListener('resize', handleTabletChange);
 </script>
 <style>
+  @reference "../styles/global.css";
   nav {
     display: flex;
     justify-content: space-between;
@@ -186,14 +187,11 @@ const path = Astro.url.pathname;
   }
 
   nav a {
-    color: inherit;
-    text-decoration: none;
-    padding: .25rem .5rem;
+    @apply text-inherit no-underline py-1 px-2;
   }
 
   nav a:hover, nav a:focus-visible, nav a.active {
-    background-color: var(--primary);
-    outline: none;
+    @apply bg-primary outline-none;
   }
 
   #search {
@@ -205,23 +203,18 @@ const path = Astro.url.pathname;
   }
 
   #search::placeholder {
-    color: white;
+    @apply text-foreground;
   }
 
   #search:focus {
-    background-color: var(--primary);
+    @apply bg-primary;
   }
 
   #search-results {
-    position: absolute;
+    @apply absolute hidden z-10 p-2 bg-muted border border-primary;
     top: calc(100% + .5rem);
     right: 0;
-    background-color: #252525;
-    border: 1px solid var(--primary);
-    display: none;
     width: 200%;
-    z-index: 10;
-    padding: .5rem;
   }
 
   #search-results.active:has(*) {
@@ -229,15 +222,7 @@ const path = Astro.url.pathname;
   }
 
   .mobile-nav-toggle {
-    display: none;
-    width: 40px;
-    height: 40px;
-    background-color: #121212;
-    border: 1px solid #353535;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 2;
+    @apply hidden w-10 h-10 bg-card border border-border items-center justify-center cursor-pointer z-20;
   }
 
   .menu-open {
@@ -285,26 +270,18 @@ const path = Astro.url.pathname;
     }
 
     nav.active {
-      background-color: #181818;
+      @apply bg-secondary;
     }
 
     nav.active ul {
-      opacity: 1;
-      pointer-events: all;
-      background-color: #181818;
+      @apply opacity-100 pointer-events-auto bg-secondary;
     }
 
     nav ul li {
-      position: relative;
-      transition: all .25s ease-out;
+      @apply relative transition-all duration-300 ease-out w-full max-w-none p-0 text-lg border-b border-border;
       top: -1.5rem;
-      border-bottom: 1px solid #353535;
-      width: 100%;
-      max-width: none;
-      padding: 0;
-      font-size: 1.125em;
     }
-  
+
     nav ul li a {
       display: block;
       padding: .75rem 0;
@@ -313,7 +290,7 @@ const path = Astro.url.pathname;
     }
 
     nav ul li:first-child {
-      border-top: 1px solid #353535;
+      @apply border-t border-border;
     }
 
     nav.active ul li {
@@ -334,21 +311,17 @@ const path = Astro.url.pathname;
   }
 </style>
 <style is:global>
+  @reference "../styles/global.css";
   #search-results a {
-    display: block;
-    text-decoration: none;
-    color: white !important;
-    padding: .5rem;
+    @apply block no-underline text-foreground p-2;
   }
 
   #search-results a:hover, #search-results a:focus-visible {
-    background-color: var(--primary);
-    outline: none;
+    @apply bg-primary outline-none;
   }
 
   #search-results a:hover mark, #search-results a:focus-visible mark {
-    background-color: #ffffff;
-    color: #000000;
+    @apply bg-white text-black;
   }
 
   #search-results a h3 {
@@ -363,14 +336,10 @@ const path = Astro.url.pathname;
   }
 
   #search-results mark {
-    background-color: var(--primary);
-    color: white;
+    @apply bg-primary text-foreground;
   }
 
   .separator {
-    margin: .5rem .5rem;
-    border: none;
-    height: 1px;
-    background-color: #353535;
+    @apply my-2 mx-2 border-none h-px bg-border;
   }
 </style>

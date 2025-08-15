@@ -57,8 +57,8 @@ class PageBackground {
     overlayCanvas.width = this.width;
     overlayCanvas.height = this.height;
 
-    // Set the primary color to the first color in the theme
-    this.primaryRgb = window.getComputedStyle(document.documentElement).getPropertyValue('--primary-rgb').trim();
+    // Set the primary color to match Tailwind's primary color (oklch(0.21 0.006 285.885))
+    this.primaryRgb = '140, 92, 245';
 
     this.initBackground();
   

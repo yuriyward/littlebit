@@ -1,4 +1,5 @@
 @import "./global.css";
+@reference "./global.css";
 
 .layout-grid-left, .layout-grid-right {
   display: flex;
@@ -35,19 +36,11 @@
 }
 
 .post-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #353535;
-  color: #ffffff;
-  text-decoration: none;
-  transition: background-color .15s ease, border .15s ease;
+  @apply flex flex-col gap-4 p-4 border border-border text-foreground no-underline transition-all duration-150;
 }
 
 .post-container:hover, .post-container:focus-visible {
-  background-color: rgba(140, 92, 245, .125);
-  border: 1px solid var(--primary);
+  @apply bg-primary/20 border-primary;
 }
 
 .post-container:focus-visible {
@@ -55,7 +48,7 @@
 }
 
 .post-date, .work-experience-duration {
-  color: #c7c7c7;
+  @apply text-muted-foreground;
 }
 
 .work-experience-container {
@@ -65,8 +58,7 @@
 }
 
 .work-experience-entry:not(:last-of-type) {
-  border-bottom: 1px solid #353535;
-  padding-bottom: 1rem;
+  @apply border-b border-border pb-4;
 }
 
 .work-experience-duration {
@@ -83,9 +75,5 @@
 }
 
 .socials-link {
-  color: white;
-  display: flex;
-  flex-direction: row;
-  gap: .75rem;
-  align-items: center;
+  @apply text-foreground flex flex-row gap-3 items-center;
 }

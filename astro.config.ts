@@ -68,7 +68,7 @@ const config = defineConfig({
     mode: 'standalone'
   }),
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss() as any],
   },
 });
 

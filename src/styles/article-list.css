@@ -1,3 +1,5 @@
+@reference "./global.css";
+
 .header-container {
   display: flex;
   flex-direction: row;
@@ -22,18 +24,13 @@
 }
 
 .blog-tag {
-  padding: .25rem .5rem;
-  background: #252525;
-  color: white;
-  text-decoration: none;
+  @apply py-1 px-2 bg-muted text-foreground no-underline;
 }
 
 .blog-tag:hover, .blog-tag:focus-visible {
-  background: #353535;
-  color: white;
-  text-decoration: none;
+  @apply bg-border text-foreground no-underline;
 }
 
 .blog-tag.active {
-  background: var(--primary);
+  @apply bg-primary;
 }

@@ -16,7 +16,7 @@ import { giscus } from 'spectre:globals';
  * - A reading speed of 200 words per minute
  * - 10 seconds per image
  * - 20 seconds per code block
- * 
+ *
  * @param post The post to estimate the reading time for
  */
 function timeToRead(post: CollectionEntry<'posts'>): number {
@@ -119,6 +119,7 @@ const { Content, headings } = await render(post);
 </Layout>
 <script src="../../scripts/toc.ts" />
 <style is:global>
+  @reference "../../styles/global.css";
   .toc-card ol {
     padding: 0;
     display: flex;
@@ -130,21 +131,17 @@ const { Content, headings } = await render(post);
   }
 
   .toc-card ol li a {
-    color: #c7c7c7;
-    font-size: .925rem;
-    padding: .25rem .5rem;
+    @apply text-muted-foreground text-sm py-1 px-2;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
 
   .toc-card ol li a:hover {
-    color: white;
-    text-decoration: none;
+    @apply text-foreground no-underline;
   }
 
   .toc-card ol li a.active {
-    color: white;
-    background: var(--primary);
+    @apply text-foreground bg-primary;
   }
 
   .left {
@@ -164,7 +161,7 @@ const { Content, headings } = await render(post);
   }
 
   .comments * {
-    border-color: #353535 !important;
+    @apply border-border;
   }
 
   @media screen and (max-width: 640px) {
