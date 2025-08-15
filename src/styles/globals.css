@@ -19,12 +19,15 @@
 }
 
 a {
-  @apply text-ring transition-colors duration-150;
-  text-decoration: none;
+  @apply text-foreground transition-colors duration-150;
+  text-decoration: underline;
+  text-decoration-color: var(--muted-foreground);
+  text-underline-offset: 2px;
 }
 
 a:hover {
-  @apply text-muted-foreground underline;
+  @apply text-accent-foreground;
+  text-decoration-color: var(--accent-foreground);
 }
 
 .no-mt {
@@ -85,7 +88,7 @@ main {
 }
 
 .post-container:hover, .post-container:focus-visible {
-  @apply bg-primary/20 border-primary text-foreground no-underline;
+  @apply bg-accent/20 border-accent text-accent-foreground no-underline;
 }
 
 .post-container:focus-visible {
@@ -116,7 +119,7 @@ main {
 }
 
 .block-link:hover, .block-link:focus-visible {
-  @apply text-foreground bg-primary no-underline outline-none;
+  @apply text-accent-foreground bg-accent no-underline outline-none;
 }
 
 @media screen and (max-width: 1380px) {

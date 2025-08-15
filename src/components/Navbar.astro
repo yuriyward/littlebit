@@ -1,5 +1,7 @@
 ---
 import Icon from "./Icon.astro";
+import { InputWrapper } from "./InputWrapper";
+import { ButtonWrapper } from "./ButtonWrapper";
 import { name } from 'spectre:globals';
 
 const path = Astro.url.pathname;
@@ -16,14 +18,14 @@ const path = Astro.url.pathname;
     </li>
     <li class="nav-separator">/</li>
     <li>
-      <input id="search" type="text" placeholder="Search (Ctrl+K)" />
+      <InputWrapper id="search" type="text" placeholder="Search (Ctrl+K)" client:load />
       <div id="search-results"></div>
     </li>
   </ul>
-  <button class="mobile-nav-toggle">
+  <ButtonWrapper className="mobile-nav-toggle" client:load>
     <Icon type="lucide" name="menu" width={24} height={24} class="menu-closed" />
     <Icon type="lucide" name="x" width={24} height={24} class="menu-open" />
-  </button>
+  </ButtonWrapper>
 </nav>
 <script is:inline>
   const searchElement = document.querySelector('#search');
@@ -191,23 +193,11 @@ const path = Astro.url.pathname;
   }
 
   nav a:hover, nav a:focus-visible, nav a.active {
-    @apply bg-primary outline-none;
+    @apply bg-accent text-accent-foreground outline-none;
   }
 
   #search {
-    background: none;
-    border: none;
-    outline: none;
-    padding: .25rem .5rem;
     width: 160px;
-  }
-
-  #search::placeholder {
-    @apply text-foreground;
-  }
-
-  #search:focus {
-    @apply bg-primary;
   }
 
   #search-results {
@@ -222,7 +212,7 @@ const path = Astro.url.pathname;
   }
 
   .mobile-nav-toggle {
-    @apply hidden w-10 h-10 bg-card border border-border items-center justify-center cursor-pointer z-20;
+    @apply hidden z-20;
   }
 
   .menu-open {
@@ -300,7 +290,6 @@ const path = Astro.url.pathname;
     #search {
       width: 100%;
       max-width: none;
-      padding: .75rem 1rem;
     }
 
     #search-results {
@@ -317,11 +306,11 @@ const path = Astro.url.pathname;
   }
 
   #search-results a:hover, #search-results a:focus-visible {
-    @apply bg-primary outline-none;
+    @apply bg-accent text-accent-foreground outline-none;
   }
 
   #search-results a:hover mark, #search-results a:focus-visible mark {
-    @apply bg-white text-black;
+    @apply bg-accent-foreground text-accent;
   }
 
   #search-results a h3 {

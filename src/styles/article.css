@@ -44,13 +44,14 @@ p img {
 }
 
 .toc-card ol li a {
-  @apply text-muted-foreground text-sm py-1 px-2;
+  @apply text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150;
+  text-decoration: none !important;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
 
 .toc-card ol li a:hover {
-  @apply text-foreground no-underline;
+  @apply text-accent-foreground bg-accent no-underline;
 }
 
 .toc-li[data-depth="3"] {
@@ -65,8 +66,10 @@ p img {
   margin-top: 0;
 }
 
-ol li a.active {
-  @apply text-foreground bg-primary;
+.toc-card ol li a.active {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  border-radius: calc(var(--radius) - 4px) !important;
 }
 
 .left {
@@ -105,8 +108,8 @@ ol li a.active {
 }
 
 .article-info {
-  @apply flex flex-row gap-2 bg-white text-black w-fit;
-  font-family: 'Ghost Mono', monospace;
+  @apply flex flex-row gap-2 bg-accent-foreground text-accent w-fit;
+  font-family: 'Geist Mono', monospace;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   padding: 0 .75rem;
@@ -132,8 +135,14 @@ ol li a.active {
 }
 
 code:not(.astro-code code) {
-  @apply bg-border text-sm;
-  padding: .125rem .25rem;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: .125rem .375rem;
+  border-radius: calc(var(--radius) - 4px);
+  border: 1px solid var(--border);
+  font-family: 'Geist Mono', monospace;
 }
 
 .article-image {
@@ -147,7 +156,7 @@ code:not(.astro-code code) {
 }
 
 blockquote {
-  @apply border-l-2 border-primary p-3 ml-0 bg-primary/25 w-full;
+  @apply border-l-2 border-accent p-3 ml-0 bg-accent/10 w-full;
 }
 
 blockquote p {

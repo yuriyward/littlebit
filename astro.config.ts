@@ -8,7 +8,7 @@ import sitemap from '@astrojs/sitemap';
 import spectre from './package/src';
 
 import node from '@astrojs/node';
-import { spectreDark } from './src/ec-theme';
+import { littlebitDark } from './src/code-theme';
 import tailwindcss from "@tailwindcss/vite";
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), "");
@@ -31,7 +31,7 @@ const config = defineConfig({
   output: 'static',
   integrations: [
     expressiveCode({
-      themes: [spectreDark],
+      themes: [littlebitDark],
     }),
     mdx(),
     react(),

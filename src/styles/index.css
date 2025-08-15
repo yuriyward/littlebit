@@ -40,7 +40,7 @@
 }
 
 .post-container:hover, .post-container:focus-visible {
-  @apply bg-primary/20 border-primary;
+  @apply bg-accent/20 border-accent;
 }
 
 .post-container:focus-visible {
