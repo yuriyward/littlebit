@@ -39,20 +39,6 @@ article a[target="_blank"]:not([class]):hover::after,
   opacity: 1;
 }
 
-main {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem 0;
-}
-
-.glow-icon {
-  @apply text-primary;
-  filter: drop-shadow(0 0 4px oklch(0.21 0.006 285.885));
-}
 
 .expressive-code {
   margin-top: 1rem;
@@ -116,22 +102,3 @@ main {
 .block-link:hover, .block-link:focus-visible {
   @apply text-accent-foreground bg-accent no-underline outline-none;
 }
-
-@media screen and (max-width: 1380px) {
-  body {
-    padding: 0 2rem;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  body {
-    padding: 0;
-  }
-
-  main {
-    padding-top: 0;
-    gap: 1rem;
-  }
-
-}
-

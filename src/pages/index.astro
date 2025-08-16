@@ -37,7 +37,7 @@ const { Content: About } = await render(about!);
 			<ul class="list-none p-0 m-0">
 				{quickInfo.map((info) => (
 					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
-						<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={24} height={24} class='glow-icon' />
+						<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={24} height={24} class='text-muted-foreground' />
 						<span>{info.data.text}</span>
 					</li>
 				))}
@@ -48,8 +48,8 @@ const { Content: About } = await render(about!);
 			<ul class="list-none p-0 m-0">
 				{socials.map((item) => (
 					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
-						<a href={item.data.link} class="socials-link">
-							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={24} height={24} class='glow-icon' />
+						<a href={item.data.link} class="socials-link group">
+							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={24} height={24} class='text-muted-foreground group-hover:text-foreground transition-colors' />
 							<span>{item.data.text}</span>
 						</a>
 					</li>
@@ -60,7 +60,7 @@ const { Content: About } = await render(about!);
 	<div class="layout-grid-right" slot="right">
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="user" width={24} height={24} class='glow-icon' />
+				<Icon type='lucide' name="user" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">About me</h2>
 			</div>
 			<div class="prose">
@@ -69,7 +69,7 @@ const { Content: About } = await render(about!);
 		</Card>
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="rss" width={24} height={24} class='glow-icon' />
+				<Icon type='lucide' name="rss" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">Latest Posts</h2>
 			</div>
 			<div class="flex flex-col gap-4">
@@ -86,7 +86,7 @@ const { Content: About } = await render(about!);
 		</Card>
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="folder-git" width={24} height={24} class='glow-icon' />
+				<Icon type='lucide' name="folder-git" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">Latest Projects</h2>
 			</div>
 			<div class="flex flex-col gap-4">
@@ -103,7 +103,7 @@ const { Content: About } = await render(about!);
 		</Card>
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="briefcase-business" width={24} height={24} class='glow-icon' />
+				<Icon type='lucide' name="briefcase-business" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">Work Experience</h2>
 			</div>
 			<div class="work-experience-container">
