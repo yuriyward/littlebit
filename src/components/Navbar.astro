@@ -25,7 +25,8 @@ const path = Astro.url.pathname;
       <InputWrapper
         id="search"
         type="text"
-        placeholder="Search (Ctrl+K)"
+        placeholder="Search"
+        responsivePlaceholder={true}
         className="w-48 h-8 pl-3 pr-8 bg-muted/50 border border-border/50 rounded-md text-sm placeholder:text-muted-foreground focus:bg-background focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all duration-200"
         client:load
       />
@@ -111,7 +112,6 @@ const path = Astro.url.pathname;
   let pagefindInitialized = false;
 
   searchElement?.addEventListener('focus', async () => {
-    searchElement.placeholder = '';
     results.classList.add('active');
 
     // initialize pagefind on first focus
@@ -127,7 +127,6 @@ const path = Astro.url.pathname;
   });
 
   searchElement?.addEventListener('blur', () => {
-    handleTabletChange();
     setTimeout(() => {
       if (!document.activeElement?.closest('#search-results')) {
         results.classList.remove('active');
@@ -182,17 +181,6 @@ const path = Astro.url.pathname;
     navToggle.classList.toggle('active');
     document.querySelector('nav').classList.toggle('active');
   });
-
-  const handleTabletChange = () => {
-    if (window.matchMedia('(max-width: 640px)').matches) {
-      searchElement.placeholder = 'Search';
-    } else {
-      searchElement.placeholder = 'Search (Ctrl+K)';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', handleTabletChange);
-  document.addEventListener('resize', handleTabletChange);
 </script>
 <style>
   @reference "../styles/global.css";
