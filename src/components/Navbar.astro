@@ -117,12 +117,20 @@ const path = Astro.url.pathname;
     // initialize pagefind on first focus
     if (!pagefindInitialized) {
       try {
+        // Import the Pagefind module - it auto-initializes on first use
         window.pagefind = await import("/pagefind/pagefind.js");
-        await window.pagefind.init();
         pagefindInitialized = true;
       } catch (error) {
-        console.error('Failed to initialize Pagefind:', error);
+        console.error('Failed to load Pagefind:', error);
+        return;
       }
+    }
+    
+    // If there's already text in the search box and no results showing, trigger search
+    if (searchElement.value.trim() && !results.innerHTML.trim()) {
+      // Trigger the input event to show search results
+      const inputEvent = new Event('input', { bubbles: true });
+      searchElement.dispatchEvent(inputEvent);
     }
   });
 
@@ -150,17 +158,26 @@ const path = Astro.url.pathname;
 
     results.innerHTML = '';
     let searchResultHtml = '';
+    const searchTerm = e.target.value;
 
-    const search = await window.pagefind.search(e.target.value);
+    const search = await window.pagefind.search(searchTerm);
 
     let i = 0;
     for (const result of search.results) {
       i++;
 
       const data = await result.data();
+      
+      // Add search term to URL for highlighting on the target page
+      let targetUrl = data.url;
+      if (searchTerm && searchTerm.trim()) {
+        const url = new URL(targetUrl, window.location.origin);
+        url.searchParams.set('highlight', searchTerm.trim());
+        targetUrl = url.pathname + url.search;
+      }
 
       searchResultHtml += `
-        <a href="${data.url}">
+        <a href="${targetUrl}" data-search-term="${searchTerm}">
           <h3 class="mt-0">${data.meta.title}</h3>
           <p>${data.excerpt}</p>
         </a>
@@ -244,7 +261,14 @@ const path = Astro.url.pathname;
   }
 
   #search-results mark {
-    @apply bg-accent/30 text-accent-foreground rounded px-1;
+    @apply bg-blue-100 text-blue-900 rounded-md px-2 py-1 font-medium;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+  }
+  
+  .dark #search-results mark {
+    @apply bg-blue-900/40 text-blue-100;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
   }
 
   .separator {

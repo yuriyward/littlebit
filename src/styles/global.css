@@ -311,6 +311,29 @@ table tbody tr td {
   border-radius: 0 !important;
 }
 
+/* Fix search highlighting in code titles */
+.expressive-code .search-highlight,
+.expressive-code mark.search-highlight {
+  @apply bg-blue-100 text-blue-900 rounded-md px-1 py-0.5 font-medium;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark .expressive-code .search-highlight,
+.dark .expressive-code mark.search-highlight {
+  @apply bg-blue-900/40 text-blue-100;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4) !important;
+}
+
+.expressive-code .search-highlight.current,
+.expressive-code mark.search-highlight.current {
+  @apply bg-transparent;
+  color: inherit !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 0 2px rgba(59, 130, 246, 0.8) !important;
+  border: 2px solid rgba(59, 130, 246, 0.8) !important;
+  animation: modernGlow 3s ease-in-out infinite;
+}
+
 /* Global link styles for article content and prose */
 .prose a,
 article a:not([class]),
@@ -348,4 +371,81 @@ article a[target="_blank"]:not([class])::after,
 article a[target="_blank"]:not([class]):hover::after,
 .content a[target="_blank"]:not([class]):hover::after {
   opacity: 1;
+}
+
+/* Search highlighting styles */
+.search-highlight {
+  @apply bg-blue-100 text-blue-900 px-2 py-1 rounded-md font-medium;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(1px);
+}
+
+.dark .search-highlight {
+  @apply bg-blue-900/40 text-blue-100 border border-blue-500/30;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+}
+
+.search-highlight.current {
+  @apply bg-transparent;
+  color: inherit;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 0 2px rgba(59, 130, 246, 0.8);
+  transform: scale(1.02);
+  animation: modernGlow 3s ease-in-out infinite;
+  border: 2px solid rgba(59, 130, 246, 0.8);
+}
+
+.dark .search-highlight.current {
+  @apply bg-transparent;
+  color: inherit;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.6), 0 0 0 2px rgba(59, 130, 246, 0.9);
+  border: 2px solid rgba(59, 130, 246, 0.9);
+}
+
+.search-indicator {
+  @apply fixed top-4 right-4 z-50 bg-card border border-border rounded-lg p-3 shadow-lg flex items-center gap-2 text-sm font-mono;
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.search-indicator button {
+  @apply px-2 py-1 bg-muted text-muted-foreground rounded hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer;
+}
+
+.search-indicator .nav-btn {
+  @apply w-6 h-6 p-1 flex items-center justify-center;
+}
+
+.search-indicator .nav-btn svg {
+  @apply w-3 h-3;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes modernGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 0 2px rgba(59, 130, 246, 0.8);
+    border-color: rgba(59, 130, 246, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 0 2px rgba(59, 130, 246, 1);
+    border-color: rgba(59, 130, 246, 1);
+  }
 }

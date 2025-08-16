@@ -71,5 +71,230 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 			<slot name="404" />
 		</main>
 		<Background />
+		<script is:inline>
+			// Highlight and scroll to search terms from URL parameter
+			(function() {
+				const params = new URLSearchParams(window.location.search);
+				const highlightTerm = params.get('highlight');
+				
+				if (!highlightTerm) return;
+				
+				// Global state for navigation
+				let searchHighlights = [];
+				let currentHighlightIndex = 0;
+				
+				// Function to highlight text and scroll to first match
+				function highlightAndScroll() {
+					// Get the main content area (avoiding navbar and other UI elements)
+					const contentArea = document.querySelector('[data-pagefind-body]') || 
+					                   document.querySelector('article') || 
+					                   document.querySelector('main');
+					
+					if (!contentArea) return;
+					
+					// Create a tree walker to find text nodes
+					const walker = document.createTreeWalker(
+						contentArea,
+						NodeFilter.SHOW_TEXT,
+						{
+							acceptNode: function(node) {
+								// Skip script and style tags
+								const parent = node.parentElement;
+								if (parent && (parent.tagName === 'SCRIPT' || 
+								              parent.tagName === 'STYLE' ||
+								              parent.tagName === 'CODE' ||
+								              parent.tagName === 'PRE')) {
+									return NodeFilter.FILTER_REJECT;
+								}
+								return NodeFilter.FILTER_ACCEPT;
+							}
+						}
+					);
+					
+					const textNodes = [];
+					let node;
+					while (node = walker.nextNode()) {
+						textNodes.push(node);
+					}
+					
+					// Create regex for case-insensitive search that matches whole words
+					// but expands to include the full word even if search term is partial
+					const escapedTerm = highlightTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+					const searchRegex = new RegExp(`\\b\\w*${escapedTerm}\\w*\\b`, 'gi');
+					searchHighlights = [];
+					
+					// Process text nodes and wrap matches
+					textNodes.forEach(textNode => {
+						const text = textNode.textContent;
+						if (searchRegex.test(text)) {
+							const parent = textNode.parentNode;
+							const fragment = document.createDocumentFragment();
+							let lastIndex = 0;
+							
+							// Reset regex for exec
+							searchRegex.lastIndex = 0;
+							
+							let match;
+							while ((match = searchRegex.exec(text)) !== null) {
+								// Add text before match
+								if (match.index > lastIndex) {
+									fragment.appendChild(
+										document.createTextNode(text.slice(lastIndex, match.index))
+									);
+								}
+								
+								// Create highlighted span
+								const mark = document.createElement('mark');
+								mark.className = 'search-highlight';
+								mark.textContent = match[0];
+								fragment.appendChild(mark);
+								
+								// Store in highlights array
+								searchHighlights.push(mark);
+								
+								lastIndex = match.index + match[0].length;
+							}
+							
+							// Add remaining text
+							if (lastIndex < text.length) {
+								fragment.appendChild(
+									document.createTextNode(text.slice(lastIndex))
+								);
+							}
+							
+							// Replace text node with fragment
+							parent.replaceChild(fragment, textNode);
+						}
+					});
+					
+					// Set first highlight as current and scroll to it
+					if (searchHighlights.length > 0) {
+						currentHighlightIndex = 0;
+						updateCurrentHighlight();
+						
+						setTimeout(() => {
+							searchHighlights[0].scrollIntoView({
+								behavior: 'smooth',
+								block: 'center'
+							});
+							
+							// Add a temporary pulse animation to draw attention
+							searchHighlights[0].style.animation = 'pulse 2s ease-in-out';
+						}, 100);
+					}
+					
+					// Show indicator with navigation controls
+					if (searchHighlights.length > 0) {
+						createSearchIndicator();
+					}
+				}
+				
+				// Update current highlight styling
+				function updateCurrentHighlight() {
+					// Remove current class from all highlights
+					searchHighlights.forEach(mark => mark.classList.remove('current'));
+					// Add current class to active highlight
+					if (searchHighlights[currentHighlightIndex]) {
+						searchHighlights[currentHighlightIndex].classList.add('current');
+					}
+					// Update indicator counter
+					updateIndicatorCounter();
+				}
+				
+				// Navigation functions
+				window.nextHighlight = function() {
+					if (searchHighlights.length === 0) return;
+					currentHighlightIndex = (currentHighlightIndex + 1) % searchHighlights.length;
+					updateCurrentHighlight();
+					searchHighlights[currentHighlightIndex].scrollIntoView({
+						behavior: 'smooth',
+						block: 'center'
+					});
+				}
+				
+				window.prevHighlight = function() {
+					if (searchHighlights.length === 0) return;
+					currentHighlightIndex = (currentHighlightIndex - 1 + searchHighlights.length) % searchHighlights.length;
+					updateCurrentHighlight();
+					searchHighlights[currentHighlightIndex].scrollIntoView({
+						behavior: 'smooth',
+						block: 'center'
+					});
+				}
+				
+				// Create search indicator with navigation
+				function createSearchIndicator() {
+					const indicator = document.createElement('div');
+					indicator.className = 'search-indicator';
+					indicator.id = 'search-indicator';
+					
+					const showNavigation = searchHighlights.length > 1;
+					
+					indicator.innerHTML = `
+						<div class="flex items-center gap-2">
+							${showNavigation ? `
+								<button onclick="prevHighlight()" class="nav-btn" title="Previous match">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<polyline points="15,18 9,12 15,6"></polyline>
+									</svg>
+								</button>
+							` : ''}
+							
+							<span id="search-counter">${searchHighlights.length === 1 ? '1 match found' : `1 / ${searchHighlights.length}`}</span>
+							
+							${showNavigation ? `
+								<button onclick="nextHighlight()" class="nav-btn" title="Next match">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<polyline points="9,18 15,12 9,6"></polyline>
+									</svg>
+								</button>
+							` : ''}
+							
+							<button onclick="clearSearchHighlights()" title="Clear highlights">Clear</button>
+						</div>
+					`;
+					
+					document.body.appendChild(indicator);
+				}
+				
+				// Update counter in indicator
+				function updateIndicatorCounter() {
+					const counter = document.getElementById('search-counter');
+					if (counter && searchHighlights.length > 1) {
+						counter.textContent = `${currentHighlightIndex + 1} / ${searchHighlights.length}`;
+					}
+				}
+				
+				// Clear highlights function
+				window.clearSearchHighlights = function() {
+					// Remove all highlight marks
+					document.querySelectorAll('.search-highlight').forEach(mark => {
+						const parent = mark.parentNode;
+						while (mark.firstChild) {
+							parent.insertBefore(mark.firstChild, mark);
+						}
+						parent.removeChild(mark);
+					});
+					
+					// Remove indicator
+					const indicator = document.querySelector('.search-indicator');
+					if (indicator) {
+						indicator.remove();
+					}
+					
+					// Remove highlight parameter from URL
+					const url = new URL(window.location);
+					url.searchParams.delete('highlight');
+					window.history.replaceState({}, '', url);
+				}
+				
+				// Run highlighting after page loads
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', highlightAndScroll);
+				} else {
+					highlightAndScroll();
+				}
+			})();
+		</script>
 	</body>
 </html>
