@@ -1,37 +1,42 @@
 @import "./global.css";
 
-.overview-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.overview-list li {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: .75rem;
-  margin-bottom: .75rem;
-}
-
-.overview-list li:last-of-type {
-  margin-bottom: 0;
-}
-
-a {
+/* Global link styles for article content and prose */
+.prose a,
+article a:not([class]),
+.content a:not([class]) {
   @apply text-foreground transition-colors duration-150;
   text-decoration: underline;
   text-decoration-color: var(--muted-foreground);
   text-underline-offset: 2px;
 }
 
-a:hover {
+.prose a:hover,
+article a:not([class]):hover,
+.content a:not([class]):hover {
   @apply text-accent-foreground;
   text-decoration-color: var(--accent-foreground);
 }
 
-.no-mt {
-  margin-top: 0;
+/* External link styles */
+.prose a[target="_blank"]::after,
+article a[target="_blank"]:not([class])::after,
+.content a[target="_blank"]:not([class])::after {
+  content: "";
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-left: 0.25rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/%3e%3c/svg%3e");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.prose a[target="_blank"]:hover::after,
+article a[target="_blank"]:not([class]):hover::after,
+.content a[target="_blank"]:not([class]):hover::after {
+  opacity: 1;
 }
 
 main {
@@ -95,16 +100,6 @@ main {
   outline: none;
 }
 
-.post-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.post-header h3 {
-  margin: 0;
-}
-
 .post-date {
   @apply text-muted-foreground;
 }
@@ -138,14 +133,5 @@ main {
     gap: 1rem;
   }
 
-  .post-header {
-    flex-direction: column;
-    gap: .5rem;
-  }
 }
 
-.content-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}

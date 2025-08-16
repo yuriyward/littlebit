@@ -2,6 +2,7 @@
 import ImageGlow from "../../components/ImageGlow.astro";
 import Card from "../../components/Card.astro";
 import Layout from "../../layouts/Layout.astro";
+import Link from "../../components/Link.astro";
 
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -55,7 +56,7 @@ const { Content, headings } = await render(post);
 >
   <div class="h-full relative" slot="left">
     <Card class="min-w-0 sticky top-8">
-      <h2 class="no-mt">Table of contents</h2>
+      <h2 class="mt-0">Table of contents</h2>
       <ol class="p-0 flex flex-col gap-2 mb-0 list-none relative">
         <li>
           <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link active" style="box-decoration-break: clone; -webkit-box-decoration-break: clone; text-decoration: none !important;">{post.data.title}</a>
@@ -87,7 +88,7 @@ const { Content, headings } = await render(post);
       </div>
       <Content />
       <hr class="mt-4 mb-6 w-full h-px bg-border border-none" />
-      <a href="/blog" class="block-link" data-pagefind-ignore>← Back to blog</a>
+      <Link href="/blog" variant="ghost" data-pagefind-ignore>← Back to blog</Link>
     </Card>
     {giscus && (
       <Card>
@@ -116,3 +117,25 @@ const { Content, headings } = await render(post);
   </article>
 </Layout>
 <script src="../../scripts/toc.ts" />
+<script>
+  // Add external link icons and target="_blank" to external links in article content
+  document.addEventListener('DOMContentLoaded', () => {
+    const article = document.querySelector('article[data-pagefind-body]');
+    if (!article) return;
+
+    const links = article.querySelectorAll('a:not([class])');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Check if it's an external link
+      const isExternal = href.startsWith('http://') || href.startsWith('https://');
+      const isCurrentDomain = href.includes(window.location.hostname);
+
+      if (isExternal && !isCurrentDomain) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  });
+</script>

@@ -14,7 +14,7 @@ const projects = await getCollection('projects');
 >
   <div class="layout-grid-left" slot="left">
     <Card class="flex-col-card">
-      <h2 class="no-mt">Stats</h2>
+      <h2 class="mt-0">Stats</h2>
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-col">
 					<h3 class="text-glow text-3xl m-0 mb-2">{projects.length}</h3>
@@ -29,10 +29,10 @@ const projects = await getCollection('projects');
 				<Icon type='lucide' name="folder-git" width={24} height={24} class='glow-icon' />
 				<h2 class="m-0">Latest Projects</h2>
 			</div>
-			<div class="content-container">
+			<div class="flex flex-col gap-4">
 				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((post) => (
 					<a href={`/projects/${post.id}`} class="post-container">
-						<div class="post-header">
+						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
 							<h3>{post.data.title}</h3>
 							<span class="post-date">{post.data.date.toLocaleDateString()}</span>
 						</div>

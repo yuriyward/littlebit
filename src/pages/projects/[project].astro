@@ -1,6 +1,7 @@
 ---
 import Card from "../../components/Card.astro";
 import Layout from "../../layouts/Layout.astro";
+import Link from "../../components/Link.astro";
 
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -35,12 +36,12 @@ const { Content } = await render(project);
 >
   <div class="h-full relative" slot="left">
     <Card class="min-w-0 sticky top-8">
-      <h2 class="no-mt">Info</h2>
-      <ul class="overview-list">
+      <h2 class="mt-0">Info</h2>
+      <ul class="list-none p-0 m-0">
         {project.data.info.map((info) => {
           const Tag = info.link ? 'a' : 'div';
           return (
-            <li>
+            <li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
               <Tag href={info.link} class='flex items-center gap-4'>
                 <Icon type={info.icon.type} name={info.icon.name as any} width={24} height={24} class='glow-icon' />
                 <span>{info.text}</span>
@@ -66,7 +67,29 @@ const { Content } = await render(project);
       </div>
       <Content />
       <hr class="mt-4 mb-6 w-full h-px bg-border border-none" />
-      <a href="/projects" class="block-link" data-pagefind-ignore>← Back to projects</a>
+      <Link href="/projects" variant="ghost" data-pagefind-ignore>← Back to projects</Link>
     </Card>
   </article>
 </Layout>
+<script>
+  // Add external link icons and target="_blank" to external links in article content
+  document.addEventListener('DOMContentLoaded', () => {
+    const article = document.querySelector('article[data-pagefind-body]');
+    if (!article) return;
+
+    const links = article.querySelectorAll('a:not([class])');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Check if it's an external link
+      const isExternal = href.startsWith('http://') || href.startsWith('https://');
+      const isCurrentDomain = href.includes(window.location.hostname);
+
+      if (isExternal && !isCurrentDomain) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  });
+</script>

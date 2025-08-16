@@ -34,9 +34,9 @@ const { Content: About } = await render(about!);
 		<Card class="flex-col-card">
 			<ImageGlow quality={100} width={80} height={80} src={ProfilePicture} alt="Louis looking out of a window" loading='eager' />
 			<h2>{name}</h2>
-			<ul class="overview-list">
+			<ul class="list-none p-0 m-0">
 				{quickInfo.map((info) => (
-					<li>
+					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
 						<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={24} height={24} class='glow-icon' />
 						<span>{info.data.text}</span>
 					</li>
@@ -44,10 +44,10 @@ const { Content: About } = await render(about!);
 			</ul>
 		</Card>
 		<Card>
-			<h3 class="no-mt">Socials</h3>
-			<ul class="overview-list">
+			<h3 class="mt-0">Socials</h3>
+			<ul class="list-none p-0 m-0">
 				{socials.map((item) => (
-					<li>
+					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
 						<a href={item.data.link} class="socials-link">
 							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={24} height={24} class='glow-icon' />
 							<span>{item.data.text}</span>
@@ -72,10 +72,10 @@ const { Content: About } = await render(about!);
 				<Icon type='lucide' name="rss" width={24} height={24} class='glow-icon' />
 				<h2 class="m-0">Latest Posts</h2>
 			</div>
-			<div class="content-container">
+			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).slice(0, 2).map((post) => (
 					<a href={`/blog/${post.id}`} class="post-container">
-						<div class="post-header">
+						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
 							<h3>{post.data.title}</h3>
 							<span class="post-date">{post.data.createdAt.toLocaleDateString()}</span>
 						</div>
@@ -89,10 +89,10 @@ const { Content: About } = await render(about!);
 				<Icon type='lucide' name="folder-git" width={24} height={24} class='glow-icon' />
 				<h2 class="m-0">Latest Projects</h2>
 			</div>
-			<div class="content-container">
+			<div class="flex flex-col gap-4">
 				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2).map((project) => (
 					<a href={`/projects/${project.id}`} class="post-container">
-						<div class="post-header">
+						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
 							<h3>{project.data.title}</h3>
 							<span class="post-date">{project.data.date.toLocaleDateString()}</span>
 						</div>

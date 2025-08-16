@@ -35,17 +35,6 @@
   line-height: 1.6;
 }
 
-.post-container {
-  @apply flex flex-col gap-4 p-4 border border-border text-foreground no-underline transition-all duration-150;
-}
-
-.post-container:hover, .post-container:focus-visible {
-  @apply bg-accent/20 border-accent;
-}
-
-.post-container:focus-visible {
-  outline: none;
-}
 
 .post-date, .work-experience-duration {
   @apply text-muted-foreground;
