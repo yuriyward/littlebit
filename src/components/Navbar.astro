@@ -170,7 +170,7 @@ const path = Astro.url.pathname;
     }
 
     if (search.results.length === 0 && e.target.value.length > 0) {
-      results.innerHTML = '<p style="margin-top: 0;">No results found</p>';
+      results.innerHTML = '<p class="mt-0">No results found</p>';
     } else {
       results.innerHTML = searchResultHtml;
     }

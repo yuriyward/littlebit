@@ -62,7 +62,7 @@ const { Content, headings } = await render(post);
           <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link active" style="box-decoration-break: clone; -webkit-box-decoration-break: clone; text-decoration: none !important;">{post.data.title}</a>
         </li>
         {headings.map((heading, i) => (
-          <li class={`toc-li ${heading.depth === 3 ? 'ml-4' : heading.depth === 4 ? 'ml-8' : ''}`} data-depth={heading.depth}>
+          <li class={heading.depth === 3 ? 'ml-4' : heading.depth === 4 ? 'ml-8' : ''} data-depth={heading.depth}>
             <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link" style="box-decoration-break: clone; -webkit-box-decoration-break: clone; text-decoration: none !important;">{heading.text}</a>
           </li>
         ))}
@@ -77,7 +77,7 @@ const { Content, headings } = await render(post);
           <div>
             <h1 class="mt-0 text-2xl bg-white text-black inline relative leading-tight mb-0 px-3 py-1 sm:inline sm:bg-transparent sm:p-0 sm:text-foreground" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">{post.data.title}</h1>
           </div>
-          <div class="flex flex-row gap-2 bg-accent-foreground text-accent w-fit px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground" style="font-family: 'Geist Mono', monospace; box-decoration-break: clone; -webkit-box-decoration-break: clone;">
+          <div class="flex flex-row gap-2 bg-accent-foreground text-accent w-fit px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground font-mono" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">
             <span>{post.data.createdAt.toLocaleDateString()}</span>
             <span>/</span>
             <span>{timeToRead(post)} minute{timeToRead(post) === 1 ? "" : "s"} to read</span>
