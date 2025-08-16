@@ -43,8 +43,8 @@
 
 :root {
   --radius: 0.625rem;
-  --font-geist: 'Geist', sans-serif;
-  --font-geist-mono: 'Geist Mono', monospace;
+  --font-noto-sans: 'Noto Sans Variable', sans-serif;
+  --font-geist-mono: 'Geist Mono Variable', monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -126,7 +126,7 @@
   body {
     @apply bg-background text-foreground m-0;
     -webkit-font-smoothing: antialiased;
-    font-family: var(--font-geist), sans-serif;
+    font-family: var(--font-noto-sans), sans-serif;
   }
   
   html {
@@ -214,7 +214,7 @@ code:not(.astro-code code) {
   padding: .125rem .375rem;
   border-radius: calc(var(--radius) - 4px);
   border: 1px solid var(--border);
-  font-family: 'Geist Mono', monospace;
+  font-family: var(--font-geist-mono), monospace;
 }
 
 blockquote {

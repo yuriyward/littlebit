@@ -100,7 +100,7 @@ class PageBackground {
     const lines = Math.ceil(this.height / 35);
 
     // Loop through the canvas and draw the text
-    this.baseCtx.font = '28px Geist Mono';
+    this.baseCtx.font = '28px "Geist Mono Variable"';
     this.baseCtx.textAlign = 'start';
     this.baseCtx.textBaseline = 'top';
     this.baseCtx.fillStyle = `rgba(${this.foregroundRgb}, 0.01)`;
@@ -122,7 +122,7 @@ class PageBackground {
       Number.parseInt((lines * 0.75).toFixed())
     );
 
-    this.overlayCtx.font = 'bold 28px Geist Mono';
+    this.overlayCtx.font = 'bold 28px "Geist Mono Variable"';
     this.overlayCtx.textAlign = 'start';
     this.overlayCtx.textBaseline = 'top';
     this.overlayCtx.fillStyle = `rgba(${this.primaryRgb}, 0)`;
@@ -209,7 +209,7 @@ class PageBackground {
     // Clear the overlay canvas
     this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
-    this.overlayCtx.font = 'bold 28px Geist Mono';
+    this.overlayCtx.font = 'bold 28px "Geist Mono Variable"';
     this.overlayCtx.textAlign = 'start';
     this.overlayCtx.textBaseline = 'top';
     this.overlayCtx.shadowBlur = 16;
@@ -267,22 +267,9 @@ class PageBackground {
 }
 
 /**
- * Loads the Geist Mono font. We have to do this asynchronously because the font is not preloaded.
+ * Initializes the background. Font is loaded via Fontsource CSS imports.
  */
-async function loadFont() {
-  const font = new FontFace('Geist Mono', 'url(/fonts/GeistMono.woff2)');
-
-  await font.load();
-
-  document.fonts.add(font);
-}
-
-/**
- * First loads the Geist Mono font, then initializes the background.
- */
-async function initializeBackground() {
-  await loadFont();
-
+function initializeBackground() {
   const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
   const overlayCanvas = document.getElementById('overlay-canvas') as HTMLCanvasElement;
 
