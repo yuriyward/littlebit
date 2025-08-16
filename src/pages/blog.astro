@@ -13,8 +13,8 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   description={openGraph.blog.description}
 	pagefindIgnore
 >
-  <div class="layout-grid-left" slot="left">
-    <Card class="flex-col-card">
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
+    <Card class="flex flex-col">
       <h2 class="mt-0">Filter</h2>
       <ul class="flex flex-row items-center flex-wrap list-none m-0 p-0 gap-4">
         {Array.from(new Set(tags)).map((tag) => (
@@ -31,7 +31,7 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
       </ul>
     </Card>
   </div>
-  <div class="layout-grid-right" slot="right">
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type="lucide" name="rss" width={24} height={24} class='text-muted-foreground' />

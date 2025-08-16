@@ -1,6 +1,4 @@
 ---
-import '../styles/index.css';
-
 import ProfilePicture from '../assets/pfp.png';
 
 import Card from '../components/Card.astro';
@@ -30,8 +28,8 @@ const { Content: About } = await render(about!);
 	description={openGraph.home.description}
 	pagefindIgnore
 >
-	<div class="layout-grid-left" slot="left">
-		<Card class="flex-col-card">
+	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
+		<Card class="flex flex-col">
 			<ImageGlow quality={100} width={80} height={80} src={ProfilePicture} alt="Louis looking out of a window" loading='eager' />
 			<h2>{name}</h2>
 			<ul class="list-none p-0 m-0">
@@ -48,8 +46,8 @@ const { Content: About } = await render(about!);
 			<ul class="list-none p-0 m-0">
 				{socials.map((item) => (
 					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
-						<a href={item.data.link} class="socials-link group">
-							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={24} height={24} class='text-muted-foreground group-hover:text-foreground transition-colors' />
+						<a href={item.data.link} target="_blank" rel="noopener noreferrer" class="text-foreground flex flex-row gap-3 items-center group no-underline">
+							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={20} height={20} class='text-muted-foreground group-hover:text-primary transition-colors duration-200' />
 							<span>{item.data.text}</span>
 						</a>
 					</li>
@@ -57,13 +55,13 @@ const { Content: About } = await render(about!);
 			</ul>
 		</Card>
 	</div>
-	<div class="layout-grid-right" slot="right">
+	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="user" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">About me</h2>
 			</div>
-			<div class="prose">
+			<div class="prose leading-relaxed">
 				<About />
 			</div>
 		</Card>
@@ -106,12 +104,12 @@ const { Content: About } = await render(about!);
 				<Icon type='lucide' name="briefcase-business" width={24} height={24} class='text-muted-foreground' />
 				<h2 class="m-0">Work Experience</h2>
 			</div>
-			<div class="work-experience-container">
+			<div class="flex flex-col gap-4">
 				{workExperience.reverse().map((entry) => (
-					<div class="work-experience-entry">
-						<span class="work-experience-duration">{entry.data.duration}</span>
-						<h3 class="work-experience-company">{entry.data.company}</h3>
-						<span class="work-experience-role">{entry.data.title}</span>
+					<div class="border-b border-border pb-4 last:border-0 last:pb-0">
+						<span class="text-sm text-muted-foreground">{entry.data.duration}</span>
+						<h3 class="mt-1 mb-2">{entry.data.company}</h3>
+						<span class="mb-3">{entry.data.title}</span>
 						<p class="work-experience-desc">{entry.data.description}</p>
 					</div>
 				))}

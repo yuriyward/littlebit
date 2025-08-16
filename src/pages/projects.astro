@@ -12,8 +12,8 @@ const projects = await getCollection('projects');
 	description={openGraph.projects.description}
 	pagefindIgnore
 >
-  <div class="layout-grid-left" slot="left">
-    <Card class="flex-col-card">
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
+    <Card class="flex flex-col">
       <h2 class="mt-0">Stats</h2>
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-col">
@@ -23,7 +23,7 @@ const projects = await getCollection('projects');
 			</div>
     </Card>
   </div>
-  <div class="layout-grid-right" slot="right">
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-4">
 				<Icon type='lucide' name="folder-git" width={24} height={24} class='text-muted-foreground' />
