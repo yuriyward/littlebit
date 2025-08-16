@@ -74,10 +74,10 @@ const { Content: About } = await render(about!);
 			</div>
 			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).slice(0, 2).map((post) => (
-					<a href={`/blog/${post.id}`} class="post-container">
-						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
+					<a href={`/blog/${post.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
 							<h3>{post.data.title}</h3>
-							<span class="post-date">{post.data.createdAt.toLocaleDateString()}</span>
+							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
 						</div>
 						<span>{post.data.description}</span>
 					</a>
@@ -91,10 +91,10 @@ const { Content: About } = await render(about!);
 			</div>
 			<div class="flex flex-col gap-4">
 				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2).map((project) => (
-					<a href={`/projects/${project.id}`} class="post-container">
-						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0">
+					<a href={`/projects/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
 							<h3>{project.data.title}</h3>
-							<span class="post-date">{project.data.date.toLocaleDateString()}</span>
+							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
 						</div>
 						<span>{project.data.description}</span>
 					</a>

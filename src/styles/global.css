@@ -207,3 +207,83 @@ table tbody tr td {
 .comments * {
   @apply border-border;
 }
+
+/* Expressive-code customizations - maintains flat, sharp design to fit with overall aesthetic */
+.expressive-code {
+  margin-top: 1rem;
+}
+
+/* Remove default styling for clean appearance */
+.expressive-code figure {
+  box-shadow: none !important;
+}
+
+/* Sharp corners for code blocks */
+.expressive-code figure pre {
+  border-radius: 0 !important;
+}
+
+/* Clean figcaption styling */
+.expressive-code figcaption {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.expressive-code figcaption::before {
+  border: none !important;
+}
+
+/* Title styling with consistent design */
+.expressive-code span.title:not(.is-terminal span.title) {
+  border-radius: 0 !important;
+}
+
+/* Title accent using primary color from design system */
+.expressive-code span.title::after {
+  border-top: 1px solid var(--primary) !important;
+  border-bottom: 0 !important;
+}
+
+/* Header styling consistency */
+.expressive-code .frame.has-title:not(.is-terminal) figcaption.header {
+  border-radius: 0 !important;
+}
+
+/* Global link styles for article content and prose */
+.prose a,
+article a:not([class]),
+.content a:not([class]) {
+  @apply text-foreground transition-colors duration-150;
+  text-decoration: underline;
+  text-decoration-color: var(--muted-foreground);
+  text-underline-offset: 2px;
+}
+
+.prose a:hover,
+article a:not([class]):hover,
+.content a:not([class]):hover {
+  @apply text-accent-foreground;
+  text-decoration-color: var(--accent-foreground);
+}
+
+/* External link styles */
+.prose a[target="_blank"]::after,
+article a[target="_blank"]:not([class])::after,
+.content a[target="_blank"]:not([class])::after {
+  content: "";
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-left: 0.25rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/%3e%3c/svg%3e");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.prose a[target="_blank"]:hover::after,
+article a[target="_blank"]:not([class]):hover::after,
+.content a[target="_blank"]:not([class]):hover::after {
+  opacity: 1;
+}
