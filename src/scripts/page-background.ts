@@ -17,6 +17,14 @@ interface LetterInstance extends LetterPosition {
 class PageBackground {
   private LETTER_FADE_DURATION: [number, number] = [2, 7]; // Seconds
 
+  // Spawn control
+  private MAX_ACTIVE_LETTERS: number = 30; // Upper bound on concurrently animated letters
+  private SPAWN_RATE_PER_SEC: number = 3; // Letters spawned per second
+  private MAX_SPAWNS_PER_FRAME: number = 2; // Safety cap to avoid bursts in a single frame
+  private MAX_DT_SECONDS: number = 0.05; // Clamp frame delta to 50ms to avoid catch-up bursts
+  private spawnAccumulator: number = 0; // Accumulates spawn credits
+  private lastFrameTime: number = performance.now(); // Timestamp of previous frame
+
   private baseCanvas: HTMLCanvasElement;
   private overlayCanvas: HTMLCanvasElement;
 
@@ -29,8 +37,14 @@ class PageBackground {
   private letterPositions: LetterPosition[] = [];
   private letterInstances: LetterInstance[] = [];
 
-  private primaryRgb: string;
-  private foregroundRgb: string;
+  private primaryRgb!: string;
+  private foregroundRgb!: string;
+
+  // Timing safeguard: reset accumulators when focus/visibility changes to avoid catch-up bursts
+  private handleVisibilityOrFocusChange = () => {
+    this.lastFrameTime = performance.now();
+    this.spawnAccumulator = 0;
+  }
 
   /**
    * Initializes the background on the page.
@@ -62,6 +76,11 @@ class PageBackground {
     this.setThemeColors();
 
     this.initBackground();
+
+    // Reset timing on visibility/focus changes to avoid a large dt spike
+    document.addEventListener('visibilitychange', this.handleVisibilityOrFocusChange);
+    window.addEventListener('focus', this.handleVisibilityOrFocusChange);
+    window.addEventListener('blur', this.handleVisibilityOrFocusChange);
 
     requestAnimationFrame(this.redrawBackground);
   }
@@ -116,12 +135,7 @@ class PageBackground {
       }
     }
 
-    // Randomly select 75% of the letters to animate
-    const randomLetters = this.getRandomAmountFromArray<LetterPosition>(
-      this.letterPositions,
-      Number.parseInt((lines * 0.75).toFixed())
-    );
-
+    // We no longer pre-spawn a large set of letters. Start empty and spawn gradually.
     this.overlayCtx.font = 'bold 28px "Geist Mono Variable"';
     this.overlayCtx.textAlign = 'start';
     this.overlayCtx.textBaseline = 'top';
@@ -129,51 +143,28 @@ class PageBackground {
     this.overlayCtx.shadowBlur = 16;
     this.overlayCtx.shadowColor = `rgba(${this.primaryRgb}, 0)`;
 
-    // Draw the letters on the overlay canvas
-    for(const letter of randomLetters) {
-      this.overlayCtx.fillText(letter.letter, letter.x, letter.y);
-
-      // Some number between LETTER_FADE_DURATION[0] and LETTER_FADE_DURATION[1] (in seconds)
-      const animLength = this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0]);
-
-      this.letterInstances.push({
-        x: letter.x,
-        y: letter.y,
-        letter: letter.letter,
-        timestamp: Date.now(),
-        fadeout: Date.now() + animLength * 1000
-      });
-    }
-
-    // Make the base canvas visible
-    this.baseCanvas.style.opacity = '1';
+    // Start with a clean page: hide the subtle base layer initially
+    this.baseCanvas.style.opacity = '0';
   }
 
   /**
-   * Simple sine easing function. Used for fading in and out letters.
+   * Sine ease-in-out across the whole lifespan: 0 -> 1 -> 0
+   * Starts fully transparent, peaks mid-life, and fades back to transparent.
    * @param timestamp - The current timestamp.
    * @param start - The start timestamp of a letter.
    * @param end - The end timestamp of a letter.
    */
   private easeInOutSine = (timestamp: number, start: number, end: number) => {
     const totalDuration = end - start;
+    if (totalDuration <= 0) return 0;
 
-    // If the current timestamp is before the start, return 0
-    if (timestamp < start) {
-      return 0;
-    }
+    // Normalized progress clamped to [0, 1]
+    const t = (timestamp - start) / totalDuration;
+    const clamped = Math.max(0, Math.min(1, t));
 
-    // If the current timestamp is after the end, return 0
-    if (timestamp > end) {
-      const elapsedAfterEnd = timestamp - end;
-      const progressAfterEnd = elapsedAfterEnd / (totalDuration / 2);
-
-      return Math.sin(progressAfterEnd * Math.PI);
-    }
-
-    const progress = (timestamp - start) / totalDuration;
-
-    return Math.max(0, 0.5 - 0.5 * Math.cos(progress * Math.PI));
+    // Smooth 0 -> 1 -> 0 using a sine wave
+    // sin(0) = 0, sin(PI/2) = 1, sin(PI) = 0
+    return Math.sin(clamped * Math.PI);
   }
 
   /**
@@ -205,7 +196,7 @@ class PageBackground {
   /**
    * Redraws the overlay canvas and animates the letters.
    */
-  private redrawBackground = () => {
+  private redrawBackground = (timestamp?: number) => {
     // Clear the overlay canvas
     this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
@@ -214,24 +205,45 @@ class PageBackground {
     this.overlayCtx.textBaseline = 'top';
     this.overlayCtx.shadowBlur = 16;
 
-    for(const letter of this.letterInstances) {
-      if (letter.fadeout > Date.now()) continue;
+    const now = timestamp ?? performance.now();
 
-      const alpha = this.easeInOutSine(Date.now(), letter.timestamp, letter.fadeout);
+    // Spawn control: gradually add letters up to a cap
+    const dt = Math.min(this.MAX_DT_SECONDS, Math.max(0, (now - this.lastFrameTime) / 1000));
+    this.lastFrameTime = now;
+    this.spawnAccumulator += dt * this.SPAWN_RATE_PER_SEC;
 
-      if(alpha <= 0 && Date.now() > letter.fadeout) {
-        this.letterInstances.splice(this.letterInstances.indexOf(letter), 1);
-        const randomLetter = this.getRandomAmountFromArray<LetterPosition>(this.letterPositions, 1);
+    let spawnsThisFrame = 0;
+    while (
+      this.spawnAccumulator >= 1 &&
+      this.letterInstances.length < this.MAX_ACTIVE_LETTERS &&
+      spawnsThisFrame < this.MAX_SPAWNS_PER_FRAME
+    ) {
+      this.spawnAccumulator -= 1;
+      const [randomLetter] = this.getRandomAmountFromArray<LetterPosition>(this.letterPositions, 1);
+      const animLength = this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0]);
+      this.letterInstances.push({
+        x: randomLetter.x,
+        y: randomLetter.y,
+        letter: randomLetter.letter,
+        timestamp: now,
+        fadeout: now + animLength * 1000,
+      });
+      spawnsThisFrame++;
+    }
 
-        this.letterInstances.push({
-          x: randomLetter[0].x,
-          y: randomLetter[0].y,
-          letter: randomLetter[0].letter,
-          timestamp: Date.now(),
-          fadeout: Date.now() + (this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0])) * 1000
-        });
+    // Iterate by index so we can splice safely
+    for (let i = this.letterInstances.length - 1; i >= 0; i--) {
+      const letter = this.letterInstances[i];
+
+      if (now >= letter.fadeout) {
+        // Remove expired letter; do not immediately respawn to avoid bursts.
+        this.letterInstances.splice(i, 1);
+        continue;
       }
 
+      const alpha = this.easeInOutSine(now, letter.timestamp, letter.fadeout);
+
+      // Draw with smooth alpha
       this.overlayCtx.fillStyle = `rgba(${this.primaryRgb}, ${alpha})`;
       this.overlayCtx.shadowColor = `rgba(${this.primaryRgb}, ${alpha})`;
       this.overlayCtx.fillText(letter.letter, letter.x, letter.y);
