@@ -24,3 +24,4 @@ pnpm-debug.log*
 .idea/
 .claude/get_key.sh
 .claude/tmp.json
+public/pagefind

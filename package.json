@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "bunx --bun astro dev",
+    "dev:search": "bun run build && bun run copy:pagefind && bunx --bun astro dev",
     "build": "bunx --bun astro build",
+    "copy:pagefind": "cp -r dist/client/pagefind public/ 2>/dev/null || mkdir -p public && cp -r dist/client/pagefind public/ 2>/dev/null || echo 'Run build first'",
     "start": "node dist/server/entry.mjs",
     "preview": "bunx --bun astro preview",
     "astro": "bunx --bun astro",
