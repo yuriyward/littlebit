@@ -10,10 +10,13 @@
     "start": "node dist/server/entry.mjs",
     "preview": "bunx --bun astro preview",
     "astro": "bunx --bun astro",
-    "postbuild": "pagefind --site dist/client"
+    "postbuild": "pagefind --site dist/client",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "fix": "biome check --write ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.3",
+    "@astrojs/mdx": "^4.3.4",
     "@astrojs/node": "^9.4.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/sitemap": "^3.5.0",

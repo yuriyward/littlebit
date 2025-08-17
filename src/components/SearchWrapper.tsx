@@ -1,5 +1,5 @@
-import { SearchCommand } from "./SearchCommand"
+import { SearchCommand } from "./SearchCommand";
 
 export function SearchWrapper() {
-  return <SearchCommand />
+  return <SearchCommand />;
 }

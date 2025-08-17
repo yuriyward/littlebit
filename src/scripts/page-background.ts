@@ -44,7 +44,7 @@ class PageBackground {
   private handleVisibilityOrFocusChange = () => {
     this.lastFrameTime = performance.now();
     this.spawnAccumulator = 0;
-  }
+  };
 
   /**
    * Initializes the background on the page.
@@ -53,12 +53,12 @@ class PageBackground {
    */
   constructor(baseCanvas: HTMLCanvasElement, overlayCanvas: HTMLCanvasElement) {
     // Get 2D context for both canvases
-    const baseCtx = baseCanvas.getContext('2d');
-    const overlayCtx = overlayCanvas.getContext('2d');
+    const baseCtx = baseCanvas.getContext("2d");
+    const overlayCtx = overlayCanvas.getContext("2d");
 
     // If either context is null, throw an error
-    if(!baseCtx || !overlayCtx) {
-      throw new AstroError('Unable to get 2D context.');
+    if (!baseCtx || !overlayCtx) {
+      throw new AstroError("Unable to get 2D context.");
     }
 
     this.baseCanvas = baseCanvas;
@@ -78,9 +78,9 @@ class PageBackground {
     this.initBackground();
 
     // Reset timing on visibility/focus changes to avoid a large dt spike
-    document.addEventListener('visibilitychange', this.handleVisibilityOrFocusChange);
-    window.addEventListener('focus', this.handleVisibilityOrFocusChange);
-    window.addEventListener('blur', this.handleVisibilityOrFocusChange);
+    document.addEventListener("visibilitychange", this.handleVisibilityOrFocusChange);
+    window.addEventListener("focus", this.handleVisibilityOrFocusChange);
+    window.addEventListener("blur", this.handleVisibilityOrFocusChange);
 
     requestAnimationFrame(this.redrawBackground);
   }
@@ -89,24 +89,24 @@ class PageBackground {
    * Sets the colors based on current theme (light/dark mode)
    */
   private setThemeColors = () => {
-    const isDark = document.documentElement.classList.contains('dark');
+    const isDark = document.documentElement.classList.contains("dark");
 
     if (isDark) {
       // Dark mode: white letters on dark background
-      this.primaryRgb = '255, 255, 255'; // White for animated letters
-      this.foregroundRgb = '255, 255, 255'; // White for base layer
+      this.primaryRgb = "255, 255, 255"; // White for animated letters
+      this.foregroundRgb = "255, 255, 255"; // White for base layer
     } else {
       // Light mode: black letters on light background
-      this.primaryRgb = '0, 0, 0'; // Black for animated letters
-      this.foregroundRgb = '0, 0, 0'; // Black for base layer
+      this.primaryRgb = "0, 0, 0"; // Black for animated letters
+      this.foregroundRgb = "0, 0, 0"; // Black for base layer
     }
-  }
+  };
 
   /**
    * Sets up the background canvases. The text is decided based on the title of the page.
    */
   private initBackground = () => {
-    let text: string = document.title.toLowerCase().split(' | ')[0].replace(/\s/g, '_') || 'littlebit.dev';
+    let text: string = document.title.toLowerCase().split(" | ")[0].replace(/\s/g, "_") || "littlebit.dev";
     // let text: string = '01';
 
     // Add additional underscore to separate words
@@ -120,32 +120,32 @@ class PageBackground {
 
     // Loop through the canvas and draw the text
     this.baseCtx.font = '28px "Geist Mono Variable"';
-    this.baseCtx.textAlign = 'start';
-    this.baseCtx.textBaseline = 'top';
+    this.baseCtx.textAlign = "start";
+    this.baseCtx.textBaseline = "top";
     this.baseCtx.fillStyle = `rgba(${this.foregroundRgb}, 0.01)`;
 
-    for(let i = 0; i < lines; i++) {
-      for(let j = 0; j < letters; j++) {
+    for (let i = 0; i < lines; i++) {
+      for (let j = 0; j < letters; j++) {
         this.baseCtx.fillText(text[j % text.length], j * 17, i * 35);
         this.letterPositions.push({
           x: j * 17,
           y: i * 35,
-          letter: text[j % text.length]
+          letter: text[j % text.length],
         });
       }
     }
 
     // We no longer pre-spawn a large set of letters. Start empty and spawn gradually.
     this.overlayCtx.font = 'bold 28px "Geist Mono Variable"';
-    this.overlayCtx.textAlign = 'start';
-    this.overlayCtx.textBaseline = 'top';
+    this.overlayCtx.textAlign = "start";
+    this.overlayCtx.textBaseline = "top";
     this.overlayCtx.fillStyle = `rgba(${this.primaryRgb}, 0)`;
     this.overlayCtx.shadowBlur = 16;
     this.overlayCtx.shadowColor = `rgba(${this.primaryRgb}, 0)`;
 
     // Start with a clean page: hide the subtle base layer initially
-    this.baseCanvas.style.opacity = '0';
-  }
+    this.baseCanvas.style.opacity = "0";
+  };
 
   /**
    * Sine ease-in-out across the whole lifespan: 0 -> 1 -> 0
@@ -165,7 +165,7 @@ class PageBackground {
     // Smooth 0 -> 1 -> 0 using a sine wave
     // sin(0) = 0, sin(PI/2) = 1, sin(PI) = 0
     return Math.sin(clamped * Math.PI);
-  }
+  };
 
   /**
    * Grabs n random elements from an array.
@@ -180,18 +180,18 @@ class PageBackground {
     const result = new Array(n);
     const taken = new Array(len);
 
-    if(n > len) {
+    if (n > len) {
       throw new AstroError("getRandomAmountFromArray: more elements taken than available");
     }
 
-    while(n--) {
+    while (n--) {
       const x = Math.floor(Math.random() * len);
       result[n] = arr[x in taken ? taken[x] : x];
       taken[x] = --len in taken ? taken[len] : len;
     }
 
     return result;
-  }
+  };
 
   /**
    * Redraws the overlay canvas and animates the letters.
@@ -201,8 +201,8 @@ class PageBackground {
     this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
     this.overlayCtx.font = 'bold 28px "Geist Mono Variable"';
-    this.overlayCtx.textAlign = 'start';
-    this.overlayCtx.textBaseline = 'top';
+    this.overlayCtx.textAlign = "start";
+    this.overlayCtx.textBaseline = "top";
     this.overlayCtx.shadowBlur = 16;
 
     const now = timestamp ?? performance.now();
@@ -220,7 +220,8 @@ class PageBackground {
     ) {
       this.spawnAccumulator -= 1;
       const [randomLetter] = this.getRandomAmountFromArray<LetterPosition>(this.letterPositions, 1);
-      const animLength = this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0]);
+      const animLength =
+        this.LETTER_FADE_DURATION[0] + Math.random() * (this.LETTER_FADE_DURATION[1] - this.LETTER_FADE_DURATION[0]);
       this.letterInstances.push({
         x: randomLetter.x,
         y: randomLetter.y,
@@ -250,7 +251,7 @@ class PageBackground {
     }
 
     requestAnimationFrame(this.redrawBackground);
-  }
+  };
 
   /**
    * Resizes the background canvases.
@@ -275,19 +276,19 @@ class PageBackground {
     this.setThemeColors();
 
     this.initBackground();
-  }
+  };
 }
 
 /**
  * Initializes the background. Font is loaded via Fontsource CSS imports.
  */
 function initializeBackground() {
-  const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
-  const overlayCanvas = document.getElementById('overlay-canvas') as HTMLCanvasElement;
+  const canvas = document.getElementById("bg-canvas") as HTMLCanvasElement;
+  const overlayCanvas = document.getElementById("overlay-canvas") as HTMLCanvasElement;
 
   const background = new PageBackground(canvas, overlayCanvas);
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     background.resizeBackground();
   });
 }

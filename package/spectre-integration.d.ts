@@ -11,8 +11,8 @@ interface OpenGraphInfo {
 
 interface OpenGraph {
   /*
-  * Data for the home page.
-  */
+   * Data for the home page.
+   */
   home: OpenGraphInfo;
   /**
    * Data for the blog page.
@@ -68,10 +68,10 @@ interface GiscusOptions {
   /**
    * Where the comments input should be placed. Default is `below`.
    */
-  commentsInput: 'bottom' | 'top';
+  commentsInput: "bottom" | "top";
 }
 
-declare module 'spectre:globals' {
+declare module "spectre:globals" {
   /**
    * The name that should be displayed on the main page.
    */

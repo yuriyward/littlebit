@@ -1,14 +1,13 @@
 ---
-import ImageGlow from "../../components/ImageGlow.astro";
-import Card from "../../components/Card.astro";
-import Layout from "../../layouts/Layout.astro";
-import Link from "../../components/Link.astro";
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import { giscus } from "spectre:globals";
 
 import type { GetStaticPaths } from "astro";
-import type { CollectionEntry } from "astro:content";
-import { render } from "astro:content";
-import { getCollection } from "astro:content";
-import { giscus } from 'spectre:globals';
+import Card from "../../components/Card.astro";
+import ImageGlow from "../../components/ImageGlow.astro";
+import Link from "../../components/Link.astro";
+import Layout from "../../layouts/Layout.astro";
 
 /**
  * Estimates the time it takes to read a post in minutes based on:
@@ -18,7 +17,7 @@ import { giscus } from 'spectre:globals';
  *
  * @param post The post to estimate the reading time for
  */
-function timeToRead(post: CollectionEntry<'posts'>): number {
+function timeToRead(post: CollectionEntry<"posts">): number {
   const numWords = (post.body || "")
     .replace(/.*\[(.*?)\].*/gm, "$1")
     .replace(/```.*?```/gms, "")
@@ -28,16 +27,16 @@ function timeToRead(post: CollectionEntry<'posts'>): number {
   const numCodeblocks = post.body?.match(/```/g)?.length || 0;
 
   return Math.ceil(numWords / 200) + Math.ceil(numImages / 6) + Math.ceil(numCodeblocks / 3);
-};
+}
 
 interface Props {
-  post: CollectionEntry<'posts'>;
+  post: CollectionEntry<"posts">;
 }
 
 const { post } = Astro.props;
 
 export const getStaticPaths = (async () => {
-  const posts = await getCollection('posts', (post) => post.data.draft !== true);
+  const posts = await getCollection("posts", (post) => post.data.draft !== true);
 
   return posts.map((post) => ({ params: { post: post.id }, props: { post } }));
 }) satisfies GetStaticPaths;

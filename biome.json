@@ -1,88 +1,91 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"ignore": []
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab",
-		"lineWidth": 120
-	},
-	"organizeImports": {
-		"enabled": true
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"recommended": true,
-				"noConsole": "error"
-			},
-			"style": {
-				"recommended": true
-			},
-			"complexity": {
-				"recommended": true
-			},
-			"security": {
-				"recommended": true
-			},
-			"performance": {
-				"recommended": true
-			},
-			"correctness": {
-				"recommended": true,
-				"noUnusedImports": "warn",
-				"noUnusedVariables": "error",
-				"noUnusedLabels": "error",
-				"noUnusedFunctionParameters": "error"
-			},
-			"a11y": {
-				"recommended": true
-			},
-			"nursery": {
-				"recommended": true,
-				"noProcessEnv": "error"
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"trailingCommas": "es5"
-		}
-	},
-	"overrides": [
-		{
-			"include": ["*.astro"],
-			"linter": {
-				"rules": {
-					"style": {
-						"useConst": "off",
-						"useImportType": "off"
-					},
-					"correctness": {
-						"noUnusedImports": "off",
-						"noUnusedVariables": "off"
-					}
-				}
-			}
-		},
-		{
-			"include": ["astro.config.ts", "vite.config.ts", "*.config.ts"],
-			"linter": {
-				"rules": {
-					"nursery": {
-						"noProcessEnv": "off"
-					}
-				}
-			}
-		}
-	]
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["**", "!dist", "!node_modules", "!.astro", "!public/pagefind"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "recommended": true
+      },
+      "suspicious": {
+        "recommended": true,
+        "noConsole": "off"
+      },
+      "style": {
+        "recommended": true,
+        "noProcessEnv": "error"
+      },
+      "complexity": {
+        "recommended": true
+      },
+      "security": {
+        "recommended": true
+      },
+      "performance": {
+        "recommended": true
+      },
+      "correctness": {
+        "recommended": true,
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "error",
+        "noUnusedLabels": "error",
+        "noUnusedFunctionParameters": "error"
+      },
+      "nursery": {
+        "recommended": true
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "es5"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/astro.config.ts", "**/vite.config.ts", "**/*.config.ts"],
+      "linter": {
+        "rules": {
+          "nursery": {},
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    }
+  ]
 }

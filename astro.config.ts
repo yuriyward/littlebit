@@ -1,17 +1,15 @@
-import { loadEnv } from "vite";
-import { defineConfig } from 'astro/config';
-
-import expressiveCode from 'astro-expressive-code';
-import mdx from '@astrojs/mdx';
-import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
-import spectre from './package/src';
-
-import node from '@astrojs/node';
-import { littlebitDark } from './src/code-theme';
+import mdx from "@astrojs/mdx";
+import node from "@astrojs/node";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
+import expressiveCode from "astro-expressive-code";
+import { loadEnv } from "vite";
+import spectre from "./package/src";
+import { littlebitDark } from "./src/code-theme";
 
-const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), "");
+const env = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 
 const {
   GISCUS_REPO,
@@ -22,13 +20,13 @@ const {
   GISCUS_STRICT,
   GISCUS_REACTIONS_ENABLED,
   GISCUS_EMIT_METADATA,
-  GISCUS_LANG
+  GISCUS_LANG,
 } = env;
 
 // https://astro.build/config
 const config = defineConfig({
-  site: 'https://littlebit.dev',
-  output: 'static',
+  site: "https://littlebit.dev",
+  output: "static",
   integrations: [
     expressiveCode({
       themes: [littlebitDark],
@@ -37,20 +35,20 @@ const config = defineConfig({
     react(),
     sitemap(),
     spectre({
-      name: 'littlebit.dev',
+      name: "littlebit.dev",
       openGraph: {
         home: {
-          title: 'littlebit.dev',
-          description: 'A personal website of Yuriy Babyak AI Engineer.'
+          title: "littlebit.dev",
+          description: "A personal website of Yuriy Babyak AI Engineer.",
         },
         blog: {
-          title: 'Blog',
-          description: 'Blog written by Yuriy Babyak.'
+          title: "Blog",
+          description: "Blog written by Yuriy Babyak.",
         },
         projects: {
-          title: 'Projects',
-          description: 'Projects done by Yuriy Babyak.'
-        }
+          title: "Projects",
+          description: "Projects done by Yuriy Babyak.",
+        },
       },
       giscus: {
         repository: GISCUS_REPO,
@@ -62,11 +60,11 @@ const config = defineConfig({
         reactionsEnabled: GISCUS_REACTIONS_ENABLED === "true",
         emitMetadata: GISCUS_EMIT_METADATA === "true",
         lang: GISCUS_LANG,
-      }
-    })
+      },
+    }),
   ],
   adapter: node({
-    mode: 'standalone'
+    mode: "standalone",
   }),
   vite: {
     plugins: [tailwindcss() as any],

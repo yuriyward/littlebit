@@ -1,8 +1,8 @@
 ---
-import { CardWrapper } from './CardWrapper'
-import type { HTMLAttributes } from 'astro/types'
+import type { HTMLAttributes } from "astro/types";
+import { CardWrapper } from "./CardWrapper";
 
-interface Props extends HTMLAttributes<'div'> {}
+interface Props extends HTMLAttributes<"div"> {}
 
 const { class: className, ...props } = Astro.props;
 ---
