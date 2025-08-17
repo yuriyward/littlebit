@@ -25,10 +25,14 @@ bun run postbuild
 
 ### Code Quality
 ```bash
-# Format and lint code (Biome)
-bunx @biomejs/biome format --write .
-bunx @biomejs/biome lint .
-bunx @biomejs/biome check --write .
+# Format code
+bun run format
+
+# Lint code
+bun run lint
+
+# Check and fix all issues
+bun run fix
 ```
 
 ## Architecture Overview
@@ -51,7 +55,7 @@ bunx @biomejs/biome check --write .
 ### Content Management
 The site uses Astro's Content Collections API v5 with loaders:
 - **Posts** (`src/content/posts/`) - Blog posts in MDX format
-- **Projects** (`src/content/projects/`) - Portfolio projects in MDX format  
+- **Projects** (`src/content/projects/`) - Portfolio projects in MDX format
 - **Work Experience** (`src/content/work.json`) - Job history
 - **Socials** (`src/content/socials.json`) - Social media links
 - **Tags** (`src/content/tags.json`) - Content tags
@@ -67,7 +71,7 @@ The custom integration (`/package/`) uses virtual modules to provide configurati
 ### Styling System
 - **Tailwind CSS 4** with custom configuration
 - **Radix UI** components for accessible UI primitives
-- **Biome** for code formatting and linting (tab indentation, 120 char line width)
+- **Biome** for code formatting and linting (space indentation, 120 char line width)
 - **Shadcn/ui** component system with New York style
 
 ### Search & Comments
@@ -81,7 +85,7 @@ The custom integration (`/package/`) uses virtual modules to provide configurati
 2. **Projects**: Create `.mdx` files in `src/content/projects/` with project details
 3. **Work Experience**: Update `src/content/work.json`
 
-### Component Development  
+### Component Development
 - Use existing Astro/React component patterns in `src/components/`
 - Follow Radix UI + Tailwind CSS approach for new UI components
 - Components can import from `spectre:globals` for site configuration
@@ -90,11 +94,11 @@ The custom integration (`/package/`) uses virtual modules to provide configurati
 Copy `.env.example` to `.env` and configure Giscus environment variables for comments functionality.
 
 ### Code Style
-- Tabs for indentation (configured in `biome.json`)
+- **Biome** with latest schema (2.2.0) for formatting and linting
+- 2-space indentation (configured in `biome.json`)
 - 120 character line width
-- Import organization enabled
 - Strict linting rules with accessibility checks
-- No console.log statements allowed in production code
+- React and TypeScript-specific rules enabled
 
 ## Integration Points
 
