@@ -191,31 +191,29 @@ export function SearchCommand() {
           {!isLoading && !error && query && results.length === 0 && <CommandEmpty>No results found.</CommandEmpty>}
 
           {!isLoading && !error && results.length > 0 && (
-            <>
-              {Object.entries(groupedResults).map(([type, typeResults]) => (
-                <CommandGroup key={type} heading={getTypeLabel(type)}>
-                  {typeResults.map((result) => (
-                    <CommandItem
-                      key={result.id}
-                      value={result.title}
-                      onSelect={() => handleSelect(result.url)}
-                      className="flex items-start gap-3 py-3"
-                    >
-                      {getIcon(result.type)}
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm truncate">{result.title}</div>
-                        {result.excerpt && (
-                          <div
-                            className="text-xs text-muted-foreground mt-1 line-clamp-2"
-                            dangerouslySetInnerHTML={{ __html: result.excerpt }}
-                          />
-                        )}
-                      </div>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
-            </>
+            Object.entries(groupedResults).map(([type, typeResults]) => (
+              <CommandGroup key={type} heading={getTypeLabel(type)}>
+                {typeResults.map((result) => (
+                  <CommandItem
+                    key={result.id}
+                    value={result.title}
+                    onSelect={() => handleSelect(result.url)}
+                    className="flex items-start gap-3 py-3"
+                  >
+                    {getIcon(result.type)}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm truncate">{result.title}</div>
+                      {result.excerpt && (
+                        <div
+                          className="text-xs text-muted-foreground mt-1 line-clamp-2"
+                          dangerouslySetInnerHTML={{ __html: result.excerpt }}
+                        />
+                      )}
+                    </div>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            ))
           )}
         </CommandList>
       </Command>
