@@ -297,18 +297,24 @@ table tbody tr td {
   border-radius: 0 !important;
 }
 
-/* Fix search highlighting in code titles */
-.expressive-code .search-highlight,
-.expressive-code mark.search-highlight {
-  @apply bg-blue-100 text-blue-900 rounded-md px-1 py-0.5 font-medium;
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3) !important;
+.search-highlight.current {
+  @apply bg-transparent;
+  color: inherit;
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.5),
+    0 0 0 2px rgba(59, 130, 246, 0.8);
+  transform: scale(1.02);
+  animation: modernGlow 3s ease-in-out infinite;
+  border: 2px solid rgba(59, 130, 246, 0.8);
 }
 
-.dark .expressive-code .search-highlight,
-.dark .expressive-code mark.search-highlight {
-  @apply bg-blue-900/40 text-blue-100;
-  border: 1px solid rgba(59, 130, 246, 0.3) !important;
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4) !important;
+.dark .search-highlight.current {
+  @apply bg-transparent;
+  color: inherit;
+  box-shadow:
+    0 0 25px rgba(59, 130, 246, 0.6),
+    0 0 0 2px rgba(59, 130, 246, 0.9);
+  border: 2px solid rgba(59, 130, 246, 0.9);
 }
 
 .expressive-code .search-highlight.current,
@@ -374,25 +380,20 @@ article a[target="_blank"]:not([class]):hover::after,
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
 }
 
-.search-highlight.current {
-  @apply bg-transparent;
-  color: inherit;
-  box-shadow:
-    0 0 20px rgba(59, 130, 246, 0.5),
-    0 0 0 2px rgba(59, 130, 246, 0.8);
-  transform: scale(1.02);
-  animation: modernGlow 3s ease-in-out infinite;
-  border: 2px solid rgba(59, 130, 246, 0.8);
+/* Fix search highlighting in code titles */
+.expressive-code .search-highlight,
+.expressive-code mark.search-highlight {
+  @apply bg-blue-100 text-blue-900 rounded-md px-1 py-0.5 font-medium;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3) !important;
 }
 
-.dark .search-highlight.current {
-  @apply bg-transparent;
-  color: inherit;
-  box-shadow:
-    0 0 25px rgba(59, 130, 246, 0.6),
-    0 0 0 2px rgba(59, 130, 246, 0.9);
-  border: 2px solid rgba(59, 130, 246, 0.9);
+.dark .expressive-code .search-highlight,
+.dark .expressive-code mark.search-highlight {
+  @apply bg-blue-900/40 text-blue-100;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4) !important;
 }
+
 
 .search-indicator {
   @apply fixed top-4 right-4 z-50 bg-card border border-border rounded-lg p-3 shadow-lg flex items-center gap-2 text-sm font-mono;
