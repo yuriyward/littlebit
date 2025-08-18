@@ -55,7 +55,7 @@ const config = defineConfig({
         repositoryId: GISCUS_REPO_ID,
         category: GISCUS_CATEGORY,
         categoryId: GISCUS_CATEGORY_ID,
-        mapping: GISCUS_MAPPING as any,
+        mapping: GISCUS_MAPPING as "pathname" | "url" | "title" | "og:title" | "specific" | "number",
         strict: GISCUS_STRICT === "true",
         reactionsEnabled: GISCUS_REACTIONS_ENABLED === "true",
         emitMetadata: GISCUS_EMIT_METADATA === "true",
@@ -67,7 +67,8 @@ const config = defineConfig({
     mode: "standalone",
   }),
   vite: {
-    plugins: [tailwindcss() as any],
+    // @ts-expect-error - TailwindCSS plugin has incompatible types with Vite 
+    plugins: [tailwindcss()],
   },
 });
 

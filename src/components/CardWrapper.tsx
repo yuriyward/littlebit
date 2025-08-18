@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface CardWrapperProps {
   className?: string;
   children: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export function CardWrapper({ className, children, ...props }: CardWrapperProps) {
