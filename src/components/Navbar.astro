@@ -3,12 +3,13 @@ import { name } from "spectre:globals";
 import { ButtonWrapper } from "./ButtonWrapper";
 import Icon from "./Icon.astro";
 import Link from "./Link.astro";
+import Logo from "./Logo.astro";
 import { SearchWrapper } from "./SearchWrapper";
 
 const path = Astro.url.pathname;
 ---
 <nav class="flex justify-between items-center font-mono z-50 py-4 px-6 bg-card/80 backdrop-blur-sm border-b border-border/50 max-sm:px-4 max-sm:pt-4 max-sm:pb-2 max-sm:transition-all max-sm:duration-300">
-  <Link href="/" class="font-bold no-underline text-xl z-[2] hover:text-accent transition-colors duration-200" variant="link">{name}</Link>
+  <Logo />
 
   <div class="flex items-center gap-6 max-sm:hidden">
     <ul class="flex items-center gap-1 m-0 p-0 list-none">

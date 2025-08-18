@@ -1,0 +1,264 @@
+---
+import { name } from "spectre:globals";
+import Link from "./Link.astro";
+
+const slogan = "Little bit — big impact";
+---
+
+<Link
+  href="/"
+  class="logo-link relative font-bold no-underline text-xl z-[2] transition-all duration-200"
+  aria-label={`${name} — ${slogan}`}
+  variant="link"
+>
+  <span id="logo-wordmark">{name}</span>
+ </Link>
+
+<script is:inline>
+  (() => {
+    const wordmarkEl = document.getElementById('logo-wordmark');
+    if (!wordmarkEl) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isHome = location.pathname === '/';
+    const hoverCapable = window.matchMedia('(hover: hover)').matches;
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+
+    const original = wordmarkEl.textContent || '';
+    const target = "Little bit — big impact";
+
+    const logoLink = wordmarkEl.closest('.logo-link');
+    const nav = logoLink?.closest('nav');
+
+    function measureTextWidth(text) {
+      const test = document.createElement('span');
+      test.textContent = text;
+      const cs = getComputedStyle(wordmarkEl);
+      test.style.position = 'absolute';
+      test.style.visibility = 'hidden';
+      test.style.whiteSpace = 'nowrap';
+      test.style.fontFamily = cs.fontFamily;
+      test.style.fontSize = cs.fontSize;
+      test.style.fontWeight = cs.fontWeight;
+      test.style.letterSpacing = cs.letterSpacing;
+      test.style.lineHeight = cs.lineHeight;
+      document.body.appendChild(test);
+      const w = test.getBoundingClientRect().width;
+      document.body.removeChild(test);
+      return w;
+    }
+
+    function visibleWidth(el) {
+      if (!el) return 0;
+      const rect = el.getBoundingClientRect();
+      const styles = getComputedStyle(el);
+      if (
+        styles.display === 'none' ||
+        styles.visibility === 'hidden' ||
+        styles.opacity === '0' ||
+        styles.position === 'absolute' ||
+        styles.position === 'fixed' ||
+        rect.width === 0
+      ) {
+        return 0;
+      }
+      return rect.width;
+    }
+
+    function availableWidth() {
+      if (!nav) return window.innerWidth;
+      let used = 0;
+      Array.from(nav.children).forEach((child) => {
+        if (child === logoLink) return;
+        used += visibleWidth(child);
+      });
+      const navStyles = getComputedStyle(nav);
+      const pad = parseFloat(navStyles.paddingLeft) + parseFloat(navStyles.paddingRight);
+      return nav.clientWidth - used - pad - 24; // buffer
+    }
+
+    function setSearchVisibility(visible) {
+      const ids = ['search-trigger', 'search-trigger-mobile'];
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (visible) {
+          el.style.opacity = '';
+          el.style.pointerEvents = '';
+        } else {
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        }
+      });
+    }
+
+    function setSearchDisplay(visible) {
+      const ids = ['search-trigger', 'search-trigger-mobile'];
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.display = visible ? '' : 'none';
+      });
+    }
+
+    let animationSeq = 0;
+    function scrambleTo(text, { duration = 900 } = {}) {
+      const letters = '01';
+      const start = performance.now();
+      const maxLen = Math.max((wordmarkEl.textContent || '').length, text.length);
+      const mySeq = ++animationSeq;
+
+      function frame(now) {
+        if (mySeq !== animationSeq) return; // canceled by a newer animation
+        const t = Math.min(1, (now - start) / duration);
+        let out = '';
+        for (let i = 0; i < maxLen; i++) {
+          const targetChar = text[i] || '';
+          if (targetChar === ' ') {
+            out += ' ';
+            continue;
+          }
+          if (Math.random() < t) {
+            out += targetChar;
+          } else {
+            if (targetChar && /[\w]/.test(targetChar)) {
+              out += letters[(Math.random() * 2) | 0];
+            } else {
+              out += targetChar || letters[(Math.random() * 2) | 0];
+            }
+          }
+        }
+        wordmarkEl.textContent = out;
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        } else if (mySeq === animationSeq) {
+          // Ensure we land exactly on the target text
+          wordmarkEl.textContent = text;
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    // Reserve width to avoid layout shift during animation
+    function reserveWidth() {
+      const originalW = measureTextWidth(original);
+      const targetW = measureTextWidth(target);
+      const availW = availableWidth();
+      const reserved = Math.max(originalW, Math.min(availW, targetW + 6));
+      if (logoLink) {
+        logoLink.style.display = 'inline-block';
+        logoLink.style.width = `${Math.ceil(reserved)}px`;
+      }
+      wordmarkEl.style.display = 'inline-block';
+      wordmarkEl.style.maxWidth = '100%';
+      wordmarkEl.style.overflow = 'hidden';
+    }
+
+    function canShowTarget() {
+      const targetW = measureTextWidth(target);
+      return targetW <= availableWidth();
+    }
+
+    if (!prefersReducedMotion) {
+      const delay = 700;
+      const forwardMs = 900;
+      const holdMs = 2200;
+      const backMs = 800;
+
+      // Always reserve width early to prevent jitter
+      if (isHome && isMobile) setSearchDisplay(false);
+      reserveWidth();
+      if (isHome && isMobile) setSearchDisplay(true);
+
+      if (isHome) {
+        // Home only: autoplay
+        const runAutoplay = () => {
+          if (isMobile) setSearchDisplay(false);
+          reserveWidth();
+          scrambleTo(target, { duration: forwardMs });
+          setTimeout(() => {
+            scrambleTo(original, { duration: backMs });
+            if (isMobile) setTimeout(() => setSearchDisplay(true), backMs);
+          }, holdMs);
+        };
+
+        // Measure with search hidden since we'll hide it during autoplay
+        let shouldPlay;
+        if (isMobile) {
+          setSearchDisplay(false);
+          shouldPlay = canShowTarget();
+          setSearchDisplay(true);
+        } else {
+          shouldPlay = canShowTarget();
+        }
+        if (shouldPlay) setTimeout(runAutoplay, delay);
+      }
+
+      // Hover interactions on all pages (pointer devices only)
+      if (hoverCapable) {
+        const hoverTarget = logoLink || wordmarkEl;
+        const enterEvent = 'pointerenter';
+        const leaveEvent = 'pointerleave';
+
+        hoverTarget.addEventListener(enterEvent, () => {
+          if (canShowTarget()) {
+            reserveWidth();
+            scrambleTo(target, { duration: 500 });
+          }
+        });
+        hoverTarget.addEventListener(leaveEvent, () => {
+          // Cancel any ongoing forward animation and force return
+          animationSeq++;
+          reserveWidth();
+          scrambleTo(original, { duration: 400 });
+        });
+      }
+    }
+  })();
+</script>
+
+<style>
+  @reference "../styles/global.css";
+
+  /* Keep layout stable while morphing */
+  #logo-wordmark {
+    display: inline-block;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  /* Prevent default underline from link variant on hover */
+  .logo-link:hover {
+    text-decoration: none !important;
+  }
+
+  /* Modern hover: animated underline grow, keep text crisp */
+  .logo-link {
+    position: relative;
+  }
+
+  .logo-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary), blue 30%));
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 200ms ease;
+    border-radius: 2px;
+  }
+
+  .logo-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #logo-wordmark {
+      transition: none;
+    }
+  }
+</style>
