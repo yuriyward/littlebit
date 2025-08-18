@@ -1,0 +1,80 @@
+---
+// No props needed - this is a self-contained component
+---
+
+<button
+  id="scroll-to-top"
+  class="fixed bottom-4 right-2 sm:bottom-6 sm:right-6 lg:bottom-10 lg:right-10 w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-background text-foreground border border-border flex items-center justify-center opacity-0 invisible translate-y-2.5 transition-all duration-200 ease-out shadow-lg hover:bg-accent hover:text-accent-foreground hover:-translate-y-1 hover:shadow-xl active:translate-y-0 focus:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 z-[1000] cursor-pointer"
+  aria-label="Scroll to top"
+  title="Scroll to top"
+>
+  <svg
+    width="16"
+    height="16"
+    class="sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="m18 15-6-6-6 6"></path>
+  </svg>
+</button>
+
+
+<script>
+  function initScrollToTop() {
+    const scrollToTopBtn = document.getElementById('scroll-to-top') as HTMLButtonElement;
+
+    if (!scrollToTopBtn) return;
+
+    // Show/hide button based on scroll position
+    function toggleVisibility() {
+      const scrollY = window.scrollY;
+      const threshold = 200; // Show after scrolling 200px
+
+      if (scrollY > threshold) {
+        scrollToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-2.5');
+        scrollToTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+      } else {
+        scrollToTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        scrollToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-2.5');
+      }
+    }
+
+    // Smooth scroll to top
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', toggleVisibility);
+    scrollToTopBtn.addEventListener('click', scrollToTop);
+
+    // Handle keyboard navigation
+    scrollToTopBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        scrollToTop();
+      }
+    });
+
+    // Initial check in case page is already scrolled
+    toggleVisibility();
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollToTop);
+  } else {
+    initScrollToTop();
+  }
+
+  // Re-initialize for client-side navigation (if using view transitions)
+  document.addEventListener('astro:page-load', initScrollToTop);
+</script>

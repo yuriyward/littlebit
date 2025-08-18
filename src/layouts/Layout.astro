@@ -6,6 +6,7 @@ import { name, themeColor, twitterHandle } from "spectre:globals";
 import Background from "../components/Background.astro";
 import LayoutGrid from "../components/LayoutGrid.astro";
 import Navbar from "../components/Navbar.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
 
 interface Props {
   title: string;
@@ -70,6 +71,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 			</LayoutGrid>
 			<slot name="404" />
 		</main>
+		<ScrollToTop />
 		<Background />
 		<script is:inline>
 			// Highlight and scroll to search terms from URL parameter
