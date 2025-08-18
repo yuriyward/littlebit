@@ -250,7 +250,6 @@ table tbody tr td {
   padding: 0.5rem 1.5rem 0.5rem 0;
 }
 
-
 /* Comments styles */
 .comments * {
   @apply border-border;
@@ -393,7 +392,6 @@ article a[target="_blank"]:not([class]):hover::after,
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4) !important;
 }
-
 
 .search-indicator {
   @apply fixed top-4 right-4 z-50 bg-card border border-border rounded-lg p-3 shadow-lg flex items-center gap-2 text-sm font-mono;

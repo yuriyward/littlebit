@@ -67,7 +67,7 @@ const config = defineConfig({
     mode: "standalone",
   }),
   vite: {
-    // @ts-expect-error - TailwindCSS plugin has incompatible types with Vite 
+    // @ts-expect-error - TailwindCSS plugin has incompatible types with Vite
     plugins: [tailwindcss()],
   },
 });

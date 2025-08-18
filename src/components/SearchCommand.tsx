@@ -1,6 +1,6 @@
+import DOMPurify from "dompurify";
 import { FileTextIcon, FolderIcon } from "lucide-react";
 import * as React from "react";
-import DOMPurify from "dompurify";
 import {
   Command,
   CommandDialog,
@@ -71,20 +71,20 @@ export function SearchCommand() {
             `;
 
             const handleLoaded = () => {
-              window.removeEventListener('pagefind-loaded', handleLoaded);
-              window.removeEventListener('pagefind-error', handleError);
+              window.removeEventListener("pagefind-loaded", handleLoaded);
+              window.removeEventListener("pagefind-error", handleError);
               resolve();
             };
 
             const handleError = (event: Event) => {
-              window.removeEventListener('pagefind-loaded', handleLoaded);
-              window.removeEventListener('pagefind-error', handleError);
+              window.removeEventListener("pagefind-loaded", handleLoaded);
+              window.removeEventListener("pagefind-error", handleError);
               const customEvent = event as CustomEvent;
               reject(customEvent.detail || new Error("Failed to load Pagefind"));
             };
 
-            window.addEventListener('pagefind-loaded', handleLoaded);
-            window.addEventListener('pagefind-error', handleError);
+            window.addEventListener("pagefind-loaded", handleLoaded);
+            window.addEventListener("pagefind-error", handleError);
 
             document.head.appendChild(script);
           });
@@ -214,13 +214,7 @@ export function SearchCommand() {
         } else if (part === "</mark>") {
           isInMark = false;
         } else if (part) {
-          elements.push(
-            isInMark ? (
-              <mark key={key++}>{part}</mark>
-            ) : (
-              part
-            )
-          );
+          elements.push(isInMark ? <mark key={key++}>{part}</mark> : part);
         }
       }
 
@@ -264,7 +258,9 @@ export function SearchCommand() {
 
           {!isLoading && !error && query && results.length === 0 && <CommandEmpty>No results found.</CommandEmpty>}
 
-          {!isLoading && !error && results.length > 0 && (
+          {!isLoading &&
+            !error &&
+            results.length > 0 &&
             Object.entries(groupedResults).map(([type, typeResults]) => (
               <CommandGroup key={type} heading={getTypeLabel(type)}>
                 {typeResults.map((result) => (
@@ -286,8 +282,7 @@ export function SearchCommand() {
                   </CommandItem>
                 ))}
               </CommandGroup>
-            ))
-          )}
+            ))}
         </CommandList>
       </Command>
     </CommandDialog>

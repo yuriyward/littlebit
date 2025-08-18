@@ -49,6 +49,16 @@ const { Content } = await render(project);
           )
         })}
       </ul>
+      <hr class="mt-4 mb-2 w-full h-px bg-border border-none" />
+      <Link
+        href="/projects"
+        variant="link"
+        class="w-full flex items-center justify-start px-3 py-2 rounded-md text-sm font-medium font-mono text-foreground/80 hover:text-foreground hover:bg-accent/80 focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none transition-all duration-200"
+        data-pagefind-ignore
+        aria-label="View all projects"
+      >
+        All projects
+      </Link>
     </Card>
   </div>
   <article slot="right" data-pagefind-body class="flex flex-col gap-8 leading-relaxed min-w-0 sm:gap-4">
