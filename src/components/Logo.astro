@@ -7,11 +7,12 @@ const slogan = "Little bit — big impact";
 
 <Link
   href="/"
-  class="logo-link relative font-bold no-underline text-xl z-[2] transition-all duration-200"
+  class="logo-link group relative inline-block font-bold text-xl z-[2] no-underline hover:no-underline transition-all duration-200 motion-reduce:transition-none"
   aria-label={`${name} — ${slogan}`}
   variant="link"
 >
-  <span id="logo-wordmark">{name}</span>
+  <span id="logo-wordmark" class="inline-block whitespace-nowrap tracking-[0.02em] motion-reduce:transition-none">{name}</span>
+  <span aria-hidden class="absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 rounded bg-primary transition-transform duration-200 group-hover:scale-x-100 motion-reduce:transition-none"></span>
  </Link>
 
 <script is:inline>
@@ -217,48 +218,3 @@ const slogan = "Little bit — big impact";
     }
   })();
 </script>
-
-<style>
-  @reference "../styles/global.css";
-
-  /* Keep layout stable while morphing */
-  #logo-wordmark {
-    display: inline-block;
-    white-space: nowrap;
-    letter-spacing: 0.02em;
-  }
-
-  /* Prevent default underline from link variant on hover */
-  .logo-link:hover {
-    text-decoration: none !important;
-  }
-
-  /* Modern hover: animated underline grow, keep text crisp */
-  .logo-link {
-    position: relative;
-  }
-
-  .logo-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    height: 2px;
-    width: 100%;
-    background: linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary), blue 30%));
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 200ms ease;
-    border-radius: 2px;
-  }
-
-  .logo-link:hover::after {
-    transform: scaleX(1);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #logo-wordmark {
-      transition: none;
-    }
-  }
-</style>
