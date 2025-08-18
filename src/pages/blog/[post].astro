@@ -8,6 +8,13 @@ import Card from "../../components/Card.astro";
 import Icon from "../../components/Icon.astro";
 import ImageGlow from "../../components/ImageGlow.astro";
 import Link from "../../components/Link.astro";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb";
 import Layout from "../../layouts/Layout.astro";
 
 /**
@@ -56,27 +63,28 @@ const { Content, headings } = await render(post);
 >
   <div class="h-full relative" slot="left">
     <Card class="min-w-0 sticky top-8">
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/" data-pagefind-ignore>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/blog" data-pagefind-ignore>Blog</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h2 class="mt-0">On this page</h2>
       <ol class="p-0 flex flex-col gap-2 mb-0 list-none relative">
         <li>
-          <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone">{post.data.title}</a>
+          <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone w-fit inline-block">{post.data.title}</a>
         </li>
         {headings.map((heading, i) => (
           <li class={heading.depth === 3 ? 'ml-4' : heading.depth === 4 ? 'ml-8' : ''} data-depth={heading.depth}>
-            <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone">{heading.text}</a>
+            <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone w-fit inline-block">{heading.text}</a>
           </li>
         ))}
       </ol>
-      <hr class="mt-4 mb-2 w-full h-px bg-border border-none" />
-      <Link
-        href="/blog"
-        variant="link"
-        class="w-full flex items-center justify-start px-3 py-2 rounded-md text-sm font-medium font-mono text-foreground/80 hover:text-foreground hover:bg-accent/80 focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none transition-all duration-200"
-        data-pagefind-ignore
-        aria-label="View all blog posts"
-      >
-        All posts
-      </Link>
     </Card>
   </div>
   <article slot="right" data-pagefind-body class="flex flex-col gap-8 leading-relaxed min-w-0 sm:gap-4">

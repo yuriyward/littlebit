@@ -7,6 +7,13 @@ import Card from "../../components/Card.astro";
 import Icon from "../../components/Icon.astro";
 import ImageGlow from "../../components/ImageGlow.astro";
 import Link from "../../components/Link.astro";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb";
 import Layout from "../../layouts/Layout.astro";
 
 interface Props {
@@ -35,6 +42,17 @@ const { Content } = await render(project);
 >
   <div class="h-full relative" slot="left">
     <Card class="min-w-0 sticky top-8">
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/" data-pagefind-ignore>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/projects" data-pagefind-ignore>Projects</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <h2 class="mt-0">Info</h2>
       <ul class="list-none p-0 m-0">
         {project.data.info.map((info) => {
@@ -49,16 +67,6 @@ const { Content } = await render(project);
           )
         })}
       </ul>
-      <hr class="mt-4 mb-2 w-full h-px bg-border border-none" />
-      <Link
-        href="/projects"
-        variant="link"
-        class="w-full flex items-center justify-start px-3 py-2 rounded-md text-sm font-medium font-mono text-foreground/80 hover:text-foreground hover:bg-accent/80 focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none transition-all duration-200"
-        data-pagefind-ignore
-        aria-label="View all projects"
-      >
-        All projects
-      </Link>
     </Card>
   </div>
   <article slot="right" data-pagefind-body class="flex flex-col gap-8 leading-relaxed min-w-0 sm:gap-4">
