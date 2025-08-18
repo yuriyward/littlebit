@@ -250,20 +250,6 @@ table tbody tr td {
   padding: 0.5rem 1.5rem 0.5rem 0;
 }
 
-/* TOC link styles */
-.toc-link {
-  text-decoration: none !important;
-}
-
-.toc-link:hover {
-  text-decoration: none !important;
-}
-
-.toc-link.active {
-  background-color: var(--accent) !important;
-  color: var(--accent-foreground) !important;
-  border-radius: calc(var(--radius) - 4px) !important;
-}
 
 /* Comments styles */
 .comments * {
