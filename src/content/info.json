@@ -3,7 +3,7 @@
     "id": 1,
     "icon": {
       "type": "lucide",
-      "name": "cake"
+      "name": "calendar-days"
     },
     "text": "1 year old"
   },
@@ -11,9 +11,8 @@
     "id": 2,
     "icon": {
       "type": "lucide",
-      "name": "earth"
+      "name": "map-pin"
     },
-    "type": "lucide",
     "text": "Made in Germany"
   }
 ]

@@ -1,5 +1,23 @@
 [
   {
     "id": "guide"
+  },
+  {
+    "id": "tutorial"
+  },
+  {
+    "id": "development"
+  },
+  {
+    "id": "ai"
+  },
+  {
+    "id": "tools"
+  },
+  {
+    "id": "astro"
+  },
+  {
+    "id": "typescript"
   }
 ]

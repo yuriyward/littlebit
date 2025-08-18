@@ -21,7 +21,7 @@
     "id": 3,
     "icon": {
       "type": "lucide",
-      "name": "calendar"
+      "name": "calendar-clock"
     },
     "text": "Schedule a call",
     "link": "https://cal.com/louisescher"
