@@ -6,7 +6,6 @@ import type { GetStaticPaths } from "astro";
 import Card from "../../components/Card.astro";
 import Icon from "../../components/Icon.astro";
 import ImageGlow from "../../components/ImageGlow.astro";
-import Link from "../../components/Link.astro";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,7 +27,12 @@ export const getStaticPaths = (async () => {
   return projects.map((project) => ({ params: { project: project.id }, props: { project } }));
 }) satisfies GetStaticPaths;
 
-console.log(project.data.info);
+// Get all projects and find current project's neighbors
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const currentIndex = sortedProjects.findIndex((p) => p.id === project.id);
+// Cycle to oldest project if this is the newest, otherwise go to next newer project
+const nextProject = currentIndex > 0 ? sortedProjects[currentIndex - 1] : sortedProjects[sortedProjects.length - 1];
 
 const { Content } = await render(project);
 ---
@@ -83,9 +87,26 @@ const { Content } = await render(project);
         </div>
       </div>
       <Content />
-      <hr class="mt-4 mb-6 w-full h-px bg-border border-none" />
-      <Link href="/projects" variant="ghost" data-pagefind-ignore>← Back to projects</Link>
     </Card>
+    
+    <!-- Navigation Section -->
+    <nav class="flex items-end justify-between py-6" data-pagefind-ignore>
+      <a href="/projects" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
+        <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
+        <div class="flex flex-col">
+          <span class="text-xs text-muted-foreground/70">Back to</span>
+          <span class="line-clamp-1">Projects</span>
+        </div>
+      </a>
+
+      <a href={`/projects/${nextProject.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
+        <div class="flex flex-col items-end">
+          <span class="text-xs text-muted-foreground/70">Next</span>
+          <span class="line-clamp-1 max-w-48">{nextProject.data.title}</span>
+        </div>
+        <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
+      </a>
+    </nav>
   </article>
 </Layout>
 <script src="../../scripts/heading-links.ts" />

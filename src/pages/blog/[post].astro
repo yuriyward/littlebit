@@ -7,7 +7,6 @@ import type { GetStaticPaths } from "astro";
 import Card from "../../components/Card.astro";
 import Icon from "../../components/Icon.astro";
 import ImageGlow from "../../components/ImageGlow.astro";
-import Link from "../../components/Link.astro";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -34,7 +33,7 @@ function timeToRead(post: CollectionEntry<"posts">): number {
   const numImages = post.body?.match(/!\[/g)?.length || 0;
   const numCodeblocks = post.body?.match(/```/g)?.length || 0;
 
-  return Math.ceil(numWords / 200) + Math.ceil(numImages / 6) + Math.ceil(numCodeblocks / 3);
+  return Math.ceil(numWords / 300) + Math.ceil(numImages / 6) + Math.ceil(numCodeblocks / 3);
 }
 
 interface Props {
@@ -48,6 +47,13 @@ export const getStaticPaths = (async () => {
 
   return posts.map((post) => ({ params: { post: post.id }, props: { post } }));
 }) satisfies GetStaticPaths;
+
+// Get all posts and find current post's neighbors
+const allPosts = await getCollection("posts", (post) => post.data.draft !== true);
+const sortedPosts = allPosts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime());
+const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
+// Cycle to oldest post if this is the newest, otherwise go to next newer post
+const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : sortedPosts[sortedPosts.length - 1];
 
 const { Content, headings } = await render(post);
 ---
@@ -75,11 +81,11 @@ const { Content, headings } = await render(post);
         </BreadcrumbList>
       </Breadcrumb>
       <h2 class="mt-0">On this page</h2>
-      <ol class="p-0 flex flex-col gap-2 mb-0 list-none relative">
+      <ol class="p-0 gap-0.5 flex flex-col mb-0 list-none relative">
         <li>
           <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone w-fit inline-block">{post.data.title}</a>
         </li>
-        {headings.map((heading, i) => (
+        {headings.map((heading) => (
           <li class={heading.depth === 3 ? 'ml-4' : heading.depth === 4 ? 'ml-8' : ''} data-depth={heading.depth}>
             <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone w-fit inline-block">{heading.text}</a>
           </li>
@@ -105,9 +111,26 @@ const { Content, headings } = await render(post);
         </div>
       </div>
       <Content />
-      <hr class="mt-4 mb-6 w-full h-px bg-border border-none" />
-      <Link href="/blog" variant="ghost" data-pagefind-ignore>← Back to blog</Link>
     </Card>
+
+    <!-- Navigation Section -->
+    <nav class="flex items-end justify-between py-6" data-pagefind-ignore>
+      <a href="/blog" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
+        <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
+        <div class="flex flex-col">
+          <span class="text-xs text-muted-foreground/70">Back</span>
+          <span class="line-clamp-1">All posts</span>
+        </div>
+      </a>
+
+      <a href={`/blog/${nextPost.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
+        <div class="flex flex-col items-end">
+          <span class="text-xs text-muted-foreground/70">Next</span>
+          <span class="line-clamp-1 max-w-48">{nextPost.data.title}</span>
+        </div>
+        <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
+      </a>
+    </nav>
     {giscus && (
       <Card>
         <div class="comments" data-pagefind-ignore>
