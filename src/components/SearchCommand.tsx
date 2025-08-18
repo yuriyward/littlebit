@@ -1,5 +1,6 @@
 import { FileTextIcon, FolderIcon } from "lucide-react";
 import * as React from "react";
+import DOMPurify from "dompurify";
 import {
   Command,
   CommandDialog,
@@ -54,10 +55,40 @@ export function SearchCommand() {
       if (!pagefindInitialized && typeof window !== "undefined") {
         try {
           setError(null);
-          // Use eval to avoid static analysis by bundler
-          const pagefindPath = "/pagefind/pagefind.js";
-          // @ts-expect-error
-          window.pagefind = await eval(`import('${pagefindPath}')`);
+
+          // Load Pagefind via inline module script to avoid Astro public directory restrictions
+          await new Promise<void>((resolve, reject) => {
+            const script = document.createElement("script");
+            script.type = "module";
+            script.textContent = `
+              try {
+                const pagefind = await import("/pagefind/pagefind.js");
+                window.pagefind = pagefind;
+                window.dispatchEvent(new CustomEvent('pagefind-loaded'));
+              } catch (error) {
+                window.dispatchEvent(new CustomEvent('pagefind-error', { detail: error }));
+              }
+            `;
+
+            const handleLoaded = () => {
+              window.removeEventListener('pagefind-loaded', handleLoaded);
+              window.removeEventListener('pagefind-error', handleError);
+              resolve();
+            };
+
+            const handleError = (event: Event) => {
+              window.removeEventListener('pagefind-loaded', handleLoaded);
+              window.removeEventListener('pagefind-error', handleError);
+              const customEvent = event as CustomEvent;
+              reject(customEvent.detail || new Error("Failed to load Pagefind"));
+            };
+
+            window.addEventListener('pagefind-loaded', handleLoaded);
+            window.addEventListener('pagefind-error', handleError);
+
+            document.head.appendChild(script);
+          });
+
           setPagefindInitialized(true);
         } catch (error) {
           console.error("Failed to load Pagefind:", error);
@@ -156,6 +187,49 @@ export function SearchCommand() {
     }
   };
 
+  // Safe excerpt rendering component that avoids dangerouslySetInnerHTML
+  const SafeExcerpt = React.memo(({ excerpt }: { excerpt: string }) => {
+    // Parse HTML and render only safe mark elements
+    const parseExcerpt = (html: string): React.ReactNode => {
+      if (typeof window === "undefined") {
+        // Server-side: return plain text
+        return html.replace(/<[^>]*>/g, "");
+      }
+
+      // Client-side: sanitize and parse
+      const sanitized = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ["mark"],
+        ALLOWED_ATTR: [],
+      });
+
+      // Simple parser for mark tags - split by <mark> and </mark>
+      const parts = sanitized.split(/(<\/?mark>)/);
+      const elements: React.ReactNode[] = [];
+      let isInMark = false;
+      let key = 0;
+
+      for (const part of parts) {
+        if (part === "<mark>") {
+          isInMark = true;
+        } else if (part === "</mark>") {
+          isInMark = false;
+        } else if (part) {
+          elements.push(
+            isInMark ? (
+              <mark key={key++}>{part}</mark>
+            ) : (
+              part
+            )
+          );
+        }
+      }
+
+      return elements;
+    };
+
+    return <>{parseExcerpt(excerpt)}</>;
+  });
+
   const getTypeLabel = (type: string) => {
     switch (type) {
       case "blog":
@@ -204,10 +278,9 @@ export function SearchCommand() {
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-sm truncate">{result.title}</div>
                       {result.excerpt && (
-                        <div
-                          className="text-xs text-muted-foreground mt-1 line-clamp-2"
-                          dangerouslySetInnerHTML={{ __html: result.excerpt }}
-                        />
+                        <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                          <SafeExcerpt excerpt={result.excerpt} />
+                        </div>
                       )}
                     </div>
                   </CommandItem>
