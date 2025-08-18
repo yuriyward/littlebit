@@ -462,6 +462,34 @@ article a[target="_blank"]:not([class]):hover::after,
   }
 }
 
+/* Text selection styles */
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+::-moz-selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Code block text selection styles */
+pre ::selection,
+code ::selection,
+.astro-code ::selection,
+.expressive-code ::selection {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+pre ::-moz-selection,
+code ::-moz-selection,
+.astro-code ::-moz-selection,
+.expressive-code ::-moz-selection {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
 /* Command search result highlighting */
 [cmdk-item] mark {
   @apply bg-blue-100 text-blue-900 rounded px-1 py-0.5 font-medium;
