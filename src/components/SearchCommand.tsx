@@ -1,4 +1,4 @@
-import { FileTextIcon, FolderIcon, SearchIcon } from "lucide-react";
+import { FileTextIcon, FolderIcon } from "lucide-react";
 import * as React from "react";
 import {
   Command,

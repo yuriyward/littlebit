@@ -58,11 +58,11 @@ const { Content, headings } = await render(post);
       <h2 class="mt-0">Table of contents</h2>
       <ol class="p-0 flex flex-col gap-2 mb-0 list-none relative">
         <li>
-          <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link active" style="box-decoration-break: clone; -webkit-box-decoration-break: clone; text-decoration: none !important;">{post.data.title}</a>
+          <a href={`#_top`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone">{post.data.title}</a>
         </li>
         {headings.map((heading, i) => (
           <li class={heading.depth === 3 ? 'ml-4' : heading.depth === 4 ? 'ml-8' : ''} data-depth={heading.depth}>
-            <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link" style="box-decoration-break: clone; -webkit-box-decoration-break: clone; text-decoration: none !important;">{heading.text}</a>
+            <a href={`#${heading.slug}`} class="text-muted-foreground text-sm py-1 px-2 rounded-sm transition-colors duration-150 hover:text-accent-foreground hover:bg-accent toc-link !no-underline decoration-clone">{heading.text}</a>
           </li>
         ))}
       </ol>

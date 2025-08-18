@@ -28,14 +28,16 @@
       },
       "suspicious": {
         "recommended": true,
-        "noConsole": "off"
+        "noConsole": "off",
+        "noUnknownAtRules": "off"
       },
       "style": {
         "recommended": true,
         "noProcessEnv": "error"
       },
       "complexity": {
-        "recommended": true
+        "recommended": true,
+        "noImportantStyles": "off"
       },
       "security": {
         "recommended": true

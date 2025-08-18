@@ -29,7 +29,10 @@ const observer = new IntersectionObserver(
         continue;
       }
 
-      if (link) link.classList.add("active");
+      if (link) {
+        link.classList.remove("text-muted-foreground");
+        link.classList.add("bg-accent", "text-accent-foreground");
+      }
 
       if (!visible) {
         visible = heading;
@@ -42,7 +45,10 @@ const observer = new IntersectionObserver(
       for (const key of tocMap.keys()) {
         if (key !== visible) {
           const link = tocMap.get(key);
-          if (link) link.classList.remove("active");
+          if (link) {
+            link.classList.remove("bg-accent", "text-accent-foreground");
+            link.classList.add("text-muted-foreground");
+          }
         }
       }
     }
