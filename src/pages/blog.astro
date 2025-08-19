@@ -7,6 +7,13 @@ import Layout from "../layouts/Layout.astro";
 
 const posts = await getCollection("posts", (post) => post.data.draft !== true);
 const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
+const tagCounts = tags.reduce(
+  (acc, tag) => {
+    acc[tag] = (acc[tag] || 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>
+);
 ---
 <Layout
   title={openGraph.blog.title || "Blog"}
@@ -16,19 +23,19 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
     <Card class="flex flex-col">
       <h2 class="mt-0">Filter</h2>
-      <ul class="flex flex-row items-center flex-wrap list-none m-0 p-0 gap-4">
+      <div class="flex flex-row items-center flex-wrap gap-2">
         {Array.from(new Set(tags)).map((tag) => (
-          <li>
-            <a
-              class="py-1 px-2 bg-muted text-foreground no-underline hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground blog-tag"
-              href="/blog"
-              data-tag={tag}
-            >
-              {tag}
-            </a>
-          </li>
+          <a
+            class="inline-flex items-center gap-1.5 rounded-md border border-border bg-background text-muted-foreground px-2.5 py-0.5 text-xs font-medium transition-all duration-150 hover:bg-accent hover:text-accent-foreground hover:border-accent-foreground/20 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 shrink-0 no-underline blog-tag"
+            href="/blog"
+            data-tag={tag}
+          >
+            <span>
+              {tag} <span class="opacity-60">({tagCounts[tag]})</span>
+            </span>
+          </a>
         ))}
-      </ul>
+      </div>
     </Card>
   </div>
   <div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
@@ -39,12 +46,22 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
 			</div>
 			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).map((post) => (
-					<a href={`/blog/${post.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm" data-tags={post.data.tags.map((tag) => tag.id).join(",")}>
+					<a href={`/blog/${post.id}`} class="post-container group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm" data-tags={post.data.tags.map((tag) => tag.id).join(",")}>
 						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
 							<h3>{post.data.title}</h3>
 							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
 						</div>
-						<span>{post.data.description}</span>
+						<div class="flex flex-row justify-between items-start gap-4">
+							<span class="flex-1">{post.data.description}</span>
+							<div class="flex flex-row flex-wrap gap-2 justify-end shrink-0 font-mono text-sm">
+								{post.data.tags.map((tagRef, index) => (
+									<>
+										<span>{tagRef.id}</span>
+										{index < post.data.tags.length - 1 && <span>,</span>}
+									</>
+								))}
+							</div>
+						</div>
 					</a>
 				))}
 			</div>
@@ -82,19 +99,21 @@ const tags = posts.flatMap((post) => post.data.tags.map((tag) => tag.id));
   tags.forEach((tag) => {
     const tagValue = tag.dataset.tag!;
     if (selectedTags.has(tagValue)) {
-      tag.classList.add('bg-accent', 'text-accent-foreground');
+      tag.classList.add('bg-accent', 'text-accent-foreground', 'border-accent-foreground/20');
+      tag.classList.remove('bg-background', 'text-muted-foreground');
     }
 
     tag.addEventListener('click', (event) => {
       event.preventDefault();
 
-      tag.classList.toggle('bg-accent');
-      tag.classList.toggle('text-accent-foreground');
-
       if (selectedTags.has(tagValue)) {
         selectedTags.delete(tagValue);
+        tag.classList.remove('bg-accent', 'text-accent-foreground', 'border-accent-foreground/20');
+        tag.classList.add('bg-background', 'text-muted-foreground');
       } else {
         selectedTags.add(tagValue);
+        tag.classList.add('bg-accent', 'text-accent-foreground', 'border-accent-foreground/20');
+        tag.classList.remove('bg-background', 'text-muted-foreground');
       }
 
       updatePostsVisibility();

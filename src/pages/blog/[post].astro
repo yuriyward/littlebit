@@ -101,12 +101,19 @@ const { Content, headings } = await render(post);
           <div>
             <h1 class="mt-0 text-2xl bg-white text-black inline relative leading-tight mb-0 px-3 py-1 sm:inline sm:bg-transparent sm:p-0 sm:text-foreground" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">{post.data.title}</h1>
           </div>
-          <div class="flex flex-row gap-2 bg-accent-foreground text-accent w-fit px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground font-mono" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">
-            <span>{post.data.createdAt.toLocaleDateString()}</span>
-            <span>/</span>
-            <span>{timeToRead(post)} minute{timeToRead(post) === 1 ? "" : "s"} to read</span>
-            <span>/</span>
-            <span>Tags: {post.data.tags.map((tag) => tag.id).join(", ")}</span>
+          <div class="flex flex-col gap-2 bg-accent-foreground text-accent w-full px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground font-mono sm:w-full" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">
+            <div class="flex flex-row flex-wrap gap-2">
+              <span>{post.data.createdAt.toLocaleDateString()}</span>
+              <span>/</span>
+              <span>{timeToRead(post)} minute{timeToRead(post) === 1 ? "" : "s"} to read</span>
+              <span>/</span>
+              {post.data.tags.map((tagRef, index) => (
+                <>
+                  <span>{tagRef.id}</span>
+                  {index < post.data.tags.length - 1 && <span>,</span>}
+                </>
+              ))}
+            </div>
           </div>
         </div>
       </div>

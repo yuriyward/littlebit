@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { cn } from "../lib/utils";
+
+interface Props {
+  tag: CollectionEntry<"tags">;
+  variant?: "default" | "interactive" | "filter";
+  size?: "sm" | "default" | "lg";
+  count?: number;
+  active?: boolean;
+  href?: string;
+  class?: string;
+}
+
+const { tag, variant = "default", size = "default", count, active = false, href, class: className } = Astro.props;
+
+const sizeClasses = {
+  sm: "px-2 py-0.5 text-xs rounded-sm",
+  default: "px-2.5 py-0.5 text-xs",
+  lg: "px-3 py-1 text-sm",
+};
+
+const variantClasses = {
+  default: "border-transparent bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+  interactive: "text-foreground border-border hover:bg-accent hover:text-accent-foreground",
+  filter: active
+    ? "border-accent-foreground/20 bg-accent text-accent-foreground"
+    : "border-border bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent-foreground/20",
+};
+
+const baseClasses =
+  "inline-flex items-center gap-1.5 rounded-md border font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 shrink-0";
+
+const badgeClasses = cn(baseClasses, sizeClasses[size], variantClasses[variant], className);
+---
+
+{href ? (
+  <a 
+    href={href} 
+    class="no-underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-md"
+  >
+    <span class={badgeClasses}>
+      <span>
+        {tag.id} {count !== undefined && <span class="opacity-60">({count})</span>}
+      </span>
+    </span>
+  </a>
+) : (
+  <span class={badgeClasses}>
+    <span>
+      {tag.id} {count !== undefined && <span class="opacity-60">({count})</span>}
+    </span>
+  </span>
+)}
