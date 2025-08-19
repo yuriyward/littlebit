@@ -87,26 +87,26 @@ const { Content } = await render(project);
         </div>
       </div>
       <Content />
-    </Card>
-    
-    <!-- Navigation Section -->
-    <nav class="flex items-end justify-between py-6" data-pagefind-ignore>
-      <a href="/projects" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
-        <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
-        <div class="flex flex-col">
-          <span class="text-xs text-muted-foreground/70">Back to</span>
-          <span class="line-clamp-1">Projects</span>
-        </div>
-      </a>
+      
+      <!-- Navigation Section -->
+      <nav class="flex items-end justify-between py-6 mt-8 border-t border-border" data-pagefind-ignore>
+        <a href="/projects" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
+          <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
+          <div class="flex flex-col">
+            <span class="text-xs text-muted-foreground/70">Back to</span>
+            <span class="line-clamp-1">Projects</span>
+          </div>
+        </a>
 
-      <a href={`/projects/${nextProject.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
-        <div class="flex flex-col items-end">
-          <span class="text-xs text-muted-foreground/70">Next</span>
-          <span class="line-clamp-1 max-w-48">{nextProject.data.title}</span>
-        </div>
-        <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
-      </a>
-    </nav>
+        <a href={`/projects/${nextProject.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-muted-foreground/70">Next</span>
+            <span class="line-clamp-1 max-w-48">{nextProject.data.title}</span>
+          </div>
+          <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
+        </a>
+      </nav>
+    </Card>
   </article>
 </Layout>
 <script src="../../scripts/heading-links.ts" />

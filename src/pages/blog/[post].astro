@@ -111,26 +111,26 @@ const { Content, headings } = await render(post);
         </div>
       </div>
       <Content />
+      
+      <!-- Navigation Section -->
+      <nav class="flex items-end justify-between py-6 mt-8 border-t border-border" data-pagefind-ignore>
+        <a href="/blog" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
+          <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
+          <div class="flex flex-col">
+            <span class="text-xs text-muted-foreground/70">Back</span>
+            <span class="line-clamp-1">All posts</span>
+          </div>
+        </a>
+
+        <a href={`/blog/${nextPost.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-muted-foreground/70">Next</span>
+            <span class="line-clamp-1 max-w-48">{nextPost.data.title}</span>
+          </div>
+          <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
+        </a>
+      </nav>
     </Card>
-
-    <!-- Navigation Section -->
-    <nav class="flex items-end justify-between py-6" data-pagefind-ignore>
-      <a href="/blog" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
-        <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
-        <div class="flex flex-col">
-          <span class="text-xs text-muted-foreground/70">Back</span>
-          <span class="line-clamp-1">All posts</span>
-        </div>
-      </a>
-
-      <a href={`/blog/${nextPost.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
-        <div class="flex flex-col items-end">
-          <span class="text-xs text-muted-foreground/70">Next</span>
-          <span class="line-clamp-1 max-w-48">{nextPost.data.title}</span>
-        </div>
-        <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
-      </a>
-    </nav>
     {giscus && (
       <Card>
         <div class="comments" data-pagefind-ignore>
