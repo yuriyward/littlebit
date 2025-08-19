@@ -14,7 +14,7 @@ export function ButtonWrapper({ variant = "ghost", size = "icon", className, chi
     <Button
       variant={variant}
       size={size}
-      className={cn("w-10 h-10 bg-card border border-border", className)}
+      className={cn("w-10 h-10 bg-card border border-border dark:bg-transparent cursor-pointer", className)}
       {...props}
     >
       {children}

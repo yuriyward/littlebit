@@ -5,10 +5,10 @@
 .gsc-comment-box-button,
 .btn.btn-primary,
 button.btn.btn-primary {
-  background: oklch(var(--primary)) !important;
-  background-color: oklch(var(--primary)) !important;
-  border-color: oklch(var(--primary)) !important;
-  color: oklch(var(--primary-foreground)) !important;
+  background: oklch(var(--primary, 0.21 0.006 285.885)) !important;
+  background-color: oklch(var(--primary, 0.21 0.006 285.885)) !important;
+  border-color: oklch(var(--primary, 0.21 0.006 285.885)) !important;
+  color: oklch(var(--primary-foreground, 0.985 0 0)) !important;
   border-radius: 0.375rem !important; /* rounded-md */
   font-size: 0.875rem !important; /* text-sm */
   font-weight: 500 !important; /* font-medium */
@@ -19,9 +19,9 @@ button.btn.btn-primary {
 .gsc-comment-box-button:hover,
 .btn.btn-primary:hover,
 button.btn.btn-primary:hover {
-  background: oklch(var(--primary) / 0.9) !important; /* hover:bg-primary/90 */
-  background-color: oklch(var(--primary) / 0.9) !important;
-  border-color: oklch(var(--primary) / 0.9) !important;
+  background: oklch(var(--primary, 0.21 0.006 285.885) / 0.9) !important; /* hover:bg-primary/90 */
+  background-color: oklch(var(--primary, 0.21 0.006 285.885) / 0.9) !important;
+  border-color: oklch(var(--primary, 0.21 0.006 285.885) / 0.9) !important;
 }
 
 /* Disabled state styling */
@@ -30,10 +30,10 @@ button.btn.btn-primary:hover {
 button.btn.btn-primary:disabled,
 .btn.btn-primary[disabled],
 button.btn.btn-primary[disabled] {
-  background: oklch(var(--muted)) !important;
-  background-color: oklch(var(--muted)) !important;
-  border-color: oklch(var(--muted)) !important;
-  color: oklch(var(--muted-foreground)) !important;
+  background: oklch(var(--muted, 0.967 0.001 286.375)) !important;
+  background-color: oklch(var(--muted, 0.967 0.001 286.375)) !important;
+  border-color: oklch(var(--muted, 0.967 0.001 286.375)) !important;
+  color: oklch(var(--muted-foreground, 0.552 0.016 285.938)) !important;
   cursor: not-allowed !important;
   opacity: 0.5 !important; /* disabled:opacity-50 */
   pointer-events: none !important; /* disabled:pointer-events-none */

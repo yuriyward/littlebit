@@ -30,6 +30,54 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 
+		<script is:inline>
+			(function () {
+				try {
+					const TTL_MS = 1000 * 60 * 60 * 24; // 24h
+					const stored = localStorage.getItem('theme');
+					const expRaw = localStorage.getItem('theme_expires');
+					const exp = expRaw ? parseInt(expRaw, 10) : 0;
+					const now = Date.now();
+					const storedValid = !!stored && !!exp && exp > now;
+					const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+					const isDark = storedValid ? stored === 'dark' : prefersDark;
+					const root = document.documentElement;
+					if (!storedValid) {
+						// Clear expired preference so OS setting can take effect next time too
+						try { localStorage.removeItem('theme'); localStorage.removeItem('theme_expires'); } catch {}
+					}
+					if (isDark) {
+						root.classList.add('dark');
+						root.style.colorScheme = 'dark';
+					} else {
+						root.classList.remove('dark');
+						root.style.colorScheme = 'light';
+					}
+				} catch {}
+
+				// React to OS theme changes only when there is no explicit user preference stored
+				try {
+					const mql = window.matchMedia('(prefers-color-scheme: dark)');
+					mql.addEventListener('change', (e) => {
+						try {
+							const expRaw = localStorage.getItem('theme_expires');
+							const exp = expRaw ? parseInt(expRaw, 10) : 0;
+							if (localStorage.getItem('theme') && exp && exp > Date.now()) return; // Respect unexpired choice
+						} catch {}
+						const root = document.documentElement;
+						if (e.matches) {
+							root.classList.add('dark');
+							root.style.colorScheme = 'dark';
+						} else {
+							root.classList.remove('dark');
+							root.style.colorScheme = 'light';
+						}
+						window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark: e.matches } }));
+					});
+				} catch {}
+			})();
+		</script>
+
 		<title>{title}</title>
 		{description && <meta name="description" content={description} />}
 		<meta name="theme-color" content={themeColor}>
@@ -78,22 +126,22 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 			(function() {
 				const params = new URLSearchParams(window.location.search);
 				const highlightTerm = params.get('highlight');
-				
+
 				if (!highlightTerm) return;
-				
+
 				// Global state for navigation
 				let searchHighlights = [];
 				let currentHighlightIndex = 0;
-				
+
 				// Function to highlight text and scroll to first match
 				function highlightAndScroll() {
 					// Get the main content area (avoiding navbar and other UI elements)
-					const contentArea = document.querySelector('[data-pagefind-body]') || 
-					                   document.querySelector('article') || 
+					const contentArea = document.querySelector('[data-pagefind-body]') ||
+					                   document.querySelector('article') ||
 					                   document.querySelector('main');
-					
+
 					if (!contentArea) return;
-					
+
 					// Create a tree walker to find text nodes
 					const walker = document.createTreeWalker(
 						contentArea,
@@ -102,7 +150,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 							acceptNode: function(node) {
 								// Skip script and style tags
 								const parent = node.parentElement;
-								if (parent && (parent.tagName === 'SCRIPT' || 
+								if (parent && (parent.tagName === 'SCRIPT' ||
 								              parent.tagName === 'STYLE' ||
 								              parent.tagName === 'CODE' ||
 								              parent.tagName === 'PRE')) {
@@ -112,19 +160,19 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 							}
 						}
 					);
-					
+
 					const textNodes = [];
 					let node;
 					while (node = walker.nextNode()) {
 						textNodes.push(node);
 					}
-					
+
 					// Create regex for case-insensitive search that matches whole words
 					// but expands to include the full word even if search term is partial
 					const escapedTerm = highlightTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 					const searchRegex = new RegExp(`\\b\\w*${escapedTerm}\\w*\\b`, 'gi');
 					searchHighlights = [];
-					
+
 					// Process text nodes and wrap matches
 					textNodes.forEach(textNode => {
 						const text = textNode.textContent;
@@ -132,10 +180,10 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 							const parent = textNode.parentNode;
 							const fragment = document.createDocumentFragment();
 							let lastIndex = 0;
-							
+
 							// Reset regex for exec
 							searchRegex.lastIndex = 0;
-							
+
 							let match;
 							while ((match = searchRegex.exec(text)) !== null) {
 								// Add text before match
@@ -144,53 +192,53 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 										document.createTextNode(text.slice(lastIndex, match.index))
 									);
 								}
-								
+
 								// Create highlighted span
 								const mark = document.createElement('mark');
 								mark.className = 'search-highlight';
 								mark.textContent = match[0];
 								fragment.appendChild(mark);
-								
+
 								// Store in highlights array
 								searchHighlights.push(mark);
-								
+
 								lastIndex = match.index + match[0].length;
 							}
-							
+
 							// Add remaining text
 							if (lastIndex < text.length) {
 								fragment.appendChild(
 									document.createTextNode(text.slice(lastIndex))
 								);
 							}
-							
+
 							// Replace text node with fragment
 							parent.replaceChild(fragment, textNode);
 						}
 					});
-					
+
 					// Set first highlight as current and scroll to it
 					if (searchHighlights.length > 0) {
 						currentHighlightIndex = 0;
 						updateCurrentHighlight();
-						
+
 						setTimeout(() => {
 							searchHighlights[0].scrollIntoView({
 								behavior: 'smooth',
 								block: 'center'
 							});
-							
+
 							// Add a temporary pulse animation to draw attention
 							searchHighlights[0].style.animation = 'pulse 2s ease-in-out';
 						}, 100);
 					}
-					
+
 					// Show indicator with navigation controls
 					if (searchHighlights.length > 0) {
 						createSearchIndicator();
 					}
 				}
-				
+
 				// Update current highlight styling
 				function updateCurrentHighlight() {
 					// Remove current class from all highlights
@@ -202,7 +250,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 					// Update indicator counter
 					updateIndicatorCounter();
 				}
-				
+
 				// Navigation functions
 				window.nextHighlight = function() {
 					if (searchHighlights.length === 0) return;
@@ -213,7 +261,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 						block: 'center'
 					});
 				}
-				
+
 				window.prevHighlight = function() {
 					if (searchHighlights.length === 0) return;
 					currentHighlightIndex = (currentHighlightIndex - 1 + searchHighlights.length) % searchHighlights.length;
@@ -223,15 +271,15 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 						block: 'center'
 					});
 				}
-				
+
 				// Create search indicator with navigation
 				function createSearchIndicator() {
 					const indicator = document.createElement('div');
 					indicator.className = 'search-indicator';
 					indicator.id = 'search-indicator';
-					
+
 					const showNavigation = searchHighlights.length > 1;
-					
+
 					indicator.innerHTML = `
 						<div class="flex items-center gap-2">
 							${showNavigation ? `
@@ -241,9 +289,9 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 									</svg>
 								</button>
 							` : ''}
-							
+
 							<span id="search-counter">${searchHighlights.length === 1 ? '1 match found' : `1 / ${searchHighlights.length}`}</span>
-							
+
 							${showNavigation ? `
 								<button onclick="nextHighlight()" class="nav-btn" title="Next match">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -251,14 +299,14 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 									</svg>
 								</button>
 							` : ''}
-							
+
 							<button onclick="clearSearchHighlights()" title="Clear highlights">Clear</button>
 						</div>
 					`;
-					
+
 					document.body.appendChild(indicator);
 				}
-				
+
 				// Update counter in indicator
 				function updateIndicatorCounter() {
 					const counter = document.getElementById('search-counter');
@@ -266,7 +314,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 						counter.textContent = `${currentHighlightIndex + 1} / ${searchHighlights.length}`;
 					}
 				}
-				
+
 				// Clear highlights function
 				window.clearSearchHighlights = function() {
 					// Remove all highlight marks
@@ -277,19 +325,19 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 						}
 						parent.removeChild(mark);
 					});
-					
+
 					// Remove indicator
 					const indicator = document.querySelector('.search-indicator');
 					if (indicator) {
 						indicator.remove();
 					}
-					
+
 					// Remove highlight parameter from URL
 					const url = new URL(window.location);
 					url.searchParams.delete('highlight');
 					window.history.replaceState({}, '', url);
 				}
-				
+
 				// Run highlighting after page loads
 				if (document.readyState === 'loading') {
 					document.addEventListener('DOMContentLoaded', highlightAndScroll);

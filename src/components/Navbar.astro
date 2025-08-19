@@ -8,7 +8,7 @@ import { SearchWrapper } from "./SearchWrapper";
 
 const path = Astro.url.pathname;
 ---
-<nav class="flex justify-between items-center font-mono z-50 py-4 px-6 bg-card/80 backdrop-blur-sm max-sm:border-b max-sm:border-border/50 max-sm:px-4 max-sm:pt-4 max-sm:pb-2 max-sm:transition-all max-sm:duration-300">
+<nav class="flex justify-between items-center font-mono z-50 py-4 px-6 bg-background/80 backdrop-blur-sm max-sm:border-b max-sm:border-border/50 max-sm:px-4 max-sm:pt-4 max-sm:pb-2 max-sm:transition-all max-sm:duration-300">
   <Logo />
 
   <div class="flex items-center gap-6 max-sm:hidden">
@@ -33,6 +33,10 @@ const path = Astro.url.pathname;
           <span class="text-xs" id="search-kbd">⌘</span>K
         </kbd>
       </button>
+      <ButtonWrapper className="ml-3" client:load id="theme-toggle">
+        <Icon type="lucide" name="sun" width={18} height={18} class="theme-icon-sun" />
+        <Icon type="lucide" name="moon" width={18} height={18} class="theme-icon-moon hidden" />
+      </ButtonWrapper>
     </div>
   </div>
 
@@ -54,12 +58,19 @@ const path = Astro.url.pathname;
   </div>
 
   <!-- Mobile Menu Overlay -->
-  <ul class="hidden max-sm:flex max-sm:flex-col max-sm:gap-0 max-sm:absolute max-sm:w-full max-sm:top-full max-sm:left-0 max-sm:bg-card/95 max-sm:backdrop-blur-md max-sm:border-b max-sm:border-border/50 max-sm:z-[1] max-sm:opacity-0 max-sm:pointer-events-none max-sm:transition-all max-sm:duration-300 max-sm:transform max-sm:translate-y-[-10px]">
+  <ul class="hidden max-sm:flex max-sm:flex-col max-sm:gap-0 max-sm:absolute max-sm:w-full max-sm:top-full max-sm:left-0 max-sm:bg-background/95 max-sm:backdrop-blur-md max-sm:border-b max-sm:border-border/50 max-sm:z-[1] max-sm:opacity-0 max-sm:pointer-events-none max-sm:transition-all max-sm:duration-300 max-sm:transform max-sm:translate-y-[-10px]">
     <li class="border-b border-border/30">
       <Link href="/blog" class="mobile-nav-link" class:list={{ active: path.startsWith('/blog') }} variant="link">Blog</Link>
     </li>
     <li class="border-b border-border/30">
       <Link href="/projects" class="mobile-nav-link" class:list={{ active: path.startsWith('/projects') }} variant="link">Projects</Link>
+    </li>
+    <li class="border-b border-border/30">
+      <button id="theme-toggle-mobile-menu" class="mobile-nav-link flex items-center gap-2" type="button">
+        <Icon type="lucide" name="sun" width={16} height={16} class="theme-icon-sun" />
+        <Icon type="lucide" name="moon" width={16} height={16} class="theme-icon-moon hidden" />
+        <span>Theme</span>
+      </button>
     </li>
   </ul>
 </nav>
@@ -71,6 +82,8 @@ const path = Astro.url.pathname;
   const searchTriggerMobile = document.querySelector('#search-trigger-mobile');
   const navToggle = document.querySelector('.mobile-nav-toggle');
   const searchKbd = document.querySelector('#search-kbd');
+  const themeToggle = document.querySelector('#theme-toggle');
+  const themeToggleMobileMenu = document.querySelector('#theme-toggle-mobile-menu');
 
   // Set correct keyboard shortcut symbol based on platform
   if (searchKbd && navigator.platform.toLowerCase().includes('mac')) {
@@ -104,6 +117,33 @@ const path = Astro.url.pathname;
     navToggle.classList.toggle('active');
     document.querySelector('nav').classList.toggle('active');
   });
+
+  // Theme toggle logic
+  function applyThemeIconState() {
+    const isDark = document.documentElement.classList.contains('dark');
+    document.querySelectorAll('.theme-icon-sun').forEach((el) => el.classList.toggle('hidden', isDark));
+    document.querySelectorAll('.theme-icon-moon').forEach((el) => el.classList.toggle('hidden', !isDark));
+  }
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const isDark = root.classList.toggle('dark');
+    try {
+      const TTL_MS = 1000 * 60 * 60 * 24; // 24h
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('theme_expires', String(Date.now() + TTL_MS));
+    } catch {}
+    root.style.colorScheme = isDark ? 'dark' : 'light';
+    applyThemeIconState();
+    // Notify listeners (e.g., background renderer) about theme change
+    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark } }));
+  }
+
+  // Initialize icons on load
+  applyThemeIconState();
+
+  themeToggle?.addEventListener('click', toggleTheme);
+  themeToggleMobileMenu?.addEventListener('click', toggleTheme);
 </script>
 <style>
   @reference "../styles/global.css";
@@ -119,7 +159,7 @@ const path = Astro.url.pathname;
 
   /* Mobile navigation link styles */
   .mobile-nav-link {
-    @apply block px-6 py-4 text-foreground/80 hover:text-foreground hover:bg-accent/20 focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none transition-all duration-200;
+    @apply flex items-center gap-2 px-6 py-4 w-full text-left text-foreground/80 hover:text-foreground hover:bg-accent/20 focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none transition-all duration-200;
   }
 
   .mobile-nav-link.active {

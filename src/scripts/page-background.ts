@@ -82,6 +82,12 @@ class PageBackground {
     window.addEventListener("focus", this.handleVisibilityOrFocusChange);
     window.addEventListener("blur", this.handleVisibilityOrFocusChange);
 
+    // Re-apply colors and redraw when theme changes
+    window.addEventListener("theme-changed", () => {
+      this.setThemeColors();
+      this.resizeBackground();
+    });
+
     requestAnimationFrame(this.redrawBackground);
   }
 

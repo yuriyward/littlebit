@@ -146,7 +146,7 @@ const { Content, headings } = await render(post);
             data-reactions-enabled={giscus.reactionsEnabled === true ? "1" : "0"}
             data-emit-metadata={giscus.emitMetadata === true ? "1" : "0"}
             data-input-position={giscus.commentsInput}
-            data-theme={giscus.theme || `${Astro.url.origin}/styles/giscus`}
+            data-theme={`${Astro.url.origin}/styles/giscus`}
             data-lang={giscus.lang}
             data-loading="lazy"
             crossorigin="anonymous"
@@ -180,4 +180,44 @@ const { Content, headings } = await render(post);
       }
     });
   });
+
+  // Sync Giscus theme with site theme (custom light / custom dark) without reload
+  function updateGiscusTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const theme = isDark ? `${window.location.origin}/styles/giscus-dark` : `${window.location.origin}/styles/giscus`;
+    const iframe = document.querySelector('iframe.giscus-frame') as HTMLIFrameElement | null;
+    if (!iframe) return false;
+    iframe.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+    return true;
+  }
+
+  // Try to initialize once Giscus iframe mounts
+  function initGiscusThemeSync() {
+    let tries = 0;
+    const maxTries = 50; // ~5s
+    const timer = setInterval(() => {
+      if (updateGiscusTheme() || ++tries >= maxTries) clearInterval(timer);
+    }, 100);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGiscusThemeSync);
+  } else {
+    initGiscusThemeSync();
+  }
+
+  // React to theme changes
+  window.addEventListener('theme-changed', () => {
+    // Update immediately if iframe is ready; otherwise retry briefly
+    if (!updateGiscusTheme()) {
+      let tries = 0;
+      const maxTries = 20;
+      const timer = setInterval(() => {
+        if (updateGiscusTheme() || ++tries >= maxTries) clearInterval(timer);
+      }, 100);
+    }
+  });
+
+  // For client-side navigation
+  document.addEventListener('astro:page-load', initGiscusThemeSync);
 </script>
