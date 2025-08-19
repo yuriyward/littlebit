@@ -236,6 +236,8 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 					// Show indicator with navigation controls
 					if (searchHighlights.length > 0) {
 						createSearchIndicator();
+						// Add escape key listener
+						document.addEventListener('keydown', handleEscapeKey);
 					}
 				}
 
@@ -282,6 +284,8 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 
 					indicator.innerHTML = `
 						<div class="flex items-center gap-2">
+							<span class="search-term" title="Search term">"${highlightTerm}"</span>
+							
 							${showNavigation ? `
 								<button onclick="prevHighlight()" class="nav-btn" title="Previous match">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -300,7 +304,7 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 								</button>
 							` : ''}
 
-							<button onclick="clearSearchHighlights()" title="Clear highlights">Clear</button>
+							<button onclick="clearSearchHighlights()" title="Clear highlights (ESC)">Clear</button>
 						</div>
 					`;
 
@@ -336,6 +340,16 @@ const { title, description, image, pagefindIgnore, article } = Astro.props;
 					const url = new URL(window.location);
 					url.searchParams.delete('highlight');
 					window.history.replaceState({}, '', url);
+
+					// Remove escape key listener
+					document.removeEventListener('keydown', handleEscapeKey);
+				}
+
+				// Handle escape key to close search results
+				function handleEscapeKey(event) {
+					if (event.key === 'Escape' && document.querySelector('.search-indicator')) {
+						clearSearchHighlights();
+					}
 				}
 
 				// Run highlighting after page loads
