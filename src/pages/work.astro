@@ -1,0 +1,163 @@
+---
+import { getCollection } from "astro:content";
+import { openGraph } from "spectre:globals";
+import Card from "../components/Card.astro";
+import Icon from "../components/Icon.astro";
+import Layout from "../layouts/Layout.astro";
+
+const projects = await getCollection("projects");
+
+// Categorize projects (you can enhance this based on your project data structure)
+const featuredProjects = projects.filter(p => p.data.featured || projects.indexOf(p) < 3);
+const consultingProjects = projects.filter(p => p.data.category === 'consulting' || p.data.type === 'consulting');
+const openSourceProjects = projects.filter(p => p.data.category === 'open-source' || p.data.type === 'open-source');
+const professionalProjects = projects.filter(p => p.data.category === 'professional' || p.data.type === 'professional');
+---
+<Layout
+	title="Work Portfolio - Expert Technical Solutions"
+	description="Professional portfolio showcasing AI engineering, full-stack development, and technical consulting projects."
+	pagefindIgnore
+>
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="briefcase" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Portfolio Overview</h2>
+      </div>
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-lg bg-primary/10 border border-primary/20">
+            <h3 class="text-primary font-semibold text-2xl m-0 mb-1 tracking-tight">{projects.length}+</h3>
+            <span class="text-sm text-muted-foreground">Completed Projects</span>
+          </div>
+          <div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
+            <h3 class="text-accent-foreground font-semibold text-2xl m-0 mb-1 tracking-tight">5+</h3>
+            <span class="text-sm text-muted-foreground">Years Experience</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <h3 class="text-lg font-semibold">Expertise Areas</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">AI Engineering</span>
+            <span class="px-3 py-1 bg-accent/10 text-accent-foreground rounded-full text-sm font-medium">Full-Stack Development</span>
+            <span class="px-3 py-1 bg-secondary/10 text-secondary-foreground rounded-full text-sm font-medium">Technical Consulting</span>
+            <span class="px-3 py-1 bg-muted/10 text-muted-foreground rounded-full text-sm font-medium">System Architecture</span>
+          </div>
+        </div>
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="target" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Consulting Services</h2>
+      </div>
+      <div class="space-y-4">
+        <p class="text-muted-foreground leading-relaxed">
+          I provide expert consulting services for organizations that need specialized technical guidance in AI implementation, system architecture, and development excellence.
+        </p>
+        <div class="space-y-3">
+          <div class="flex items-start gap-3">
+            <Icon type="lucide" name="check-circle" width={16} height={16} class="text-primary mt-1 flex-shrink-0" />
+            <div>
+              <h4 class="font-medium m-0 mb-1">Technical Architecture Reviews</h4>
+              <p class="text-sm text-muted-foreground m-0">System design evaluation and optimization recommendations</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <Icon type="lucide" name="check-circle" width={16} height={16} class="text-primary mt-1 flex-shrink-0" />
+            <div>
+              <h4 class="font-medium m-0 mb-1">AI Implementation Strategy</h4>
+              <p class="text-sm text-muted-foreground m-0">ML/AI project planning and execution guidance</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <Icon type="lucide" name="check-circle" width={16} height={16} class="text-primary mt-1 flex-shrink-0" />
+            <div>
+              <h4 class="font-medium m-0 mb-1">Development Process Optimization</h4>
+              <p class="text-sm text-muted-foreground m-0">Code quality, tooling, and workflow improvements</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <Icon type="lucide" name="check-circle" width={16} height={16} class="text-primary mt-1 flex-shrink-0" />
+            <div>
+              <h4 class="font-medium m-0 mb-1">Project Rescue & Recovery</h4>
+              <p class="text-sm text-muted-foreground m-0">Emergency technical assistance and project rehabilitation</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a href="/about" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
+            <Icon type="lucide" name="arrow-right" width={16} height={16} />
+            Learn About My Expertise
+          </a>
+        </div>
+      </div>
+    </Card>
+  </div>
+
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="star" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Featured Work</h2>
+      </div>
+      <div class="flex flex-col gap-4">
+        {featuredProjects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((project) => (
+          <a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+            <div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
+              <h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
+              <span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
+            </div>
+            <span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
+            <div class="flex items-center gap-2 mt-2">
+              <Icon type="lucide" name="award" width={14} height={14} class="text-primary" />
+              <span class="text-xs text-primary font-medium">Featured Project</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="rocket" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">All Projects</h2>
+      </div>
+      <div class="flex flex-col gap-4">
+        {projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).map((project) => (
+          <a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+            <div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
+              <h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
+              <span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
+            </div>
+            <span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
+          </a>
+        ))}
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="handshake" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Ready to Collaborate?</h2>
+      </div>
+      <div class="space-y-4">
+        <p class="text-muted-foreground leading-relaxed">
+          Looking for expert technical guidance on your next project? Let's discuss how I can help you achieve your goals with cutting-edge technology solutions.
+        </p>
+        <div class="flex flex-col gap-3">
+          <a href="/about" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
+            <Icon type="lucide" name="user-check" width={16} height={16} />
+            View My Expertise
+          </a>
+          <a href="/blog" class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg font-medium transition-all duration-300 hover:bg-accent">
+            <Icon type="lucide" name="book-open" width={16} height={16} />
+            Read My Insights
+          </a>
+        </div>
+      </div>
+    </Card>
+  </div>
+</Layout>

@@ -1,0 +1,244 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+
+import type { GetStaticPaths } from "astro";
+import Card from "../../components/Card.astro";
+import Icon from "../../components/Icon.astro";
+import ImageGlow from "../../components/ImageGlow.astro";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "../../components/ui/breadcrumb";
+import Layout from "../../layouts/Layout.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({ params: { project: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+// Get all projects and find current project's neighbors
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const currentIndex = sortedProjects.findIndex((p) => p.id === project.id);
+// Cycle to oldest project if this is the newest, otherwise go to next newer project
+const nextProject = currentIndex > 0 ? sortedProjects[currentIndex - 1] : sortedProjects[sortedProjects.length - 1];
+
+const { Content } = await render(project);
+---
+<Layout
+  title={project.data.title}
+  description={project.data.description}
+  image={project.data.image}
+  article={{
+    createdAt: project.data.date,
+  }}
+>
+  <div class="h-full relative" slot="left">
+    <Card class="min-w-0 sticky top-8">
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/" data-pagefind-ignore>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/work" data-pagefind-ignore>Work</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <h2 class="mt-0">Project Info</h2>
+      <div class="space-y-4">
+        {project.data.category && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="tag" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">
+              <span class="capitalize font-medium">{project.data.category}</span> Project
+            </span>
+          </div>
+        )}
+        
+        {project.data.status && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="activity" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">
+              Status: <span class="capitalize font-medium">{project.data.status}</span>
+            </span>
+          </div>
+        )}
+
+        {project.data.duration && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="clock" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">Duration: <span class="font-medium">{project.data.duration}</span></span>
+          </div>
+        )}
+
+        {project.data.role && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="user" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">Role: <span class="font-medium">{project.data.role}</span></span>
+          </div>
+        )}
+
+        {project.data.team_size && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="users" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">Team Size: <span class="font-medium">{project.data.team_size}</span></span>
+          </div>
+        )}
+
+        {project.data.client && (
+          <div class="flex items-center gap-2">
+            <Icon type="lucide" name="building" width={16} height={16} class="text-muted-foreground" />
+            <span class="text-sm">Client: <span class="font-medium">{project.data.client}</span></span>
+          </div>
+        )}
+
+        {project.data.technologies && project.data.technologies.length > 0 && (
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <Icon type="lucide" name="code" width={16} height={16} class="text-muted-foreground" />
+              <span class="text-sm font-medium">Technologies</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {project.data.technologies.map((tech) => (
+                <span class="text-xs px-2 py-1 bg-accent/50 text-accent-foreground rounded-md border border-accent/30 font-medium">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {project.data.info && project.data.info.length > 0 && (
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold mb-4">Links</h3>
+          <ul class="list-none p-0 m-0 space-y-2">
+            {project.data.info.map((info) => {
+              const Tag = info.link ? 'a' : 'div';
+              return (
+                <li>
+                  <Tag 
+                    href={info.link} 
+                    target={info.link ? "_blank" : undefined}
+                    rel={info.link ? "noopener noreferrer" : undefined}
+                    class='flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors duration-200'
+                  >
+                    <Icon type={info.icon.type} name={info.icon.name as any} width={20} height={20} class='text-primary' />
+                    <span class="font-medium">{info.text}</span>
+                    {info.link && <Icon type="lucide" name="external-link" width={14} height={14} class="text-muted-foreground ml-auto" />}
+                  </Tag>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+    </Card>
+  </div>
+  <article slot="right" data-pagefind-body class="flex flex-col gap-8 leading-relaxed min-w-0 sm:gap-4">
+    <Card>
+      <div class="relative w-full h-fit" style="scroll-margin-top: 2rem;" id="_top" data-pagefind-ignore>
+        {project.data.image && <ImageGlow quality={100} class="w-full h-auto z-10" src={project.data.image} alt={project.data.title} />}
+        <div class="flex flex-col gap-2 absolute bottom-6 left-4 max-w-[calc(100%-3rem)] z-20 sm:relative sm:bottom-0 sm:left-0 sm:w-fit sm:max-w-none sm:mt-4">
+          <div>
+            <h1 class="mt-0 text-2xl bg-white text-black inline relative leading-tight mb-0 px-3 py-1 sm:inline sm:bg-transparent sm:p-0 sm:text-foreground" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">{project.data.title}</h1>
+          </div>
+          <div class="flex flex-row gap-2 bg-accent-foreground text-accent w-fit px-3 sm:block sm:bg-transparent sm:p-0 sm:text-foreground font-mono" style="box-decoration-break: clone; -webkit-box-decoration-break: clone;">
+            <span>{project.data.date.toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+      <Content />
+
+      <!-- Case Study Sections -->
+      {(project.data.challenges && project.data.challenges.length > 0) && (
+        <section class="mt-8 pt-8 border-t border-border">
+          <h2 class="text-xl font-semibold mb-4 flex items-center gap-3">
+            <Icon type="lucide" name="zap" width={20} height={20} class="text-primary" />
+            Technical Challenges
+          </h2>
+          <ul class="space-y-3">
+            {project.data.challenges.map((challenge) => (
+              <li class="flex items-start gap-3">
+                <Icon type="lucide" name="alert-triangle" width={16} height={16} class="text-amber-500 mt-1 flex-shrink-0" />
+                <span class="text-muted-foreground leading-relaxed">{challenge}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(project.data.outcomes && project.data.outcomes.length > 0) && (
+        <section class="mt-8 pt-8 border-t border-border">
+          <h2 class="text-xl font-semibold mb-4 flex items-center gap-3">
+            <Icon type="lucide" name="trophy" width={20} height={20} class="text-primary" />
+            Results & Impact
+          </h2>
+          <ul class="space-y-3">
+            {project.data.outcomes.map((outcome) => (
+              <li class="flex items-start gap-3">
+                <Icon type="lucide" name="check-circle" width={16} height={16} class="text-green-500 mt-1 flex-shrink-0" />
+                <span class="text-muted-foreground leading-relaxed">{outcome}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      
+      <!-- Navigation Section -->
+      <nav class="flex items-end justify-between py-6 mt-8 border-t border-border" data-pagefind-ignore>
+        <a href="/work" class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline">
+          <Icon type="lucide" name="arrow-left" width={16} height={16} class="transition-transform duration-200 group-hover:-translate-x-1" />
+          <div class="flex flex-col">
+            <span class="text-xs text-muted-foreground/70">Back to</span>
+            <span class="line-clamp-1">Work Portfolio</span>
+          </div>
+        </a>
+
+        <a href={`/work/${nextProject.id}`} class="group flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 no-underline text-right">
+          <div class="flex flex-col items-end">
+            <span class="text-xs text-muted-foreground/70">Next</span>
+            <span class="line-clamp-1 max-w-48">{nextProject.data.title}</span>
+          </div>
+          <Icon type="lucide" name="arrow-right" width={16} height={16} class="transition-transform duration-200 group-hover:translate-x-1" />
+        </a>
+      </nav>
+    </Card>
+  </article>
+</Layout>
+<script src="../../scripts/heading-links.ts" />
+<script>
+  // Add external link icons and target="_blank" to external links in article content
+  document.addEventListener('DOMContentLoaded', () => {
+    const article = document.querySelector('article[data-pagefind-body]');
+    if (!article) return;
+
+    const links = article.querySelectorAll('a:not([class])');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+
+      // Check if it's an external link
+      const isExternal = href.startsWith('http://') || href.startsWith('https://');
+      const isCurrentDomain = href.includes(window.location.hostname);
+
+      if (isExternal && !isCurrentDomain) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  });
+</script>

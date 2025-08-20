@@ -1,23 +1,19 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
 import { name, openGraph } from "spectre:globals";
-import ProfilePicture from "../assets/pfp.png";
+import ProfilePicture from "../assets/yuriy_openai_rect.png";
 import Card from "../components/Card.astro";
+import ExternalLink from "../components/ExternalLink.astro";
 import Icon from "../components/Icon.astro";
 import ImageGlow from "../components/ImageGlow.astro";
 import Layout from "../layouts/Layout.astro";
 
-const [posts, projects, about, workExperience, quickInfo, socials] = await Promise.all([
+const [posts, projects, quickInfo, socials] = await Promise.all([
   getCollection("posts", (post) => post.data.draft !== true),
   getCollection("projects"),
-  getEntry("other", "about"),
-  getCollection("workExperience"),
   getCollection("quickInfo"),
   getCollection("socials"),
 ]);
-
-// biome-ignore lint/style/noNonNullAssertion: Should always be defined.
-const { Content: About } = await render(about!);
 ---
 
 <Layout
@@ -25,91 +21,183 @@ const { Content: About } = await render(about!);
 	description={openGraph.home.description}
 	pagefindIgnore
 >
-	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
-		<Card class="flex flex-col">
-			<ImageGlow quality={100} width={80} height={80} src={ProfilePicture} alt="Louis looking out of a window" loading='eager' />
-			<h2>{name}</h2>
-			<ul class="list-none p-0 m-0">
-				{quickInfo.map((info) => (
-					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
-						<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={24} height={24} class='text-muted-foreground' />
-						<span>{info.data.text}</span>
-					</li>
-				))}
-			</ul>
-		</Card>
-		<Card>
-			<h3 class="mt-0">Socials</h3>
-			<ul class="list-none p-0 m-0">
-				{socials.map((item) => (
-					<li class="flex flex-row items-center gap-3 mb-3 last:mb-0">
-						<a href={item.data.link} target="_blank" rel="noopener noreferrer" class="text-foreground flex flex-row gap-3 items-center group no-underline">
-							<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={20} height={20} class='text-muted-foreground group-hover:text-primary transition-colors duration-200' />
-							<span>{item.data.text}</span>
+	<!-- Hero Section with Gradient Background -->
+	<div class="w-full mb-8" slot="hero">
+		<Card class="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent/10">
+			<div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-50"></div>
+			<div class="relative flex flex-col md:flex-row items-center gap-8 p-4">
+				<div class="flex-shrink-0">
+					<ImageGlow quality={100} width={220} height={180} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl object-cover" />
+				</div>
+				<div class="flex-1 text-center md:text-left">
+					<h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent mb-4">Yuriy Babyak</h1>
+					<p class="text-xl text-muted-foreground mb-2">AI Engineer & Startup Founder</p>
+					<p class="text-lg text-muted-foreground/80 mb-6">Building LLM Solutions & AI-Powered Businesses</p>
+					<div class="flex flex-wrap gap-4 justify-center md:justify-start mb-6">
+						{quickInfo.map((info) => (
+							<div class="flex items-center gap-2 px-3 py-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/30">
+								<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={16} height={16} class='text-primary' />
+								<span class="text-sm font-medium">{info.data.text}</span>
+							</div>
+						))}
+					</div>
+					<div class="flex flex-wrap gap-4 justify-center md:justify-start">
+						<a href="/work" class="group inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5">
+							<Icon type="lucide" name="briefcase" width={20} height={20} />
+							View My Work
+							<Icon type="lucide" name="arrow-right" width={16} height={16} class="group-hover:translate-x-1 transition-transform duration-300" />
 						</a>
-					</li>
-				))}
-			</ul>
+						<a href="/about" class="group inline-flex items-center gap-2 px-6 py-3 border border-border rounded-lg font-semibold transition-all duration-300 hover:bg-accent hover:shadow-lg hover:-translate-y-0.5">
+							<Icon type="lucide" name="user" width={20} height={20} />
+							About Me
+						</a>
+					</div>
+				</div>
+			</div>
 		</Card>
 	</div>
-	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
+
+	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
 		<Card>
-			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="user" width={24} height={24} class='text-muted-foreground' />
-				<h2 class="m-0 leading-none">About me</h2>
+			<div class="flex flex-row items-center justify-between mb-6">
+				<div class="flex items-center gap-4">
+					<Icon type='lucide' name="message-circle" width={24} height={24} class='text-primary' />
+					<h3 class="m-0">Let's Connect</h3>
+				</div>
 			</div>
-			<div class="prose leading-relaxed">
-				<About />
+			<div class="grid grid-cols-1 gap-3">
+				{socials.map((item) => (
+					<a href={item.data.link} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 p-4 rounded-lg border border-border/30 bg-card/50 text-foreground no-underline transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card/80 backdrop-blur-sm">
+						<Icon type={item.data.icon.type} name={item.data.icon.name as any} width={20} height={20} class='text-primary group-hover:scale-110 transition-transform duration-300' />
+						<span class="font-medium">{item.data.text}</span>
+						<Icon type="lucide" name="external-link" width={14} height={14} class="ml-auto text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+					</a>
+				))}
 			</div>
 		</Card>
+	</div>
+
+	<div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
 		<Card>
-			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="newspaper" width={24} height={24} class='text-muted-foreground' />
-				<h2 class="m-0 leading-none">Latest Posts</h2>
+			<div class="flex flex-row items-center gap-4 mb-6">
+				<Icon type='lucide' name="user" width={24} height={24} class='text-primary' />
+				<h2 class="m-0 leading-none">Professional Overview</h2>
+			</div>
+			<div class="space-y-4">
+				<p class="text-muted-foreground leading-relaxed">
+					I'm an AI Engineer and startup founder specializing in LLM integration, business process automation, and AI-powered solutions. Currently building Waypass.ai, an AI-first startup that simplifies immigration processes in Poland. I help businesses implement cutting-edge AI solutions while building my own AI ventures.
+				</p>
+				<a href="/about" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+					Learn more about my expertise
+					<Icon type="lucide" name="arrow-right" width={16} height={16} />
+				</a>
+			</div>
+		</Card>
+
+		<Card>
+			<div class="flex flex-row items-center gap-4 mb-6">
+				<Icon type='lucide' name="target" width={24} height={24} class='text-primary' />
+				<h2 class="m-0 leading-none">Areas of Expertise</h2>
+			</div>
+			<div class="grid grid-cols-1 gap-4">
+				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
+					<div class="flex items-center gap-3 mb-2">
+						<Icon type="lucide" name="brain" width={20} height={20} class="text-primary" />
+						<h3 class="text-base font-semibold m-0">LLM-Powered Applications</h3>
+					</div>
+					<p class="text-sm text-muted-foreground m-0">Building complete LLM-powered applications from frontend to infrastructure with strong business intuition and technical expertise.</p>
+				</div>
+				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
+					<div class="flex items-center gap-3 mb-2">
+						<Icon type="lucide" name="cog" width={20} height={20} class="text-primary" />
+						<h3 class="text-base font-semibold m-0">Business Process Automation</h3>
+					</div>
+					<p class="text-sm text-muted-foreground m-0">Automating boring and lengthy business processes including customer support, email workflows, lead qualification, document/image processing, and repetitive manual tasks.</p>
+				</div>
+				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
+					<div class="flex items-center gap-3 mb-2">
+						<Icon type="lucide" name="graduation-cap" width={20} height={20} class="text-primary" />
+						<h3 class="text-base font-semibold m-0">Vibe-Coding Workshops</h3>
+					</div>
+					<p class="text-sm text-muted-foreground m-0">Teaching developers how to "Vibe-code" with AI/LLM assistance, achieving 10x development speed and massive productivity boosts.</p>
+				</div>
+				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
+					<div class="flex items-center gap-3 mb-2">
+						<Icon type="lucide" name="globe" width={20} height={20} class="text-primary" />
+						<h3 class="text-base font-semibold m-0">Immigration Tech Solutions</h3>
+					</div>
+					<p class="text-sm text-muted-foreground m-0">Building <ExternalLink href="https://waypass.ai">Waypass.ai</ExternalLink> with deep image analysis, AI client data collection, browser automation, document analysis - inspiring businesses with cutting-edge immigration tech.</p>
+				</div>
+			</div>
+		</Card>
+
+		<Card>
+			<div class="flex flex-row items-center gap-4 mb-6">
+				<Icon type='lucide' name="trending-up" width={24} height={24} class='text-primary' />
+				<h2 class="m-0 leading-none">Latest Insights</h2>
 			</div>
 			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).slice(0, 2).map((post) => (
-					<a href={`/blog/${post.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+					<a href={`/blog/${post.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
 						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
-							<h3>{post.data.title}</h3>
-							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
+							<h3 class="group-hover:text-primary transition-colors duration-300">{post.data.title}</h3>
+							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
 						</div>
-						<span>{post.data.description}</span>
+						<span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{post.data.description}</span>
 					</a>
 				))}
 			</div>
+			<div class="mt-4">
+				<a href="/blog" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+					Read all articles
+					<Icon type="lucide" name="arrow-right" width={16} height={16} />
+				</a>
+			</div>
 		</Card>
+
 		<Card>
-			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="folder-git" width={24} height={24} class='text-muted-foreground' />
-				<h2 class="m-0 leading-none">Latest Projects</h2>
+			<div class="flex flex-row items-center gap-4 mb-6">
+				<Icon type='lucide' name="rocket" width={24} height={24} class='text-primary' />
+				<h2 class="m-0 leading-none">Featured Work</h2>
 			</div>
 			<div class="flex flex-col gap-4">
 				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2).map((project) => (
-					<a href={`/projects/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
+					<a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
 						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
-							<h3>{project.data.title}</h3>
-							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
+							<h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
+							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
 						</div>
-						<span>{project.data.description}</span>
+						<span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
 					</a>
 				))}
 			</div>
-		</Card>
-		<Card>
-			<div class="flex flex-row items-center gap-4 mb-4">
-				<Icon type='lucide' name="briefcase-business" width={24} height={24} class='text-muted-foreground' />
-				<h2 class="m-0 leading-none">Work Experience</h2>
+			<div class="mt-4">
+				<a href="/work" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+					View all projects
+					<Icon type="lucide" name="arrow-right" width={16} height={16} />
+				</a>
 			</div>
-			<div class="flex flex-col gap-4">
-				{workExperience.reverse().map((entry) => (
-					<div class="border-b border-border pb-4 last:border-0 last:pb-0">
-						<span class="text-sm text-muted-foreground">{entry.data.duration}</span>
-						<h3 class="mt-1 mb-2">{entry.data.company}</h3>
-						<span class="mb-3">{entry.data.title}</span>
-						<p>{entry.data.description}</p>
-					</div>
-				))}
+		</Card>
+
+		<Card>
+			<div class="flex flex-row items-center gap-4 mb-6">
+				<Icon type='lucide' name="handshake" width={24} height={24} class='text-primary' />
+				<h2 class="m-0 leading-none">Let's Work Together</h2>
+			</div>
+			<div class="space-y-4">
+				<p class="text-muted-foreground">
+					Ready to transform your business with AI? I build custom LLM solutions, automate complex processes, and help startups implement cutting-edge AI strategies. Let's discuss how AI can accelerate your vision.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-3">
+					<a href="/about" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
+						<Icon type="lucide" name="user-check" width={16} height={16} />
+						My Expertise
+					</a>
+					<a href="/work" class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg font-medium transition-all duration-300 hover:bg-accent">
+						<Icon type="lucide" name="eye" width={16} height={16} />
+						View Portfolio
+					</a>
+				</div>
 			</div>
 		</Card>
 	</div>

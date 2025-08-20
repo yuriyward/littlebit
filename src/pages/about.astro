@@ -1,0 +1,150 @@
+---
+import { getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
+import Card from "../components/Card.astro";
+import Icon from "../components/Icon.astro";
+import ImageGlow from "../components/ImageGlow.astro";
+import Layout from "../layouts/Layout.astro";
+import ProfilePicture from "../assets/yuriy_openai_rect.png";
+
+const [about, workExperience, skills, socials] = await Promise.all([
+  getEntry("other", "about"),
+  getCollection("workExperience"),
+  getCollection("skills"),
+  getCollection("socials"),
+]);
+
+// biome-ignore lint/style/noNonNullAssertion: Should always be defined.
+const { Content: About } = await render(about!);
+---
+
+<Layout
+  title="About - Expert AI Engineer & Technical Consultant"
+  description="Learn about my expertise in AI engineering, full-stack development, and technical consulting services."
+>
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
+    <Card>
+      <div class="flex flex-col items-center text-center mb-6">
+        <ImageGlow quality={100} width={200} height={150} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl mb-4 object-cover" />
+        <h1 class="text-3xl font-bold mb-2">Yuriy Babyak</h1>
+        <p class="text-xl text-muted-foreground mb-1">AI Engineer & Startup Founder</p>
+        <p class="text-lg text-muted-foreground/80">Building LLM Solutions & AI-Powered Businesses</p>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-xl font-semibold mb-4">Let's Connect</h2>
+        <div class="grid grid-cols-1 gap-3">
+          {socials.map((item) => (
+            <a href={item.data.link} target="_blank" rel="noopener noreferrer" class="group flex items-center gap-4 p-4 rounded-lg border border-border/30 bg-card/50 text-foreground no-underline transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card/80 backdrop-blur-sm">
+              <Icon type={item.data.icon.type} name={item.data.icon.name as any} width={20} height={20} class='text-primary group-hover:scale-110 transition-transform duration-300' />
+              <span class="font-medium">{item.data.text}</span>
+              <Icon type="lucide" name="external-link" width={14} height={14} class="ml-auto text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="code" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Technical Skills</h2>
+      </div>
+      <div class="space-y-6">
+        {skills.map((category) => (
+          <div>
+            <h3 class="text-lg font-semibold mb-4 text-foreground/90">{category.data.category}</h3>
+            <div class="grid grid-cols-1 gap-4">
+              {category.data.skills.map((skill) => (
+                <div class="group">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-medium text-sm">{skill.name}</span>
+                    <span class="text-xs text-muted-foreground font-mono">{skill.level}%</span>
+                  </div>
+                  <div class="w-full bg-muted/50 rounded-full h-2 overflow-hidden">
+                    <div
+                      class="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-700 ease-out group-hover:shadow-sm group-hover:shadow-primary/50"
+                      style={`width: ${skill.level}%`}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  </div>
+
+  <div class="flex flex-col w-full gap-8 sm:gap-4" slot="right">
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="user" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">About Me</h2>
+      </div>
+      <div class="prose leading-relaxed max-w-none">
+        <About />
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="briefcase-business" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Professional Experience</h2>
+      </div>
+      <div class="space-y-6">
+        {workExperience.reverse().map((entry, index) => (
+          <div class="relative">
+            {index !== workExperience.length - 1 && (
+              <div class="absolute left-4 top-12 w-0.5 h-16 bg-gradient-to-b from-primary/50 to-transparent"></div>
+            )}
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-primary/10 border-2 border-primary/30 rounded-full flex items-center justify-center">
+                <div class="w-2 h-2 bg-primary rounded-full"></div>
+              </div>
+              <div class="flex-1 pb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h3 class="font-semibold text-foreground m-0">{entry.data.title}</h3>
+                  <span class="text-sm text-primary font-mono font-medium bg-primary/10 px-2 py-1 rounded-md">{entry.data.duration}</span>
+                </div>
+                <h4 class="text-muted-foreground font-medium mb-3 m-0">{entry.data.company}</h4>
+                <p class="text-sm leading-relaxed mb-3">{entry.data.description}</p>
+                {entry.data.technologies && (
+                  <div class="flex flex-wrap gap-2">
+                    {entry.data.technologies.map((tech) => (
+                      <span class="text-xs px-2 py-1 bg-accent/50 text-accent-foreground rounded-md border border-accent/30 font-medium">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+
+    <Card>
+      <div class="flex flex-row items-center gap-4 mb-6">
+        <Icon type='lucide' name="handshake" width={24} height={24} class='text-primary' />
+        <h2 class="m-0 leading-none">Ready to Collaborate?</h2>
+      </div>
+      <div class="space-y-4">
+        <p class="text-muted-foreground leading-relaxed">
+          I'm always interested in discussing challenging technical problems and exploring opportunities for collaboration. Whether you need expert consulting or want to connect with a fellow technologist, let's connect.
+        </p>
+        <div class="flex flex-col gap-3">
+          <a href="/work" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
+            <Icon type="lucide" name="eye" width={16} height={16} />
+            View My Work
+          </a>
+          <a href="/blog" class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg font-medium transition-all duration-300 hover:bg-accent">
+            <Icon type="lucide" name="book-open" width={16} height={16} />
+            Read My Insights
+          </a>
+        </div>
+      </div>
+    </Card>
+  </div>
+</Layout>

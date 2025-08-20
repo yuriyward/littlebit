@@ -3,9 +3,9 @@
     "id": 1,
     "icon": {
       "type": "lucide",
-      "name": "calendar-days"
+      "name": "briefcase"
     },
-    "text": "1 year old"
+    "text": "10+ Years Experience"
   },
   {
     "id": 2,
@@ -13,6 +13,22 @@
       "type": "lucide",
       "name": "map-pin"
     },
-    "text": "Made in Germany"
+    "text": "Poland"
+  },
+  {
+    "id": 3,
+    "icon": {
+      "type": "lucide",
+      "name": "rocket"
+    },
+    "text": "Startup Founder"
+  },
+  {
+    "id": 4,
+    "icon": {
+      "type": "lucide",
+      "name": "bot"
+    },
+    "text": "LLM Specialist"
   }
 ]

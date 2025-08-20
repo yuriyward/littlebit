@@ -44,6 +44,19 @@ const workExperience = defineCollection({
     company: z.string(),
     duration: z.string(),
     description: z.string(),
+    technologies: z.array(z.string()).optional(),
+  }),
+});
+
+const skills = defineCollection({
+  loader: file("src/content/skills.json"),
+  schema: z.object({
+    id: z.number(),
+    category: z.string(),
+    skills: z.array(z.object({
+      name: z.string(),
+      level: z.number().min(0).max(100),
+    })),
   }),
 });
 
@@ -77,6 +90,17 @@ const projects = defineCollection({
       date: z.coerce.date(),
       image: image(),
       link: z.string().url().optional(),
+      category: z.enum(['consulting', 'professional', 'open-source', 'personal']).optional(),
+      type: z.enum(['consulting', 'professional', 'open-source', 'personal']).optional(),
+      featured: z.boolean().optional(),
+      technologies: z.array(z.string()).optional(),
+      status: z.enum(['completed', 'ongoing', 'maintained', 'archived']).optional(),
+      client: z.string().optional(),
+      duration: z.string().optional(),
+      team_size: z.string().optional(),
+      role: z.string().optional(),
+      challenges: z.array(z.string()).optional(),
+      outcomes: z.array(z.string()).optional(),
       info: z.array(
         z.object({
           text: z.string(),
@@ -87,4 +111,4 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { tags, posts, projects, other, quickInfo, socials, workExperience };
+export const collections = { tags, posts, projects, other, quickInfo, socials, workExperience, skills };

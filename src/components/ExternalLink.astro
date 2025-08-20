@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+}
+
+const { href, class: className, ...props } = Astro.props;
+
+// Check if it's an external link
+const isExternal = href.startsWith('http://') || href.startsWith('https://');
+const isCurrentDomain = typeof window !== 'undefined' ? href.includes(window.location?.hostname || '') : false;
+const shouldOpenInNewTab = isExternal && !isCurrentDomain;
+---
+
+<a
+  href={href}
+  target={shouldOpenInNewTab ? "_blank" : undefined}
+  rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
+  class:list={[
+    "text-foreground transition-colors duration-150 underline decoration-muted-foreground underline-offset-2 hover:text-accent-foreground hover:decoration-accent-foreground",
+    className
+  ]}
+  {...props}
+>
+  <slot />
+</a>
+
+<style>
+  /* Apply the same external link icon styling from global.css */
+  a[target="_blank"]::after {
+    content: "";
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-left: 0.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' d='M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25'/%3e%3c/svg%3e");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+  }
+
+  a[target="_blank"]:hover::after {
+    opacity: 1;
+  }
+</style>

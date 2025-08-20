@@ -18,7 +18,11 @@ const path = Astro.url.pathname;
       </li>
       <li class="flex items-center text-muted-foreground mx-2">/</li>
       <li class="flex items-center">
-        <Link href="/projects" class="nav-link" class:list={{ active: path.startsWith('/projects') }} variant="link">Projects</Link>
+        <Link href="/work" class="nav-link" class:list={{ active: path.startsWith('/work') || path.startsWith('/projects') }} variant="link">Work</Link>
+      </li>
+      <li class="flex items-center text-muted-foreground mx-2">/</li>
+      <li class="flex items-center">
+        <Link href="/about" class="nav-link" class:list={{ active: path.startsWith('/about') }} variant="link">About</Link>
       </li>
     </ul>
 
@@ -63,7 +67,10 @@ const path = Astro.url.pathname;
       <Link href="/blog" class="mobile-nav-link" class:list={{ active: path.startsWith('/blog') }} variant="link">Blog</Link>
     </li>
     <li class="border-b border-border/30">
-      <Link href="/projects" class="mobile-nav-link" class:list={{ active: path.startsWith('/projects') }} variant="link">Projects</Link>
+      <Link href="/work" class="mobile-nav-link" class:list={{ active: path.startsWith('/work') || path.startsWith('/projects') }} variant="link">Work</Link>
+    </li>
+    <li class="border-b border-border/30">
+      <Link href="/about" class="mobile-nav-link" class:list={{ active: path.startsWith('/about') }} variant="link">About</Link>
     </li>
     <li class="border-b border-border/30">
       <button id="theme-toggle-mobile-menu" class="mobile-nav-link flex items-center gap-2" type="button">

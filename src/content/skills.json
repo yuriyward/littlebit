@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "category": "Frontend",
+    "skills": [
+      {"name": "React", "level": 90},
+      {"name": "TypeScript", "level": 85},
+      {"name": "Astro", "level": 95},
+      {"name": "TailwindCSS", "level": 90},
+      {"name": "HTML/CSS", "level": 95}
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Tools & Workflow",
+    "skills": [
+      {"name": "Git", "level": 90},
+      {"name": "Bun/Node.js", "level": 80},
+      {"name": "Biome", "level": 85},
+      {"name": "Vite", "level": 80}
+    ]
+  },
+  {
+    "id": 3,
+    "category": "Design",
+    "skills": [
+      {"name": "UI/UX Design", "level": 85},
+      {"name": "Component Systems", "level": 90},
+      {"name": "Responsive Design", "level": 95},
+      {"name": "Accessibility", "level": 80}
+    ]
+  }
+]

@@ -2,8 +2,17 @@
   {
     "id": 1,
     "duration": "2024 - present",
-    "company": "Astro Community",
-    "title": "Astro Theme",
-    "description": "Existing as an Astro theme for anyone to use."
+    "company": "Waypass.ai",
+    "title": "Founder & CEO",
+    "description": "Building an AI-first startup revolutionizing immigration processes in Poland. Leveraging LLM technology to automate karta pobytu applications and provide intelligent immigration guidance.",
+    "technologies": ["LLM APIs", "TypeScript", "React", "Node.js", "AI Automation", "Document Processing"]
+  },
+  {
+    "id": 2,
+    "duration": "2023 - present",
+    "company": "Independent",
+    "title": "AI Engineer & Business Automation Specialist",
+    "description": "Leading custom AI implementations and business automation projects for startups and enterprises. Specializing in LLM integration, process optimization, and intelligent system architecture.",
+    "technologies": ["OpenAI APIs", "LangChain", "Python", "Astro", "TypeScript", "React"]
   }
 ]
