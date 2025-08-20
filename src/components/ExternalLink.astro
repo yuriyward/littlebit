@@ -8,8 +8,8 @@ interface Props extends HTMLAttributes<"a"> {
 const { href, class: className, ...props } = Astro.props;
 
 // Check if it's an external link
-const isExternal = href.startsWith('http://') || href.startsWith('https://');
-const isCurrentDomain = typeof window !== 'undefined' ? href.includes(window.location?.hostname || '') : false;
+const isExternal = href.startsWith("http://") || href.startsWith("https://");
+const isCurrentDomain = typeof window !== "undefined" ? href.includes(window.location?.hostname || "") : false;
 const shouldOpenInNewTab = isExternal && !isCurrentDomain;
 ---
 

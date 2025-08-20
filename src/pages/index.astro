@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import { name, openGraph } from "spectre:globals";
 import ProfilePicture from "../assets/yuriy_openai_rect.png";
+import ActionButton from "../components/ActionButton.astro";
+import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import ExternalLink from "../components/ExternalLink.astro";
 import Icon from "../components/Icon.astro";
@@ -27,7 +29,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 			<div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-50"></div>
 			<div class="relative flex flex-col md:flex-row items-center gap-8 p-4">
 				<div class="flex-shrink-0">
-					<ImageGlow quality={100} width={220} height={180} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl object-cover" />
+					<ImageGlow quality={100} width={200} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl object-cover" />
 				</div>
 				<div class="flex-1 text-center md:text-left">
 					<h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent mb-4">Yuriy Babyak</h1>
@@ -81,16 +83,15 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 		<Card>
 			<div class="flex flex-row items-center gap-4 mb-6">
 				<Icon type='lucide' name="user" width={24} height={24} class='text-primary' />
-				<h2 class="m-0 leading-none">Professional Overview</h2>
+				<h2 class="m-0 leading-none">Overview</h2>
 			</div>
 			<div class="space-y-4">
 				<p class="text-muted-foreground leading-relaxed">
 					I'm an AI Engineer and startup founder specializing in LLM integration, business process automation, and AI-powered solutions. Currently building Waypass.ai, an AI-first startup that simplifies immigration processes in Poland. I help businesses implement cutting-edge AI solutions while building my own AI ventures.
 				</p>
-				<a href="/about" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+				<ActionButton href="/about" variant="secondary">
 					Learn more about my expertise
-					<Icon type="lucide" name="arrow-right" width={16} height={16} />
-				</a>
+				</ActionButton>
 			</div>
 		</Card>
 
@@ -148,10 +149,9 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 				))}
 			</div>
 			<div class="mt-4">
-				<a href="/blog" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+				<ActionButton href="/blog" variant="secondary">
 					Read all articles
-					<Icon type="lucide" name="arrow-right" width={16} height={16} />
-				</a>
+				</ActionButton>
 			</div>
 		</Card>
 
@@ -172,10 +172,9 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 				))}
 			</div>
 			<div class="mt-4">
-				<a href="/work" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors duration-300 font-medium">
+				<ActionButton href="/work" variant="secondary">
 					View all projects
-					<Icon type="lucide" name="arrow-right" width={16} height={16} />
-				</a>
+				</ActionButton>
 			</div>
 		</Card>
 
@@ -186,17 +185,15 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 			</div>
 			<div class="space-y-4">
 				<p class="text-muted-foreground">
-					Ready to transform your business with AI? I build custom LLM solutions, automate complex processes, and help startups implement cutting-edge AI strategies. Let's discuss how AI can accelerate your vision.
+					Ready to transform your business with AI? Let's discuss how I can help accelerate your vision.
 				</p>
 				<div class="flex flex-col sm:flex-row gap-3">
-					<a href="/about" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
-						<Icon type="lucide" name="user-check" width={16} height={16} />
-						My Expertise
-					</a>
-					<a href="/work" class="inline-flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg font-medium transition-all duration-300 hover:bg-accent">
-						<Icon type="lucide" name="eye" width={16} height={16} />
-						View Portfolio
-					</a>
+					<Button href="https://cal.com/yuriybabyak" target="_blank" rel="noopener noreferrer" variant="default" iconName="calendar">
+						Book a call
+					</Button>
+					<Button href="mailto:yuriy.babyak@gmail.com" variant="secondary" iconName="mail">
+						Email me
+					</Button>
 				</div>
 			</div>
 		</Card>

@@ -1,0 +1,47 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  href: string;
+  variant?: "secondary" | "ghost" | "outline";
+  size?: "default" | "sm" | "lg";
+  target?: "_blank" | "_self";
+  rel?: string;
+  class?: string;
+}
+
+const { href, variant = "secondary", size = "default", target = "_self", rel, class: className = "" } = Astro.props;
+
+const variantClasses = {
+  secondary:
+    "bg-card/50 border border-border/30 hover:bg-card hover:border-border/60 hover:shadow-md hover:shadow-primary/5",
+  ghost: "border border-transparent hover:bg-accent/50 hover:border-border/30",
+  outline:
+    "border border-border hover:bg-accent hover:border-accent-foreground/20 hover:shadow-lg hover:shadow-primary/10",
+};
+
+const sizeClasses = {
+  default: "px-4 py-2.5 text-sm gap-2",
+  sm: "px-3 py-2 text-xs gap-1.5",
+  lg: "px-6 py-3 text-base gap-3",
+};
+
+const baseClasses =
+  "group inline-flex items-center font-medium rounded-lg transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground no-underline";
+---
+
+<a 
+  href={href} 
+  target={target} 
+  rel={rel}
+  class={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+>
+  <slot />
+  <Icon 
+    type="lucide" 
+    name="arrow-right" 
+    width={size === "sm" ? 14 : size === "lg" ? 18 : 16} 
+    height={size === "sm" ? 14 : size === "lg" ? 18 : 16} 
+    class="group-hover:translate-x-1 transition-transform duration-300 text-primary" 
+  />
+</a>

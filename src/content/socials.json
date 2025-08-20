@@ -6,7 +6,7 @@
       "name": "github"
     },
     "text": "GitHub",
-    "link": "https://github.com/louisescher/spectre"
+    "link": "https://github.com/yuriybabyak"
   },
   {
     "id": 2,
@@ -15,15 +15,24 @@
       "name": "linkedin"
     },
     "text": "LinkedIn",
-    "link": "https://linkedin.com/in/louisescher"
+    "link": "https://linkedin.com/in/yuriybabyak"
   },
   {
     "id": 3,
     "icon": {
       "type": "lucide",
+      "name": "mail"
+    },
+    "text": "Email",
+    "link": "mailto:yuriy@babyak.dev"
+  },
+  {
+    "id": 4,
+    "icon": {
+      "type": "lucide",
       "name": "calendar-clock"
     },
     "text": "Schedule a call",
-    "link": "https://cal.com/louisescher"
+    "link": "https://calendly.com/yuriy-babyak/30min"
   }
 ]

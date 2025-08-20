@@ -1,11 +1,10 @@
 ---
-import { getEntry, render } from "astro:content";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
+import ProfilePicture from "../assets/yuriy_openai_rect.png";
 import Card from "../components/Card.astro";
 import Icon from "../components/Icon.astro";
 import ImageGlow from "../components/ImageGlow.astro";
 import Layout from "../layouts/Layout.astro";
-import ProfilePicture from "../assets/yuriy_openai_rect.png";
 
 const [about, workExperience, skills, socials] = await Promise.all([
   getEntry("other", "about"),

@@ -1,0 +1,75 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  href?: string;
+  variant?: "default" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg";
+  target?: "_blank" | "_self";
+  rel?: string;
+  class?: string;
+  iconName?: string;
+  iconType?: "lucide" | "simple-icons";
+  iconPosition?: "left" | "right";
+}
+
+const {
+  href,
+  variant = "default",
+  size = "default",
+  target = "_self",
+  rel,
+  class: className = "",
+  iconName,
+  iconType = "lucide",
+  iconPosition = "left",
+} = Astro.props;
+
+const variantClasses = {
+  default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+  outline: "border border-border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+  secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+  ghost: "hover:bg-accent hover:text-accent-foreground",
+  link: "text-primary underline-offset-4 hover:underline",
+};
+
+const sizeClasses = {
+  default: "h-9 px-4 py-2 text-sm",
+  sm: "h-8 px-3 py-1.5 text-xs",
+  lg: "h-10 px-6 py-2.5 text-base",
+};
+
+const baseClasses =
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-medium transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 no-underline";
+
+const iconSize = size === "sm" ? 14 : size === "lg" ? 18 : 16;
+---
+
+{href ? (
+  <a 
+    href={href} 
+    target={target} 
+    rel={rel}
+    class={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+  >
+    {iconName && iconPosition === "left" && (
+      <Icon type={iconType} name={iconName} width={iconSize} height={iconSize} />
+    )}
+    <slot />
+    {iconName && iconPosition === "right" && (
+      <Icon type={iconType} name={iconName} width={iconSize} height={iconSize} />
+    )}
+  </a>
+) : (
+  <button 
+    class={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+  >
+    {iconName && iconPosition === "left" && (
+      <Icon type={iconType} name={iconName} width={iconSize} height={iconSize} />
+    )}
+    <slot />
+    {iconName && iconPosition === "right" && (
+      <Icon type={iconType} name={iconName} width={iconSize} height={iconSize} />
+    )}
+  </button>
+)}

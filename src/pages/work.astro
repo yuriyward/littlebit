@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import { openGraph } from "spectre:globals";
+import ActionButton from "../components/ActionButton.astro";
 import Card from "../components/Card.astro";
 import Icon from "../components/Icon.astro";
 import Layout from "../layouts/Layout.astro";
@@ -8,10 +9,12 @@ import Layout from "../layouts/Layout.astro";
 const projects = await getCollection("projects");
 
 // Categorize projects (you can enhance this based on your project data structure)
-const featuredProjects = projects.filter(p => p.data.featured || projects.indexOf(p) < 3);
-const consultingProjects = projects.filter(p => p.data.category === 'consulting' || p.data.type === 'consulting');
-const openSourceProjects = projects.filter(p => p.data.category === 'open-source' || p.data.type === 'open-source');
-const professionalProjects = projects.filter(p => p.data.category === 'professional' || p.data.type === 'professional');
+const featuredProjects = projects.filter((p) => p.data.featured || projects.indexOf(p) < 3);
+const consultingProjects = projects.filter((p) => p.data.category === "consulting" || p.data.type === "consulting");
+const openSourceProjects = projects.filter((p) => p.data.category === "open-source" || p.data.type === "open-source");
+const professionalProjects = projects.filter(
+  (p) => p.data.category === "professional" || p.data.type === "professional"
+);
 ---
 <Layout
 	title="Work Portfolio - Expert Technical Solutions"
@@ -88,10 +91,9 @@ const professionalProjects = projects.filter(p => p.data.category === 'professio
           </div>
         </div>
         <div class="mt-6">
-          <a href="/about" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:bg-primary/90">
-            <Icon type="lucide" name="arrow-right" width={16} height={16} />
+          <ActionButton href="/about" variant="outline">
             Learn About My Expertise
-          </a>
+          </ActionButton>
         </div>
       </div>
     </Card>
