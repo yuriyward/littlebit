@@ -4,6 +4,7 @@ import { openGraph } from "spectre:globals";
 import ActionButton from "../components/ActionButton.astro";
 import Card from "../components/Card.astro";
 import Icon from "../components/Icon.astro";
+import ContentCard from "../components/ContentCard.astro";
 import Layout from "../layouts/Layout.astro";
 
 const projects = await getCollection("projects");
@@ -107,16 +108,16 @@ const professionalProjects = projects.filter(
       </div>
       <div class="flex flex-col gap-4">
         {featuredProjects.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title)).map((project) => (
-          <a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
-            <div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
-              <h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
+          <ContentCard 
+            href={`/work/${project.id}`}
+            title={project.data.title}
+            description={project.data.description}
+          >
+            <div class="absolute bottom-4 right-4 flex items-center gap-1.5 bg-white/10 text-muted-foreground border border-white/20 px-2.5 py-1 rounded-full backdrop-blur-sm">
+              <Icon type="lucide" name="award" width={10} height={10} />
+              <span class="text-xs font-medium">Featured</span>
             </div>
-            <span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
-            <div class="flex items-center gap-2 mt-2">
-              <Icon type="lucide" name="award" width={14} height={14} class="text-primary" />
-              <span class="text-xs text-primary font-medium">Featured Project</span>
-            </div>
-          </a>
+          </ContentCard>
         ))}
       </div>
     </Card>
@@ -128,12 +129,11 @@ const professionalProjects = projects.filter(
       </div>
       <div class="flex flex-col gap-4">
         {projects.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title)).map((project) => (
-          <a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
-            <div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
-              <h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
-            </div>
-            <span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
-          </a>
+          <ContentCard 
+            href={`/work/${project.id}`}
+            title={project.data.title}
+            description={project.data.description}
+          />
         ))}
       </div>
     </Card>

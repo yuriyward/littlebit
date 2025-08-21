@@ -1,0 +1,42 @@
+---
+export interface Props {
+	href: string;
+	title: string;
+	description: string;
+	metadata?: string;
+	tags?: string[];
+	dataTags?: string;
+	class?: string;
+}
+
+const { href, title, description, metadata, tags, dataTags, class: className = "" } = Astro.props;
+---
+
+<a 
+	href={href} 
+	class={`group relative flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm ${className}`}
+	data-tags={dataTags}
+>
+	<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
+		<h3 class="group-hover:text-primary transition-colors duration-300">{title}</h3>
+		{metadata && (
+			<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{metadata}</span>
+		)}
+	</div>
+	{tags && tags.length > 0 ? (
+		<div class="flex flex-row justify-between items-start gap-4">
+			<span class="flex-1 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{description}</span>
+			<div class="flex flex-row flex-wrap gap-2 justify-end shrink-0 font-mono text-sm">
+				{tags.map((tag, index) => (
+					<>
+						<span>{tag}</span>
+						{index < tags.length - 1 && <span>,</span>}
+					</>
+				))}
+			</div>
+		</div>
+	) : (
+		<span class="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{description}</span>
+	)}
+	<slot />
+</a>

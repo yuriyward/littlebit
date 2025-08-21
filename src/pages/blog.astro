@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { openGraph } from "spectre:globals";
 import Card from "../components/Card.astro";
+import ContentCard from "../components/ContentCard.astro";
 import Icon from "../components/Icon.astro";
 import Layout from "../layouts/Layout.astro";
 
@@ -46,23 +47,15 @@ const tagCounts = tags.reduce(
 			</div>
 			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).map((post) => (
-					<a href={`/blog/${post.id}`} class="post-container group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm" data-tags={post.data.tags.map((tag) => tag.id).join(",")}>
-						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
-							<h3>{post.data.title}</h3>
-							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-muted-foreground transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
-						</div>
-						<div class="flex flex-row justify-between items-start gap-4">
-							<span class="flex-1">{post.data.description}</span>
-							<div class="flex flex-row flex-wrap gap-2 justify-end shrink-0 font-mono text-sm">
-								{post.data.tags.map((tagRef, index) => (
-									<>
-										<span>{tagRef.id}</span>
-										{index < post.data.tags.length - 1 && <span>,</span>}
-									</>
-								))}
-							</div>
-						</div>
-					</a>
+					<ContentCard 
+						href={`/blog/${post.id}`}
+						title={post.data.title}
+						description={post.data.description}
+						metadata={post.data.createdAt.toLocaleDateString()}
+						tags={post.data.tags.map((tag) => tag.id)}
+						dataTags={post.data.tags.map((tag) => tag.id).join(",")}
+						class="post-container"
+					/>
 				))}
 			</div>
 		</Card>
