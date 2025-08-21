@@ -89,7 +89,7 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
-      date: z.coerce.date(),
+      order: z.number().optional(),
       image: image(),
       link: z.string().url().optional(),
       category: z.enum(["consulting", "professional", "open-source", "personal"]).optional(),

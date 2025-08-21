@@ -104,28 +104,28 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
 					<div class="flex items-center gap-3 mb-2">
 						<Icon type="lucide" name="brain" width={20} height={20} class="text-primary" />
-						<h3 class="text-base font-semibold m-0">LLM-Powered Applications</h3>
+						<h3 class="text-base m-0">LLM-Powered Applications</h3>
 					</div>
 					<p class="text-sm text-muted-foreground m-0">Building complete LLM-powered applications from frontend to infrastructure with strong business intuition and technical expertise.</p>
 				</div>
 				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
 					<div class="flex items-center gap-3 mb-2">
 						<Icon type="lucide" name="cog" width={20} height={20} class="text-primary" />
-						<h3 class="text-base font-semibold m-0">Business Process Automation</h3>
+						<h3 class="text-base m-0">Business Process Automation</h3>
 					</div>
 					<p class="text-sm text-muted-foreground m-0">Automating boring and lengthy business processes including customer support, email workflows, lead qualification, document/image processing, and repetitive manual tasks.</p>
 				</div>
 				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
 					<div class="flex items-center gap-3 mb-2">
 						<Icon type="lucide" name="graduation-cap" width={20} height={20} class="text-primary" />
-						<h3 class="text-base font-semibold m-0">Vibe-Coding Workshops</h3>
+						<h3 class="text-base m-0">Vibe-Coding Workshops</h3>
 					</div>
 					<p class="text-sm text-muted-foreground m-0">Teaching developers how to "Vibe-code" with AI/LLM assistance, achieving 10x development speed and massive productivity boosts.</p>
 				</div>
 				<div class="p-4 rounded-lg bg-accent/10 border border-accent/20">
 					<div class="flex items-center gap-3 mb-2">
 						<Icon type="lucide" name="globe" width={20} height={20} class="text-primary" />
-						<h3 class="text-base font-semibold m-0">Immigration Tech Solutions</h3>
+						<h3 class="text-base m-0">Immigration Tech Solutions</h3>
 					</div>
 					<p class="text-sm text-muted-foreground m-0">Building <ExternalLink href="https://waypass.ai">Waypass.ai</ExternalLink> with deep image analysis, AI client data collection, browser automation, document analysis - inspiring businesses with cutting-edge immigration tech.</p>
 				</div>
@@ -144,7 +144,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 							<h3 class="group-hover:text-primary transition-colors duration-300">{post.data.title}</h3>
 							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{post.data.createdAt.toLocaleDateString()}</span>
 						</div>
-						<span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{post.data.description}</span>
+						<span class="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{post.data.description}</span>
 					</a>
 				))}
 			</div>
@@ -161,11 +161,10 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 				<h2 class="m-0 leading-none">Featured Work</h2>
 			</div>
 			<div class="flex flex-col gap-4">
-				{projects.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2).map((project) => (
+				{projects.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title)).slice(0, 2).map((project) => (
 					<a href={`/work/${project.id}`} class="group flex flex-col gap-4 p-6 rounded-xl border border-border/50 bg-card/30 text-foreground no-underline transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 hover:border-primary/20 hover:bg-card/80 backdrop-blur-sm">
 						<div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-0 group-hover:gap-3 transition-all duration-300">
 							<h3 class="group-hover:text-primary transition-colors duration-300">{project.data.title}</h3>
-							<span class="text-sm text-muted-foreground/80 font-mono group-hover:text-primary/80 transition-colors duration-300">{project.data.date.toLocaleDateString()}</span>
 						</div>
 						<span class="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{project.data.description}</span>
 					</a>
