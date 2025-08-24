@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "text": "Ticket triage & replies"
+  },
+  {
+    "id": 2,
+    "text": "Invoices → CRM automatically"
+  },
+  {
+    "id": 3,
+    "text": "Order changes & refunds"
+  },
+  {
+    "id": 4,
+    "text": "Auto-reply to emails"
+  },
+  {
+    "id": 5,
+    "text": "Chat with your docs"
+  },
+  {
+    "id": 6,
+    "text": "Email/Instagram orders → CRM"
+  },
+  {
+    "id": 7,
+    "text": "Auto-capture client data"
+  },
+  {
+    "id": 8,
+    "text": "Legal document processing"
+  },
+  {
+    "id": 9,
+    "text": "Competitor price monitoring"
+  },
+  {
+    "id": 10,
+    "text": "Smart browser automations"
+  },
+  {
+    "id": 11,
+    "text": "And more..."
+  }
+]

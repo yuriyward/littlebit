@@ -11,10 +11,11 @@ import ContentCard from "../components/ContentCard.astro";
 import ImageGlow from "../components/ImageGlow.astro";
 import Layout from "../layouts/Layout.astro";
 
-const [posts, projects, quickInfo, socials] = await Promise.all([
+const [posts, projects, quickInfo, industries, socials] = await Promise.all([
   getCollection("posts", (post) => post.data.draft !== true),
   getCollection("projects"),
   getCollection("quickInfo"),
+  getCollection("industries"),
   getCollection("socials"),
 ]);
 ---
@@ -24,37 +25,64 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 	description={openGraph.home.description}
 	pagefindIgnore
 >
-	<!-- Hero Section with Gradient Background -->
+	<!-- Hero Section with New Copy and Layout -->
 	<div class="w-full mb-8" slot="hero">
 		<Card class="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent/10">
 			<div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-50"></div>
-			<div class="relative flex flex-col md:flex-row items-center gap-8 p-4">
-				<div class="flex-shrink-0">
-					<ImageGlow quality={100} width={200} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl object-cover" />
-				</div>
-				<div class="flex-1 text-center md:text-left">
-					<h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent mb-4">Yuriy Babyak</h1>
-					<p class="text-xl text-muted-foreground mb-2">AI Engineer & Startup Founder</p>
-					<p class="text-lg text-muted-foreground/80 mb-6">Building LLM Solutions & AI-Powered Businesses</p>
-					<div class="flex flex-wrap gap-4 justify-center md:justify-start mb-6">
+			<div class="relative flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 p-8">
+				<!-- Left Column: Content (~55%) -->
+				<div class="flex-1 lg:max-w-[55%] text-center lg:text-left">
+					<h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-4">
+						What if your team had an extra 20 hours per week?
+					</h1>
+					<div class="text-lg lg:text-xl text-muted-foreground mb-6 leading-relaxed">
+						<p class="mb-2">I'm <span class="font-bold leading-tight">Yuriy Babyak</span>. I automate the boring stuff
+							so your team can focus on what matters.</p>
+					</div>
+
+					<!-- Quick Facts Badges -->
+					<div class="flex flex-wrap gap-3 justify-center lg:justify-start mb-6">
 						{quickInfo.map((info) => (
-							<div class="flex items-center gap-2 px-3 py-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/30">
-								<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={16} height={16} class='text-primary' />
+							<div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/30">
+								<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={14} height={14} class='text-primary' />
 								<span class="text-sm font-medium">{info.data.text}</span>
 							</div>
 						))}
 					</div>
-					<div class="flex flex-wrap gap-4 justify-center md:justify-start">
-						<a href="/work" class="group inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5">
-							<Icon type="lucide" name="briefcase" width={20} height={20} />
-							View My Work
-							<Icon type="lucide" name="arrow-right" width={16} height={16} class="group-hover:translate-x-1 transition-transform duration-300" />
+
+					<!-- CTA Row -->
+					<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-3">
+						<a href="#hire" class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5">
+							<Icon type="lucide" name="calendar" width={20} height={20} />
+							Talk with me
 						</a>
-						<a href="/about" class="group inline-flex items-center gap-2 px-6 py-3 border border-border rounded-lg font-semibold transition-all duration-300 hover:bg-accent hover:shadow-lg hover:-translate-y-0.5">
-							<Icon type="lucide" name="user" width={20} height={20} />
-							About Me
+						<a href="/work" class="group inline-flex items-center justify-center gap-2 px-6 py-3 border border-border rounded-lg font-semibold transition-all duration-300 hover:bg-accent hover:shadow-lg hover:-translate-y-0.5">
+							<Icon type="lucide" name="briefcase" width={20} height={20} />
+							See case studies
 						</a>
 					</div>
+
+					<!-- Helper Text -->
+					<p class="text-sm text-muted-foreground/80 mb-6 text-center lg:text-left">
+						Free, 30-min call. We'll map 1-3 quick wins for your team
+					</p>
+
+					<!-- Trust Row -->
+					 <div class="flex flex-col gap-2">
+						<p class="text-sm text-muted-foreground/80 text-center lg:text-left">
+							Worked with:
+						</p>
+						<div class="flex flex-wrap gap-2 justify-center lg:justify-start">
+							{industries.map((industry) => (
+								<span class="px-3 py-1 text-xs font-medium bg-accent/20 text-accent-foreground rounded-full">{industry.data.text}</span>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<!-- Right Column: Photo (~45%) -->
+				<div class="flex-shrink-0 lg:flex-1 lg:max-w-[45%] flex justify-center items-center order-first lg:order-last mb-8 lg:mb-0">
+					<ImageGlow quality={100} width={300} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl object-cover shadow-xl" />
 				</div>
 			</div>
 		</Card>
@@ -140,7 +168,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 			</div>
 			<div class="flex flex-col gap-4">
 				{posts.sort((a, b) => b.data.createdAt.getTime() - a.data.createdAt.getTime()).slice(0, 2).map((post) => (
-					<ContentCard 
+					<ContentCard
 						href={`/blog/${post.id}`}
 						title={post.data.title}
 						description={post.data.description}
@@ -162,7 +190,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 			</div>
 			<div class="flex flex-col gap-4">
 				{projects.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title)).slice(0, 2).map((project) => (
-					<ContentCard 
+					<ContentCard
 						href={`/work/${project.id}`}
 						title={project.data.title}
 						description={project.data.description}
@@ -176,7 +204,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 			</div>
 		</Card>
 
-		<Card>
+		<Card id="hire">
 			<div class="flex flex-row items-center gap-4 mb-6">
 				<Icon type='lucide' name="handshake" width={24} height={24} class='text-primary' />
 				<h2 class="m-0 leading-none">Let's Work Together</h2>
@@ -187,7 +215,7 @@ const [posts, projects, quickInfo, socials] = await Promise.all([
 				</p>
 				<div class="flex flex-col sm:flex-row gap-3">
 					<Button href="https://cal.com/yuriybabyak" target="_blank" rel="noopener noreferrer" variant="default" iconName="calendar">
-						Book a call
+						Book call
 					</Button>
 					<Button href="mailto:yuriy.babyak@gmail.com" variant="secondary" iconName="mail">
 						Email me

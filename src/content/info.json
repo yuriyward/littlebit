@@ -11,24 +11,16 @@
     "id": 2,
     "icon": {
       "type": "lucide",
-      "name": "map-pin"
+      "name": "globe"
     },
-    "text": "Poland"
+    "text": "Remote (Warsaw/Kraków)"
   },
   {
     "id": 3,
     "icon": {
       "type": "lucide",
-      "name": "rocket"
+      "name": "brain"
     },
-    "text": "Startup Founder"
-  },
-  {
-    "id": 4,
-    "icon": {
-      "type": "lucide",
-      "name": "bot"
-    },
-    "text": "GenAI Specialist"
+    "text": "AI/LLM"
   }
 ]

@@ -62,6 +62,14 @@ const skills = defineCollection({
   }),
 });
 
+const industries = defineCollection({
+  loader: file("src/content/industries.json"),
+  schema: z.object({
+    id: z.number(),
+    text: z.string(),
+  }),
+});
+
 const tags = defineCollection({
   loader: file("src/content/tags.json"),
   schema: z.object({
@@ -113,4 +121,4 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { tags, posts, projects, other, quickInfo, socials, workExperience, skills };
+export const collections = { tags, posts, projects, other, quickInfo, socials, workExperience, skills, industries };
