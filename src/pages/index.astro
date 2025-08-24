@@ -43,9 +43,9 @@ const [posts, projects, quickInfo, industries, socials] = await Promise.all([
 					<!-- Quick Facts Badges -->
 					<div class="flex flex-wrap gap-3 justify-center lg:justify-start mb-6">
 						{quickInfo.map((info) => (
-							<div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-background/50 backdrop-blur-sm border border-border/30">
+							<div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-background/80 via-card/60 to-background/80 backdrop-blur-sm shadow-sm">
 								<Icon type={info.data.icon.type} name={info.data.icon.name as any} width={14} height={14} class='text-primary' />
-								<span class="text-sm font-medium">{info.data.text}</span>
+								<span class="text-sm font-medium text-foreground">{info.data.text}</span>
 							</div>
 						))}
 					</div>
