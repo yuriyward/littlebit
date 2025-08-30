@@ -29,7 +29,9 @@ export const getStaticPaths = (async () => {
 
 // Get all projects and find current project's neighbors
 const allProjects = await getCollection("projects");
-const sortedProjects = allProjects.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title));
+const sortedProjects = allProjects.sort(
+  (a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title)
+);
 const currentIndex = sortedProjects.findIndex((p) => p.id === project.id);
 // Cycle to oldest project if this is the newest, otherwise go to next newer project
 const nextProject = currentIndex > 0 ? sortedProjects[currentIndex - 1] : sortedProjects[sortedProjects.length - 1];

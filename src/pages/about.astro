@@ -1,33 +1,28 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
 import ProfilePicture from "../assets/yuriy_openai_rect.png";
 import Card from "../components/Card.astro";
 import Icon from "../components/Icon.astro";
 import ImageGlow from "../components/ImageGlow.astro";
 import Layout from "../layouts/Layout.astro";
 
-const [about, workExperience, skills, socials] = await Promise.all([
-  getEntry("other", "about"),
+const [workExperience, skills, socials] = await Promise.all([
   getCollection("workExperience"),
   getCollection("skills"),
   getCollection("socials"),
 ]);
-
-// biome-ignore lint/style/noNonNullAssertion: Should always be defined.
-const { Content: About } = await render(about!);
 ---
 
 <Layout
-  title="About - Expert AI Engineer & Technical Consultant"
-  description="Learn about my expertise in AI engineering, full-stack development, and technical consulting services."
+  title="About - AI Engineer & Full-Stack Developer | Yuriy Babyak"
+  description="AI Engineer and Full-Stack Developer specializing in AI agents with LangGraph/LangChain, modern web applications, and scalable backend systems using cutting-edge tech stacks."
 >
   <div class="flex flex-col w-full gap-8 sm:gap-4" slot="left">
     <Card>
       <div class="flex flex-col items-center text-center mb-6">
-        <ImageGlow quality={100} width={200} height={150} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="rounded-xl mb-4 object-cover" />
+        <ImageGlow quality={100} width={400} src={ProfilePicture} alt="Yuriy Babyak profile picture" loading='eager' class="w-full h-auto rounded-xl mb-4 object-cover" />
         <h1 class="text-3xl font-bold mb-2">Yuriy Babyak</h1>
-        <p class="text-xl text-muted-foreground mb-1">AI Engineer & Startup Founder</p>
-        <p class="text-lg text-muted-foreground/80">Building LLM Solutions & AI-Powered Businesses</p>
+        <p class="text-xl text-muted-foreground mb-1">AI Engineer & Full-Stack Developer</p>
       </div>
 
       <div class="space-y-4">
@@ -81,8 +76,88 @@ const { Content: About } = await render(about!);
         <Icon type='lucide' name="user" width={24} height={24} class='text-primary' />
         <h2 class="m-0 leading-none">About Me</h2>
       </div>
-      <div class="prose leading-relaxed max-w-none">
-        <About />
+      <div class="max-w-none space-y-6">
+        <div class="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
+          <Icon type="lucide" name="sparkles" width={14} height={14} />
+          Building AI‑first products end‑to‑end
+        </div>
+
+        <h3 class="font-sans text-3xl md:text-4xl font-semibold tracking-tight m-0">
+          Hey there — I create AI systems and ship real products.
+        </h3>
+
+        <p class="text-foreground/90 leading-7 text-base md:text-lg">
+          Picture this: instead of just building apps, I build <span class="font-semibold">AI‑first</span> apps that learn,
+          adapt, and make your team faster. I blend solid full‑stack engineering with practical AI so the experience feels simple while the system does the hard work.
+        </p>
+
+        <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-2">
+          <li class="flex items-start gap-3">
+            <Icon type="lucide" name="check" width={18} height={18} class="mt-0.5 text-primary" />
+            <span>Products that get <span class="font-medium">smarter over time</span>, not just “done”.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon type="lucide" name="check" width={18} height={18} class="mt-0.5 text-primary" />
+            <span>Automation that frees your team to focus on what matters.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon type="lucide" name="check" width={18} height={18} class="mt-0.5 text-primary" />
+            <span><span class="font-medium">End‑to‑end</span>: interface, backend, agents, and deployment.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon type="lucide" name="check" width={18} height={18} class="mt-0.5 text-primary" />
+            <span>Clear monitoring and reliability from day one.</span>
+          </li>
+        </ul>
+
+        <hr class="border-border" />
+
+        <div class="rounded-lg border border-border bg-accent/10 px-4 py-3">
+          <p class="m-0 text-foreground/90">
+            Master's in Computer Science at <span class="font-medium">Lodz University of Technology</span> with a thesis on
+            deep‑learning object tracking. Recognized in a <span class="font-medium">Machine Learning Hackathon</span> and
+            the <span class="font-medium">MAcS‑Junior Researcher</span> competition—and more importantly, I’ve turned
+            that research into production systems.
+          </p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="rounded-lg border border-border bg-card/60 p-4">
+            <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              <Icon type="lucide" name="message-circle" width={16} height={16} class="text-primary" />
+              Customer Support
+            </div>
+            <p class="mt-2 text-sm leading-6 text-foreground/85">
+              Response times cut from hours to seconds with agents that learn from each interaction.
+            </p>
+          </div>
+          <div class="rounded-lg border border-border bg-card/60 p-4">
+            <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              <Icon type="lucide" name="shield-check" width={16} height={16} class="text-primary" />
+              Security Testing
+            </div>
+            <p class="mt-2 text-sm leading-6 text-foreground/85">
+              Automated vulnerability analysis that replaces weeks of manual reviews with minutes.
+            </p>
+          </div>
+          <div class="rounded-lg border border-border bg-card/60 p-4">
+            <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              <Icon type="lucide" name="factory" width={16} height={16} class="text-primary" />
+              Operations Automation
+            </div>
+            <p class="mt-2 text-sm leading-6 text-foreground/85">
+              AI‑powered email/order processing that removes hours of daily manual work.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          {['LangGraph', 'LangChain', 'OpenAI', 'Python', 'FastAPI', 'TypeScript', 'React', 'PostgreSQL', 'Azure', 'Cloudflare'].map((t) => (
+            <span class="text-xs px-2 py-1 bg-accent/60 text-accent-foreground rounded-md border border-accent/40 font-medium">
+              {t}
+            </span>
+          ))}
+        </div>
       </div>
     </Card>
 

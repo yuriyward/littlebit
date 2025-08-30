@@ -1,12 +1,12 @@
 ---
 export interface Props {
-	href: string;
-	title: string;
-	description: string;
-	metadata?: string;
-	tags?: string[];
-	dataTags?: string;
-	class?: string;
+  href: string;
+  title: string;
+  description: string;
+  metadata?: string;
+  tags?: string[];
+  dataTags?: string;
+  class?: string;
 }
 
 const { href, title, description, metadata, tags, dataTags, class: className = "" } = Astro.props;
